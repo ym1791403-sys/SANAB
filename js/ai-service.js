@@ -107,7 +107,7 @@ export async function analyzePlantImage({ base64, mimeType, cropHint, notes, lan
   }
 
   // 2. Direct Gemini Vision REST API call (Permanent hardwired API Key)
-  const candidateModels = ["gemini-2.5-flash", "gemini-2.0-flash", "gemini-1.5-flash", "gemini-3.5-flash", "gemini-3.5-flash-lite"];
+  const candidateModels = ["gemini-3.5-flash-lite", "gemini-flash-lite-latest", "gemini-3.5-flash", "gemini-flash-latest"];
   const uniqueModels = [...new Set(candidateModels)];
 
   const promptText = buildDiagnosisPrompt(cropHint, notes, lang);

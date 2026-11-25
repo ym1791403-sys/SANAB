@@ -410,8 +410,22 @@
 
       <div id="consult-auth-guard" class="card hidden" style="text-align:center;padding:36px;">
         <h3 style="font-weight:800;margin-bottom:8px;">سجّل الدخول للتواصل مع المهندسين الزراعيين</h3>
-        <p class="section-subtitle" style="margin-bottom:16px;">يتم حفظ الاستشارات والردود بشكل فوري وآمن في قاعدة بيانات Firebase الخاصة بك.</p>
+        <p class="section-subtitle" style="margin-bottom:16px;">يتم حفظ الاستشارات والردود بشكل فوري ومباشر في السجل السحابي المشفر.</p>
         <button class="btn btn-primary" data-route="auth">تسجيل الدخول / إنشاء حساب</button>
+      </div>
+
+      <!-- Available Registered Engineers Directory -->
+      <div id="engineers-directory-card" class="card" style="margin-bottom:20px;padding:20px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;gap:12px;flex-wrap:wrap;">
+          <div>
+            <h3 style="font-weight:900;color:var(--green-900);display:flex;align-items:center;gap:8px;font-size:1.15rem;">
+              <span>👨‍🌾</span> <span>المهندسون الزراعيون المعتمدون في المنصة</span>
+            </h3>
+            <p class="section-subtitle" style="margin-top:2px;font-size:0.86rem;">كل مهندس يسجل بحساب "مهندس زراعي" يظهر هنا تلقائياً لجميع المزارعين للتواصل والاستشارة الفورية.</p>
+          </div>
+          <span id="engineers-count-badge" class="tag" style="background:var(--green-100);color:var(--green-800);font-weight:800;">0 مهندس متاح</span>
+        </div>
+        <div id="engineers-list-grid" style="display:grid;grid-template-columns:repeat(auto-fill, minmax(260px, 1fr));gap:12px;"></div>
       </div>
 
       <div id="consult-workspace" class="chat-layout">
@@ -447,7 +461,7 @@
     <section id="view-dashboard" class="app-view hidden">
       <div id="dash-auth-guard" class="card hidden" style="text-align:center;padding:40px;">
         <h3 style="font-weight:800;margin-bottom:10px;">لوحة التحكم الشخصية</h3>
-        <p class="section-subtitle" style="margin-bottom:18px;">سجّل الدخول بحسابك لمتابعة فحوصات مزرعتك، تقدمك التعليمي، والمفضلة من Firestore.</p>
+        <p class="section-subtitle" style="margin-bottom:18px;">سجّل الدخول بحسابك لمتابعة فحوصات مزرعتك، تقدمك التعليمي، وسجل الآفات المفضلة.</p>
         <button class="btn btn-primary" data-route="auth">تسجيل الدخول الآن</button>
       </div>
 
@@ -549,12 +563,6 @@
           <button id="btn-auth-submit" type="submit" class="btn btn-primary" style="width:100%;margin-top:14px;">تسجيل الدخول</button>
           <button id="btn-switch-auth-mode" type="button" class="btn btn-secondary" style="width:100%;margin-top:10px;">إنشاء حساب جديد</button>
         </form>
-
-        <div style="text-align:center;margin:14px 0;color:var(--text-muted);font-size:0.86rem;">أو</div>
-
-        <button id="btn-google-auth" type="button" class="btn btn-secondary" style="width:100%;">
-          🔵 <span>الدخول بحساب Google</span>
-        </button>
       </div>
     </section>
   </main>
@@ -574,6 +582,12 @@
       <button id="btn-close-consult-modal" class="icon-btn" style="position:absolute;top:16px;inset-inline-end:16px;">✕</button>
       <h2 style="font-weight:900;margin-bottom:14px;">🎧 إرسال استشارة لمهندس زراعي</h2>
       <form id="form-new-consult">
+        <div class="form-group">
+          <label class="form-label" for="consult-engineer-select">المهندس الزراعي المستهدف</label>
+          <select id="consult-engineer-select" class="form-control">
+            <option value="all">عام (متاح لجميع المهندسين الزراعيين المعتمدين)</option>
+          </select>
+        </div>
         <div class="form-group">
           <label class="form-label" for="consult-crop">المحصول</label>
           <input id="consult-crop" type="text" class="form-control" placeholder="مثال: طماطم، قمح، بطاطس" required />
@@ -600,7 +614,7 @@
         <p style="font-size:0.86rem;opacity:0.8;">منصة زراعية ذكية — تشخيص استرشادي، موسوعة علمية، ودعم صوتي للمزارعين.</p>
       </div>
       <div style="font-size:0.84rem;opacity:0.8;">
-        الطقس الحي عبر Open-Meteo • القاعدة السحابية Firebase
+        الطقس الحي عبر Open-Meteo • المنصة السحابية المعتمدة
       </div>
     </div>
   </footer>

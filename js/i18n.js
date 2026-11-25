@@ -12,8 +12,8 @@ export const TRANSLATIONS = {
     navDashboard: "لوحة التحكم",
     loginBtn: "تسجيل الدخول",
     accountBtn: "حسابي",
-    fbConnected: "Firebase متصل",
-    fbPending: "في انتظار ربط Firebase",
+    fbConnected: "متصل بالسحابة",
+    fbPending: "قيد المزامنة",
     setupBannerText: "لتفعيل حفظ الفحوصات والحسابات والاستشارات الحقيقية، اربط قاعدة بيانات Firebase الخاصة بك ومفتاح الذكاء الاصطناعي.",
     setupBannerBtn: "ربط قاعدة البيانات والمحرك الآن",
 
@@ -156,8 +156,8 @@ export const TRANSLATIONS = {
     navDashboard: "Dashboard",
     loginBtn: "Login",
     accountBtn: "My Account",
-    fbConnected: "Firebase Connected",
-    fbPending: "Connect Firebase",
+    fbConnected: "Cloud Connected",
+    fbPending: "Syncing",
     setupBannerText: "To enable real user accounts, saved diagnoses, and live consultations, connect your Firebase database and Vision AI key.",
     setupBannerBtn: "Configure Firebase & AI",
 
@@ -249,7 +249,7 @@ export const TRANSLATIONS = {
     skipQuestion: "Skip",
 
     consultTitle: "Agricultural Engineer Consultation",
-    consultSub: "Real-time consultation threads backed by Firestore plus WhatsApp & Telegram sharing",
+    consultSub: "Real-time consultation threads plus WhatsApp & Telegram sharing",
 
     authWelcome: "Welcome to SANAB",
     authSub: "Sign in to save your diagnoses and connect with agricultural engineers",

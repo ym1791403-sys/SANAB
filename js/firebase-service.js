@@ -586,7 +586,7 @@ class FirebaseService {
     return { diseasesCount: DISEASES_DATA.length, quizCount: QUIZ_QUESTIONS.length };
   }
 
-  async createConsultation({ userId, userName, governorate, crop, subject, details, attachedReport = null, imageUrl = "" }) {
+  async createConsultation({ userId, userName, governorate, crop, subject, details, attachedReport = null, imageUrl = "", targetEngineerId = "all" }) {
     const docData = {
       id: "c_" + Date.now().toString(36),
       farmerId: userId,
@@ -594,6 +594,7 @@ class FirebaseService {
       governorate: governorate || "",
       crop: crop || "",
       subject: subject || "استشارة زراعية",
+      targetEngineerId: targetEngineerId || "all",
       status: "open",
       attachedReport: attachedReport || null,
       imageUrl: imageUrl || "",
@@ -720,6 +721,33 @@ class FirebaseService {
         );
       } catch (_) {}
     }
+  }
+
+  async getRegisteredEngineers() {
+    let list = [];
+    if (this.db) {
+      try {
+        const q = query(collection(this.db, "users"), where("accountType", "==", "engineer"));
+        const snap = await withTimeout(getDocs(q), 1800);
+        list = snap.docs.map(d => ({ uid: d.id, ...d.data() }));
+      } catch (_) {}
+    }
+    const locals = this._getLocalAccounts();
+    const localEngs = locals
+      .filter(a => a.profile?.accountType === "engineer" || a.profile?.role === "engineer")
+      .map(a => a.profile);
+
+    const combined = [...list, ...localEngs];
+    const seen = new Set();
+    const unique = [];
+    for (const eng of combined) {
+      const key = eng.uid || eng.email;
+      if (key && !seen.has(key)) {
+        seen.add(key);
+        unique.push(eng);
+      }
+    }
+    return unique;
   }
 
   async getChannelSettings() {

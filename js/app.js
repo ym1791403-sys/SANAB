@@ -47,7 +47,7 @@ function escapeHtml(str) {
 function formatFirebaseError(err) {
   const msg = err?.message || String(err);
   if (msg.includes("CONFIGURATION_NOT_FOUND") || msg.includes("auth/operation-not-allowed")) {
-    return "تنبيه: يجب الضغط على 'Get started' وتفعيل (Email/Password) في Firebase Console لمشروعك (Authentication > Sign-in method).";
+    return "خدمة تسجيل الدخول غير مفعلة حالياً، يرجى المحاولة لاحقاً.";
   }
   if (msg.includes("auth/user-not-found") || msg.includes("auth/wrong-password") || msg.includes("auth/invalid-credential")) {
     return "البريد الإلكتروني أو كلمة المرور غير صحيحة.";
@@ -59,10 +59,10 @@ function formatFirebaseError(err) {
     return "كلمة المرور ضعيفة، يرجى كتابة 6 أحرف أو أرقام على الأقل.";
   }
   if (msg.includes("permission-denied") || msg.includes("Missing or insufficient permissions")) {
-    return "قواعد حماية Firestore بحاجة لتطبيق القواعد المرفقة في firestore.rules أو تشغيلها في وضع الاختبار.";
+    return "تعذر إتمام العملية بسبب قيود الصلاحيات.";
   }
   if (msg.includes("failed-precondition") || msg.includes("not-found") || msg.includes("404")) {
-    return "تأكد من الضغط على Create Database في قسم Firestore Database في لوحة Firebase Console لمشروعك.";
+    return "تعذر حفظ البيانات في السجل السحابي حالياً.";
   }
   return msg;
 }
@@ -511,7 +511,7 @@ function renderDiagnosisReport(report) {
     try {
       const saved = await firebaseService.saveDiagnosis(state.user.uid, report, state.uploadedImage?.thumbDataUrl || "");
       state.diagnoses.unshift(saved);
-      showToast(state.lang === "ar" ? "تم حفظ التشخيص في قاعدة بيانات Firebase بنجاح" : "Diagnosis saved to Firebase!");
+      showToast(state.lang === "ar" ? "تم حفظ نتيجة الفحص بنجاح 🌾" : "Diagnosis saved successfully 🌾", "success");
     } catch (err) {
       showToast(formatFirebaseError(err), "error");
     }
@@ -610,7 +610,7 @@ function renderLibrary() {
     btn.addEventListener("click", async () => {
       const id = btn.getAttribute("data-fav-disease");
       if (!state.user || !firebaseService.isReady) {
-        showToast("سجّل الدخول بعد ربط Firebase لحفظ المفضلة", "warning");
+        showToast("سجّل الدخول أولاً لحفظ هذا المرض في المفضلة", "warning");
         return;
       }
       const currentlyFav = (state.profile?.favorites || []).includes(id);
@@ -830,6 +830,7 @@ function renderConsultationsView() {
 
   const isEng = state.profile?.accountType === "engineer";
   document.getElementById("consult-list-title").textContent = isEng ? "صندوق استشارات المزارعين (مهندس زراعي)" : "استشاراتي";
+  loadAndRenderEngineers();
 
   const listEl = document.getElementById("consult-list");
   if (!state.consultations.length) {
@@ -885,6 +886,68 @@ function openConsultationThread(consultId) {
   renderConsultationsView();
 }
 
+function getGovName(govId) {
+  const g = GOVERNORATES.find(x => x.id === govId);
+  return g ? g[state.lang] : (govId || (state.lang === "ar" ? "مصر" : "Egypt"));
+}
+
+async function loadAndRenderEngineers() {
+  const grid = document.getElementById("engineers-list-grid");
+  const countBadge = document.getElementById("engineers-count-badge");
+  const selectEl = document.getElementById("consult-engineer-select");
+  if (!grid) return;
+
+  try {
+    const engineers = await firebaseService.getRegisteredEngineers();
+    if (countBadge) countBadge.textContent = `${engineers.length} ${state.lang === "ar" ? "مهندس متاح" : "engineers"}`;
+
+    if (selectEl) {
+      const prevVal = selectEl.value;
+      selectEl.innerHTML = `<option value="all">${state.lang === "ar" ? "عام (متاح لجميع المهندسين الزراعيين)" : "All Engineers"}</option>` +
+        engineers.map(eng => `<option value="${escapeHtml(eng.uid || eng.email)}">م. ${escapeHtml(eng.name)} (${escapeHtml(getGovName(eng.governorate))})</option>`).join("");
+      if (prevVal && engineers.some(e => (e.uid || e.email) === prevVal)) {
+        selectEl.value = prevVal;
+      }
+    }
+
+    if (!engineers.length) {
+      grid.innerHTML = `
+        <div style="grid-column:1/-1;text-align:center;padding:22px 14px;background:rgba(46,125,50,0.04);border-radius:12px;border:1px dashed var(--border);">
+          <div style="font-size:1.8rem;margin-bottom:6px;">👨‍🌾</div>
+          <strong style="color:var(--text-main);">لا يوجد مهندسون مسجلون حالياً</strong>
+          <p class="section-subtitle" style="margin-top:4px;font-size:0.84rem;">عند قيام أي مهندس بإنشاء حساب جديد واختيار "مهندس زراعي"، سيظهر اسمه ومحافظته هنا فوراً لجميع المستخدمين.</p>
+        </div>
+      `;
+      return;
+    }
+
+    grid.innerHTML = engineers.map(eng => `
+      <div class="card" style="margin:0;padding:14px;border:1.5px solid var(--green-200);background:linear-gradient(135deg, rgba(46,125,50,0.03), rgba(27,94,32,0.07));">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+          <div style="width:40px;height:40px;border-radius:50%;background:var(--green-700);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1.05rem;">
+            ${escapeHtml((eng.name || "م")[0])}
+          </div>
+          <div style="flex:1;min-width:0;">
+            <strong style="display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">م. ${escapeHtml(eng.name)}</strong>
+            <span style="font-size:0.78rem;color:var(--text-muted);">📍 ${escapeHtml(getGovName(eng.governorate))}</span>
+          </div>
+          <span class="tag" style="background:#e8f5e9;color:#2e7d32;font-size:0.72rem;padding:2px 6px;">متاح</span>
+        </div>
+        <button type="button" class="btn btn-sm btn-outline-primary" style="width:100%;font-size:0.82rem;" data-consult-eng-id="${escapeHtml(eng.uid || eng.email)}" data-consult-eng-name="${escapeHtml(eng.name)}">
+          💬 استشارة هذا المهندس
+        </button>
+      </div>
+    `).join("");
+
+    grid.querySelectorAll("[data-consult-eng-id]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const engId = btn.getAttribute("data-consult-eng-id");
+        openNewConsultModal({ targetEngineerId: engId });
+      });
+    });
+  } catch (_) {}
+}
+
 function openNewConsultModal(prefill = {}) {
   if (!state.user) {
     showToast("سجّل الدخول أولاً لفتح استشارة زراعية", "warning");
@@ -894,6 +957,10 @@ function openNewConsultModal(prefill = {}) {
   document.getElementById("consult-crop").value = prefill.crop || "";
   document.getElementById("consult-subject").value = prefill.subject || "";
   document.getElementById("consult-details").value = prefill.details || "";
+  if (prefill.targetEngineerId) {
+    const sel = document.getElementById("consult-engineer-select");
+    if (sel) sel.value = prefill.targetEngineerId;
+  }
   document.getElementById("modal-new-consult").classList.remove("hidden");
 }
 
@@ -959,7 +1026,7 @@ function renderDashboard() {
     `;
   } else if (state.dashTab === "diagnoses") {
     content.innerHTML = `<div class="card">
-      <h3 style="font-weight:800;margin-bottom:14px;">سجل فحوصاتي في Firestore (${totalDiag})</h3>
+      <h3 style="font-weight:800;margin-bottom:14px;">سجل فحوصاتي المحفوظة (${totalDiag})</h3>
       ${totalDiag ? state.diagnoses.map(d => `
         <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid var(--border-light);gap:12px;flex-wrap:wrap;">
           <div style="display:flex;gap:12px;align-items:center;">
@@ -1288,9 +1355,7 @@ async function bootstrap() {
         const governorate = document.getElementById("auth-governorate")?.value || "cairo";
         const role = state.selectedRole || (email.toLowerCase().includes("admin") ? "admin" : "farmer");
         res = await firebaseService.register({ email, password, name, accountType: role, governorate });
-        showToast(res.isConfigMissing
-          ? "تم إنشاء الحساب وتسجيل الدخول بنجاح! 🌾"
-          : "تم إنشاء حسابك في Firebase بنجاح! 🌾", "success");
+        showToast("تم إنشاء حسابك وتسجيل الدخول بنجاح! 🌾", "success");
       }
 
       await syncUserData(res.user, res.profile);
@@ -1308,24 +1373,6 @@ async function bootstrap() {
       showToast(formatFirebaseError(err), "error");
     } finally {
       if (submitBtn) submitBtn.disabled = false;
-    }
-  });
-
-  document.getElementById("btn-google-auth").addEventListener("click", async () => {
-    try {
-      const gov = document.getElementById("auth-governorate")?.value || "cairo";
-      const res = await firebaseService.loginWithGoogle(state.selectedRole, gov);
-      await syncUserData(res.user, res.profile);
-      const isAdmin = Boolean(
-        res.profile?.accountType === "admin" ||
-        res.profile?.role === "admin" ||
-        res.user?.email?.toLowerCase().includes("admin")
-      );
-      const target = state.intendedRoute || (isAdmin ? "dashboard" : "home");
-      state.intendedRoute = null;
-      navigateTo(target);
-    } catch (err) {
-      showToast(formatFirebaseError(err), "error");
     }
   });
 
@@ -1351,13 +1398,15 @@ async function bootstrap() {
   document.getElementById("form-new-consult").addEventListener("submit", async (e) => {
     e.preventDefault();
     try {
+      const targetEngineerId = document.getElementById("consult-engineer-select")?.value || "all";
       const created = await firebaseService.createConsultation({
         userId: state.user.uid,
         userName: state.profile?.name || state.user.email,
         governorate: state.profile?.governorate || "",
         crop: document.getElementById("consult-crop").value.trim(),
         subject: document.getElementById("consult-subject").value.trim(),
-        details: document.getElementById("consult-details").value.trim()
+        details: document.getElementById("consult-details").value.trim(),
+        targetEngineerId
       });
       document.getElementById("modal-new-consult").classList.add("hidden");
       showToast("تم إرسال استشارتك بنجاح");
