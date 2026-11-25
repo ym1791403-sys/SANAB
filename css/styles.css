@@ -1153,8 +1153,8 @@ main {
 
 .roles {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 6px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
   margin-bottom: 14px;
 }
 .role {
@@ -1406,6 +1406,11 @@ main {
   :root {
     --radius-lg: 16px;
     --radius-md: 12px;
+  }
+
+  .roles {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
   }
 
   .container {

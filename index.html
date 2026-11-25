@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />
   <title>SANAB | مساعدك الزراعي الذكي</title>
-  <meta name="description" content="منصة SANAB لتشخيص أمراض النبات بالذكاء الاصطناعي، موسوعة الآفات، الوضع التعليمي، واستشارات المهندسين الزراعيين." />
+  <meta name="description" content="منصة SANAB لتشخيص أمراض النبات بالذكاء الاصطناعي، موسوعة الآفات، واستشارات المهندسين الزراعيين." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet" />
@@ -31,7 +31,6 @@
         <a href="#home" class="nav-link active" data-route="home" data-i18n="navHome">الرئيسية</a>
         <a href="#diagnosis" class="nav-link user-only hidden" data-route="diagnosis" data-i18n="navDiagnosis">التشخيص الذكي</a>
         <a href="#library" class="nav-link" data-route="library" data-i18n="navLibrary">موسوعة الآفات</a>
-        <a href="#learning" class="nav-link user-only hidden" data-route="learning" data-i18n="navLearning">الوضع التعليمي</a>
         <a href="#consultations" class="nav-link user-only hidden" data-route="consultations" data-i18n="navConsult">استشارة مهندس</a>
         <a href="#dashboard" class="nav-link user-only hidden" id="nav-dashboard-link" data-route="dashboard" data-i18n="navDashboard">لوحة التحكم الإدارية</a>
       </nav>
@@ -106,6 +105,37 @@
             <div class="feature-icon">👨‍🌾</div>
             <h3>استشارات ومتابعة مهندسين</h3>
             <p>تواصل مباشر مع استشاريين زراعيين لمتابعة حالة محصولك ومشاركة التقارير عبر واتساب وتيليجرام.</p>
+          </div>
+        </div>
+
+        <!-- Live Real-Time Weather Banner for Visitors -->
+        <div class="card" style="margin-bottom:28px;padding:20px 24px;border:1.5px solid var(--green-300);background:linear-gradient(135deg, rgba(46,125,50,0.06), rgba(27,94,32,0.11));border-radius:18px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px;">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#2e7d32;box-shadow:0 0 0 3px rgba(46,125,50,0.25);"></span>
+              <strong style="color:var(--green-900);font-size:1.05rem;">🌤️ طقس اليوم الحي في المحافظات الزراعية</strong>
+            </div>
+            <div style="font-size:0.82rem;color:var(--text-muted);">بث حي ومباشر من محطة الأرصاد Open-Meteo</div>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <span id="landing-weather-icon" style="font-size:2.2rem;">☀️</span>
+              <div>
+                <div id="landing-weather-temp" style="font-size:1.7rem;font-weight:900;color:var(--green-900);">17° م</div>
+                <div id="landing-weather-desc" style="font-size:0.88rem;color:var(--text-secondary);">سماء صافية ومشمسة • القاهرة</div>
+              </div>
+            </div>
+            <div style="display:flex;gap:16px;font-size:0.88rem;">
+              <div>الرياح: <strong id="landing-weather-wind">10 كم/س</strong></div>
+              <div>الرطوبة: <strong id="landing-weather-hum">72%</strong></div>
+              <div>الأمطار: <strong id="landing-weather-rain">0 مم</strong></div>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center;">
+              <select id="landing-select-gov" style="padding:6px 12px;border-radius:10px;border:1px solid var(--border);font-family:inherit;font-size:0.86rem;font-weight:700;"></select>
+            </div>
+          </div>
+          <div id="landing-weather-advice" style="margin-top:12px;padding:10px 14px;background:rgba(255,255,255,0.75);border-radius:10px;font-size:0.86rem;color:var(--green-950);">
+            💡 <strong>توصية الرش الميداني:</strong> <span id="landing-advice-text">سرعة الرياح هادئة (10 كم/س) والحرارة مناسبة: الظروف جيدة للعمليات الحقلية والرش الوقائي.</span>
           </div>
         </div>
 
@@ -247,13 +277,6 @@
               <p class="section-subtitle">دليل أمراض النبات وطرق المكافحة</p>
             </div>
           </button>
-          <button class="quick-service-card" data-route="learning">
-            <div class="qs-icon qs-amber">🎓</div>
-            <div>
-              <h3 style="font-weight:800;">الوضع التعليمي</h3>
-              <p class="section-subtitle">اختبر مهاراتك وتعلم التفريق بين الأمراض</p>
-            </div>
-          </button>
         </div>
 
         <!-- Recent Real Diagnoses from Firestore -->
@@ -372,28 +395,6 @@
       </div>
     </section>
 
-    <!-- ==================== LEARNING MODE VIEW ==================== -->
-    <section id="view-learning" class="app-view hidden">
-      <div class="section-header">
-        <div>
-          <h1 class="section-title" data-i18n="learnTitle">الوضع التعليمي والتدريبي</h1>
-          <p class="section-subtitle" data-i18n="learnSub">طوّر مهارتك في التعرف على أمراض النباتات والتفريق بين الإصابات المتشابهة</p>
-        </div>
-        <div class="tag-row">
-          <span class="tag" style="padding:8px 14px;font-size:0.9rem;">🏆 النقاط: <strong id="learn-points">0</strong></span>
-          <span class="tag" style="padding:8px 14px;font-size:0.9rem;">🔥 السلسلة: <strong id="learn-streak">0</strong></span>
-        </div>
-      </div>
-
-      <div class="tabs-bar">
-        <button class="tab-btn active" data-learn-tab="identify" data-i18n="tabIdentify">حدد المرض</button>
-        <button class="tab-btn" data-learn-tab="quiz" data-i18n="tabQuiz">اختبار سريع</button>
-        <button class="tab-btn" data-learn-tab="compare" data-i18n="tabCompare">قارن الأمراض المتشابهة</button>
-      </div>
-
-      <div id="learning-stage"></div>
-    </section>
-
     <!-- ==================== CONSULTATIONS VIEW ==================== -->
     <section id="view-consultations" class="app-view hidden">
       <div class="section-header">
@@ -504,25 +505,17 @@
             <div class="form-group" style="margin-bottom:12px;">
               <label class="form-label" style="font-weight:700;font-size:14px;">نوع الحساب</label>
               <div class="roles" id="auth-role-grid">
-                <div class="role" data-role="student">
-                  <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
-                  <span>طالب زراعة</span>
+                <div class="role on" data-role="farmer">
+                  <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="7" cy="16" r="4"/><circle cx="19" cy="17" r="2.5"/><path d="M3 16V8h8l2 5h7v2M11 8V5h3"/></svg>
+                  <span>مزارع</span>
                 </div>
                 <div class="role" data-role="engineer">
                   <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 18a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1z"/><path d="M10 10V5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v5"/><path d="M4 15v-3a6 6 0 0 1 6-6"/><path d="M14 6a6 6 0 0 1 6 6v3"/></svg>
                   <span>مهندس زراعي</span>
                 </div>
-                <div class="role on" data-role="farmer">
-                  <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="7" cy="16" r="4"/><circle cx="19" cy="17" r="2.5"/><path d="M3 16V8h8l2 5h7v2M11 8V5h3"/></svg>
-                  <span>مزارع</span>
-                </div>
                 <div class="role" data-role="nursery">
                   <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/></svg>
                   <span>صاحب مشتل</span>
-                </div>
-                <div class="role" data-role="other">
-                  <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                  <span>أخرى</span>
                 </div>
                 <div class="role" data-role="admin">
                   <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><circle cx="12" cy="11" r="3"/></svg>

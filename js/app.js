@@ -15,15 +15,9 @@ const state = {
   consultations: [],
   activeConsultId: null,
   diseases: [...DISEASES_DATA],
-  quizQuestions: [...QUIZ_QUESTIONS],
   selectedCropFilter: "all",
   selectedPathogenFilter: "all",
   libSearch: "",
-  learnTab: "identify",
-  quizIndex: 0,
-  quizSelected: null,
-  quizSubmitted: false,
-  quizScoreRun: 0,
   dashTab: "overview",
   uploadedImage: null, // { dataUrl, base64, mimeType, thumbDataUrl }
   currentReport: null,
@@ -117,11 +111,10 @@ function getSeverityBadge(sev, customText = "") {
 
 function getRoleLabel(role) {
   const map = {
-    farmer: t("roleFarmer"),
-    engineer: t("roleEngineer"),
-    student: t("roleStudent"),
-    nursery: t("roleNursery"),
-    other: t("roleOther")
+    farmer: t("roleFarmer") || "مزارع",
+    engineer: t("roleEngineer") || "مهندس زراعي",
+    nursery: t("roleNursery") || "صاحب مشتل",
+    admin: "مسؤول النظام"
   };
   return map[role] || role;
 }
@@ -151,7 +144,7 @@ function applyLanguage() {
 }
 
 function navigateTo(route) {
-  const protectedRoutes = ["diagnosis", "consultations", "learning", "dashboard"];
+  const protectedRoutes = ["diagnosis", "consultations", "dashboard"];
   if (protectedRoutes.includes(route) && !state.user) {
     state.intendedRoute = route;
     route = "auth";
@@ -190,7 +183,6 @@ function navigateTo(route) {
 function renderCurrentRoute() {
   if (state.route === "home") renderHomeRecent();
   if (state.route === "library") renderLibrary();
-  if (state.route === "learning") renderLearning();
   if (state.route === "consultations") renderConsultationsView();
   if (state.route === "dashboard") renderDashboard();
 }
@@ -204,7 +196,11 @@ function renderAllActive() {
 // ==================== WEATHER ====================
 
 function populateGovernorateSelects() {
-  const selects = [document.getElementById("select-governorate"), document.getElementById("auth-governorate")];
+  const selects = [
+    document.getElementById("select-governorate"),
+    document.getElementById("auth-governorate"),
+    document.getElementById("landing-select-gov")
+  ];
   for (const sel of selects) {
     if (!sel) continue;
     const prev = sel.value || state.profile?.governorate || localStorage.getItem("tabib_gov") || "cairo";
@@ -230,16 +226,34 @@ async function loadWeatherCoords(lat, lon, label = "") {
   const rainEl = document.getElementById("weather-rain");
   const advEl = document.getElementById("weather-advice-text");
 
+  const landingTemp = document.getElementById("landing-weather-temp");
+  const landingDesc = document.getElementById("landing-weather-desc");
+  const landingIcon = document.getElementById("landing-weather-icon");
+  const landingWind = document.getElementById("landing-weather-wind");
+  const landingHum = document.getElementById("landing-weather-hum");
+  const landingRain = document.getElementById("landing-weather-rain");
+  const landingAdv = document.getElementById("landing-advice-text");
+
   try {
     const w = await fetchLiveWeather(lat, lon);
     const info = describeWeatherCode(w.weatherCode, state.lang);
+    const advice = computeSprayingAdvice(w, state.lang);
+
     if (tempEl) tempEl.textContent = `${w.temp}° ${state.lang === "ar" ? "م" : "C"}`;
     if (descEl) descEl.textContent = `${info.text}${label ? ` • ${label}` : ""}`;
     if (iconEl) iconEl.textContent = info.icon;
     if (windEl) windEl.textContent = `${w.windSpeed} ${state.lang === "ar" ? "كم/س" : "km/h"}`;
     if (humEl) humEl.textContent = `${w.humidity}%`;
     if (rainEl) rainEl.textContent = `${w.precipitation} ${state.lang === "ar" ? "مم" : "mm"}`;
-    if (advEl) advEl.textContent = computeSprayingAdvice(w, state.lang);
+    if (advEl) advEl.textContent = advice;
+
+    if (landingTemp) landingTemp.textContent = `${w.temp}° ${state.lang === "ar" ? "م" : "C"}`;
+    if (landingDesc) landingDesc.textContent = `${info.text}${label ? ` • ${label}` : ""}`;
+    if (landingIcon) landingIcon.textContent = info.icon;
+    if (landingWind) landingWind.textContent = `${w.windSpeed} ${state.lang === "ar" ? "كم/س" : "km/h"}`;
+    if (landingHum) landingHum.textContent = `${w.humidity}%`;
+    if (landingRain) landingRain.textContent = `${w.precipitation} ${state.lang === "ar" ? "مم" : "mm"}`;
+    if (landingAdv) landingAdv.textContent = advice;
   } catch (err) {
     if (descEl && !descEl.textContent) {
       descEl.textContent = state.lang === "ar" ? "طقس معتدل • القاهرة" : "Moderate Weather • Cairo";
@@ -692,116 +706,6 @@ function openDiseaseModal(d) {
   modal.classList.remove("hidden");
 }
 
-// ==================== LEARNING MODE ====================
-
-function renderLearning() {
-  const stats = state.profile?.learningStats || { points: 0, streak: 0, answeredIds: [] };
-  document.getElementById("learn-points").textContent = stats.points || 0;
-  document.getElementById("learn-streak").textContent = stats.streak || 0;
-
-  document.querySelectorAll("[data-learn-tab]").forEach(btn => {
-    btn.classList.toggle("active", btn.getAttribute("data-learn-tab") === state.learnTab);
-  });
-
-  const stage = document.getElementById("learning-stage");
-  const ar = state.lang === "ar";
-
-  if (state.learnTab === "compare") {
-    stage.innerHTML = `<div class="disease-grid">
-      ${state.diseases.slice(0, 6).map(d => `
-        <div class="card">
-          <img src="${escapeHtml(d.image)}" alt="" style="width:100%;height:150px;object-fit:cover;border-radius:12px;margin-bottom:12px;" />
-          <h3 style="font-weight:800;margin-bottom:6px;">${escapeHtml(ar ? d.nameAr : d.nameEn)}</h3>
-          <p class="section-subtitle" style="font-size:0.88rem;">${escapeHtml(ar ? d.lookalikeNoteAr : d.lookalikeNoteEn)}</p>
-        </div>
-      `).join("")}
-    </div>`;
-    return;
-  }
-
-  const qList = state.quizQuestions;
-  const q = qList[state.quizIndex % qList.length];
-  const opts = ar ? q.optionsAr : q.optionsEn;
-  const letters = ["A", "B", "C", "D"];
-
-  stage.innerHTML = `
-    <div class="card quiz-card">
-      <div>
-        <span class="tag" style="margin-bottom:10px;display:inline-block;">سؤال ${(state.quizIndex % qList.length) + 1} من ${qList.length}</span>
-        <img src="${escapeHtml(q.image)}" alt="Leaf quiz sample" style="width:100%;max-height:300px;object-fit:cover;border-radius:16px;margin-bottom:14px;" />
-        <div class="weather-advice">
-          💡 <strong>تلميح:</strong> ${escapeHtml(ar ? q.tipAr : q.tipEn)}
-        </div>
-      </div>
-
-      <div>
-        <h2 style="font-weight:800;font-size:1.2rem;margin-bottom:16px;">${escapeHtml(ar ? q.questionAr : q.questionEn)}</h2>
-        <div id="quiz-options">
-          ${opts.map((opt, idx) => {
-            let cls = "quiz-option";
-            if (state.quizSubmitted) {
-              if (idx === q.correctIndex) cls += " correct";
-              else if (idx === state.quizSelected) cls += " wrong";
-            } else if (idx === state.quizSelected) {
-              cls += " selected";
-            }
-            return `<button class="${cls}" data-opt-idx="${idx}"><span class="quiz-letter">${letters[idx]}</span><span>${escapeHtml(opt)}</span></button>`;
-          }).join("")}
-        </div>
-
-        <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;">
-          ${!state.quizSubmitted
-            ? `<button id="btn-quiz-submit" class="btn btn-primary" ${state.quizSelected === null ? "disabled" : ""}>${escapeHtml(t("confirmAnswer"))}</button>`
-            : `<button id="btn-quiz-next" class="btn btn-primary">${escapeHtml(t("nextQuestion"))} ←</button>`
-          }
-          <button id="btn-quiz-skip" class="btn btn-secondary">${escapeHtml(t("skipQuestion"))}</button>
-        </div>
-      </div>
-    </div>
-  `;
-
-  stage.querySelectorAll("[data-opt-idx]").forEach(btn => {
-    btn.addEventListener("click", () => {
-      if (state.quizSubmitted) return;
-      state.quizSelected = Number(btn.getAttribute("data-opt-idx"));
-      renderLearning();
-    });
-  });
-
-  document.getElementById("btn-quiz-submit")?.addEventListener("click", async () => {
-    state.quizSubmitted = true;
-    const correct = state.quizSelected === q.correctIndex;
-    if (state.profile) {
-      const currentStats = state.profile.learningStats || { points: 0, streak: 0, answeredIds: [] };
-      const newPoints = (currentStats.points || 0) + (correct ? 20 : 0);
-      const newStreak = correct ? (currentStats.streak || 0) + 1 : 0;
-      state.profile.learningStats = {
-        points: newPoints,
-        streak: newStreak,
-        answeredIds: Array.from(new Set([...(currentStats.answeredIds || []), q.id]))
-      };
-      if (firebaseService.isReady && state.user) {
-        await firebaseService.saveLearningProgress(state.user.uid, {
-          points: newPoints,
-          streak: newStreak,
-          answeredId: q.id
-        }).catch(() => {});
-      }
-    }
-    showToast(correct ? "إجابة صحيحة! +20 نقطة" : "إجابة غير صحيحة — راجع التلميح أسفل الصورة", correct ? "info" : "warning");
-    renderLearning();
-  });
-
-  const goNext = () => {
-    state.quizIndex = (state.quizIndex + 1) % qList.length;
-    state.quizSelected = null;
-    state.quizSubmitted = false;
-    renderLearning();
-  };
-  document.getElementById("btn-quiz-next")?.addEventListener("click", goNext);
-  document.getElementById("btn-quiz-skip")?.addEventListener("click", goNext);
-}
-
 // ==================== CONSULTATIONS ====================
 
 function renderConsultationsView() {
@@ -991,16 +895,13 @@ function renderDashboard() {
   const content = document.getElementById("dash-content");
   const totalDiag = state.diagnoses.length;
   const favCount = (state.profile?.favorites || []).length;
-  const answeredCount = (state.profile?.learningStats?.answeredIds || []).length;
-  const learnPct = state.quizQuestions.length
-    ? Math.min(100, Math.round((answeredCount / state.quizQuestions.length) * 100))
-    : 0;
+  const govName = GOVERNORATES.find(g => g.id === (state.profile?.governorate || "cairo"))?.[state.lang] || "القاهرة";
 
   if (state.dashTab === "overview") {
     content.innerHTML = `
       <div class="kpi-grid">
         <div class="kpi-card"><div class="kpi-val">${totalDiag}</div><div class="kpi-label">إجمالي الفحوصات</div></div>
-        <div class="kpi-card"><div class="kpi-val">${learnPct}%</div><div class="kpi-label">التقدم التعليمي</div></div>
+        <div class="kpi-card"><div class="kpi-val">${escapeHtml(govName)}</div><div class="kpi-label">المحافظة / الإقليم</div></div>
         <div class="kpi-card"><div class="kpi-val">${favCount}</div><div class="kpi-label">الأمراض المفضلة</div></div>
         <div class="kpi-card"><div class="kpi-val">${state.consultations.length}</div><div class="kpi-label">الاستشارات</div></div>
       </div>
@@ -1227,6 +1128,9 @@ async function bootstrap() {
   document.getElementById("select-governorate")?.addEventListener("change", (e) => {
     loadWeatherForGov(e.target.value);
   });
+  document.getElementById("landing-select-gov")?.addEventListener("change", (e) => {
+    loadWeatherForGov(e.target.value);
+  });
   document.getElementById("btn-gps-weather")?.addEventListener("click", () => {
     if (!navigator.geolocation) {
       showToast("المتصفح لا يدعم تحديد الموقع الجغرافي", "warning");
@@ -1271,14 +1175,6 @@ async function bootstrap() {
   document.getElementById("pathogen-filter").addEventListener("change", (e) => {
     state.selectedPathogenFilter = e.target.value;
     renderLibrary();
-  });
-
-  // Learning tabs
-  document.querySelectorAll("[data-learn-tab]").forEach(btn => {
-    btn.addEventListener("click", () => {
-      state.learnTab = btn.getAttribute("data-learn-tab");
-      renderLearning();
-    });
   });
 
   // Dashboard sidebar tabs
@@ -1438,7 +1334,7 @@ async function bootstrap() {
 
   // Respect URL hash
   const initialHash = window.location.hash.replace("#", "");
-  if (["home", "diagnosis", "library", "learning", "consultations", "dashboard", "auth"].includes(initialHash)) {
+  if (["home", "diagnosis", "library", "consultations", "dashboard", "auth"].includes(initialHash)) {
     navigateTo(initialHash);
   }
 }

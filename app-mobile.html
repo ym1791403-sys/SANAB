@@ -149,7 +149,7 @@ input[type=checkbox] { width: auto; }
   transform: translateY(-50%); background: none; border: 0; color: var(--mu);
 }
 
-.roles { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+.roles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
 .role {
   display: flex; flex-direction: column; align-items: center; gap: 2px;
   padding: 8px 2px; border: 1.5px solid var(--bd); border-radius: 12px;
@@ -239,7 +239,7 @@ dialog::backdrop { background: #0008; }
 @media (min-width: 641px) {
   :root { --max-w: 780px; }
   .svc { grid-template-columns: repeat(4, 1fr); }
-  .roles { grid-template-columns: repeat(5, 1fr); }
+  .roles { grid-template-columns: repeat(4, 1fr); }
   .bar h1 { font-size: 22px; }
   main { padding-inline: 20px; }
 }
@@ -326,7 +326,7 @@ const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&
 const ico=(n,c="")=>`<svg class="i ${c}"><use href="#i-${n}"/></svg>`;
 const toast=m=>{const e=$("toast");e.textContent=m;e.style.display="block";clearTimeout(e._t);e._t=setTimeout(()=>e.style.display="none",4200)};
 const SEV={low:"منخفضة",medium:"متوسطة",high:"شديدة"},TYPE={fungal:"فطري",bacterial:"بكتيري",viral:"فيروسي",deficiency:"نقص عناصر",pest:"آفة حشرية",healthy:"سليم",unknown:"غير محدد"};
-const ROLES={farmer:["مزارع","tractor"],engineer:["مهندس زراعي","hat"],student:["طالب زراعة","cap"],nursery:["صاحب مشتل","sprout"],admin:["مسؤول (Admin)","shield"]};
+const ROLES={farmer:["مزارع","tractor"],engineer:["مهندس زراعي","hat"],nursery:["صاحب مشتل","sprout"],admin:["مسؤول النظام","shield"]};
 const sk=s=>SEV[s]?s:"medium";
 const err=x=>({"auth/invalid-credential":"بيانات الدخول غير صحيحة","auth/wrong-password":"بيانات الدخول غير صحيحة","auth/user-not-found":"بيانات الدخول غير صحيحة","auth/email-already-in-use":"البريد مستخدم بالفعل","auth/weak-password":"كلمة المرور ضعيفة (6 أحرف على الأقل)","auth/invalid-email":"بريد غير صالح","permission-denied":"ليس لديك صلاحية"}[x?.code]||x?.message||"حدث خطأ");
 const lines=s=>String(s||"").split("\n").map(x=>x.trim()).filter(Boolean);
@@ -494,7 +494,13 @@ function wxHTML(){
   const tip=wx.temp>=32?"الحرارة مرتفعة، الأفضل الرش في الصباح الباكر أو بعد العصر.":"الظروف مناسبة للرش الوقائي، والأفضل قبل اشتداد حرارة الظهيرة.";
   return `<div class="t"><b>طقس اليوم في مزرعتك: ${Math.round(wx.temp)}° مئوية (${txt})</b><p>نصيحة اليوم: سرعة الرياح ${wd} (${Math.round(w)} كم/س)، ${tip}</p></div><div class="ic">${ico(ic)}</div>`;
 }
-function loadWx(){
+async function loadWx(){
+  try{
+    const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=30.0444&longitude=31.2357&current=temperature_2m,weather_code,wind_speed_10m&wind_speed_unit=kmh&timezone=auto`);
+    const j=await r.json();
+    wx={temp:j.current.temperature_2m,code:j.current.weather_code,wind:j.current.wind_speed_10m};
+    paintWx();
+  }catch(_){}
   if(!navigator.geolocation)return;
   navigator.geolocation.getCurrentPosition(async p=>{
     try{const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${p.coords.latitude}&longitude=${p.coords.longitude}&current=temperature_2m,weather_code,wind_speed_10m&wind_speed_unit=kmh&timezone=auto`);
