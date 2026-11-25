@@ -161,12 +161,15 @@ function navigateTo(route) {
     const isAdmin = Boolean(
       state.profile?.accountType === "admin" ||
       state.profile?.role === "admin" ||
-      state.profile?.accountType === "engineer" ||
       state.user?.email?.toLowerCase().includes("admin")
     );
     if (!isAdmin) {
       route = "home";
     }
+  }
+  if (route === "auth") {
+    const submitBtn = document.getElementById("btn-auth-submit");
+    if (submitBtn) submitBtn.disabled = false;
   }
   state.route = route;
   window.location.hash = route;
@@ -251,7 +254,6 @@ function updateConnectionUI() {
   const isAdmin = Boolean(
     state.profile?.accountType === "admin" ||
     state.profile?.role === "admin" ||
-    state.profile?.accountType === "engineer" ||
     state.user?.email?.toLowerCase().includes("admin")
   );
 
@@ -898,13 +900,17 @@ function openNewConsultModal(prefill = {}) {
 // ==================== DASHBOARD ====================
 
 function renderDashboard() {
-  const guard = document.getElementById("dash-auth-guard");
-  const main = document.getElementById("dash-main");
-  if (!state.user || !firebaseService.isReady) {
-    guard.classList.remove("hidden");
-    main.classList.add("hidden");
+  const isAdmin = Boolean(
+    state.profile?.accountType === "admin" ||
+    state.profile?.role === "admin" ||
+    state.user?.email?.toLowerCase().includes("admin")
+  );
+  if (!state.user || !isAdmin) {
+    navigateTo("home");
     return;
   }
+  const guard = document.getElementById("dash-auth-guard");
+  const main = document.getElementById("dash-main");
   guard.classList.add("hidden");
   main.classList.remove("hidden");
 
@@ -1103,7 +1109,6 @@ async function bootstrap() {
   try {
     const fbRes = await firebaseService.init();
     if (fbRes.ready) {
-      firebaseService.listenAuth(syncUserData);
       firebaseService.getDiseasesFromFirestore().then(fsDiseases => {
         if (fsDiseases?.length) state.diseases = fsDiseases;
       }).catch(() => {});
@@ -1115,6 +1120,9 @@ async function bootstrap() {
       }).catch(() => {});
     }
   } catch (_) {}
+
+  // Always listen to auth so persistent user sessions are loaded immediately
+  firebaseService.listenAuth(syncUserData);
 
   updateConnectionUI();
 
@@ -1231,7 +1239,10 @@ async function bootstrap() {
     document.getElementById("register-only-fields")?.classList.toggle("hidden", !isSignup);
     document.getElementById("login-only-row")?.classList.toggle("hidden", isSignup);
     const subBtn = document.getElementById("btn-auth-submit");
-    if (subBtn) subBtn.textContent = isSignup ? "إنشاء الحساب" : "تسجيل الدخول";
+    if (subBtn) {
+      subBtn.textContent = isSignup ? "إنشاء الحساب" : "تسجيل الدخول";
+      subBtn.disabled = false;
+    }
     const swBtn = document.getElementById("btn-switch-auth-mode");
     if (swBtn) swBtn.textContent = isSignup ? "لديك حساب؟ سجّل الدخول" : "إنشاء حساب جديد";
   };
@@ -1287,7 +1298,6 @@ async function bootstrap() {
       const isAdmin = Boolean(
         res.profile?.accountType === "admin" ||
         res.profile?.role === "admin" ||
-        res.profile?.accountType === "engineer" ||
         email.toLowerCase().includes("admin")
       );
 
@@ -1309,7 +1319,7 @@ async function bootstrap() {
       const isAdmin = Boolean(
         res.profile?.accountType === "admin" ||
         res.profile?.role === "admin" ||
-        res.profile?.accountType === "engineer"
+        res.user?.email?.toLowerCase().includes("admin")
       );
       const target = state.intendedRoute || (isAdmin ? "dashboard" : "home");
       state.intendedRoute = null;

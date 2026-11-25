@@ -395,7 +395,7 @@ function route(){
   }
   $("bnav").style.display="flex";
 
-  const isAdm=Boolean(profile?.role==="admin"||profile?.role==="engineer"||user?.email?.toLowerCase().includes("admin"));
+  const isAdm=Boolean(profile?.role==="admin"||user?.email?.toLowerCase().includes("admin"));
   const dashBtn=$("bnav-dash");
   if(dashBtn)dashBtn.style.display=isAdm?"flex":"none";
 
@@ -435,6 +435,9 @@ async function doAuth(){
   try{
     if(mode==="signup"){
       const name=$("aName").value.trim();if(!name){b.disabled=false;return toast("اكتب اسمك")}
+      if(pw.length<6){b.disabled=false;return toast("كلمة المرور يجب أن لا تقل عن 6 أحرف")}
+      const existing = getLocalAccounts().find(a=>a.email.toLowerCase()===em.toLowerCase());
+      if(existing){b.disabled=false;return toast("هذا البريد مسجل بالفعل، يرجى تسجيل الدخول")}
       const isAdm=role==="admin"||em.toLowerCase().includes("admin");
       const assignedRole=isAdm?"admin":role;
       let cUser=null,cProfile=null,cloud=false;
@@ -457,7 +460,7 @@ async function doAuth(){
       intendedMobileRoute=null;
       location.hash="#"+tgt;
       route();
-      toast(cloud?"تم إنشاء الحساب في Firebase بنجاح":"تم إنشاء الحساب وتسجيل الدخول بنجاح 🌾");
+      toast("تم إنشاء الحساب وتسجيل الدخول بنجاح 🌾");
     }else{
       let cUser=null,cProfile=null,cloud=false;
       const isAdm=em.toLowerCase().includes("admin")||role==="admin";
@@ -475,9 +478,7 @@ async function doAuth(){
           if(found.password&&found.password!==pw)throw new Error("كلمة المرور غير صحيحة");
           cUser=found.user;cProfile=found.profile;
         }else{
-          cUser={uid:"usr_"+Date.now().toString(36),email:em,displayName:em.split("@")[0]};
-          cProfile={name:em.split("@")[0],email:em,role:isAdm?"admin":role};
-          saveLocalAccount(cUser,cProfile,pw);
+          throw new Error("البريد الإلكتروني غير مسجل، يرجى إنشاء حساب جديد أولاً");
         }
       }
       user=cUser;profile=cProfile;
@@ -779,7 +780,7 @@ async function replyC(id){const t=$("r_"+id)?.value.trim();if(!t)return toast("�
 
 /* ---------- admin dashboard (Real Platform Data Only) ---------- */
 function renderDashboard(){
-  const isAdm = Boolean(profile?.role==="admin"||profile?.role==="engineer"||user?.email?.toLowerCase().includes("admin"));
+  const isAdm = Boolean(profile?.role==="admin"||user?.email?.toLowerCase().includes("admin"));
   if(!isAdm){location.replace("#home");return}
   const locals=getLocalAccounts();
   const totalUsers=Math.max(locals.length,1);
@@ -823,7 +824,7 @@ function renderDashboard(){
 /* ---------- account ---------- */
 async function renderAccount(){
   await loadDiags();if(location.hash!=="#account")return;
-  const isAdm=Boolean(profile?.role==="admin"||profile?.role==="engineer"||user?.email?.toLowerCase().includes("admin"));
+  const isAdm=Boolean(profile?.role==="admin"||user?.email?.toLowerCase().includes("admin"));
   $("main").innerHTML=`<div class="card sum"><div class="av" style="font-weight:800;font-size:24px">${esc((profile?.name||"?")[0])}</div><div><b>${esc(profile?.name)}</b><small>${ROLES[profile?.role]?ROLES[profile.role][0]:"مزارع"} • ${esc(user.email)}</small></div></div>
   ${isAdm?`<div class="card" style="border:1.5px solid var(--g);background:var(--g3)"><div style="display:flex;justify-content:space-between;align-items:center;"><div><b>لوحة تحكم النظام (Admin)</b><br><small style="color:var(--gd);">إدارة المنصة والإحصائيات والمستخدمين</small></div><a href="#dashboard" class="btn sm" style="width:auto">فتح اللوحة</a></div></div>`:""}
   <div class="card"><div class="met" style="border:0;margin:0;padding:0"><div><b style="color:var(--g)">${diags.length}</b><small>إجمالي الفحوصات</small></div><div><b style="color:var(--blue)">${diseases.length||12}</b><small>آفات الموسوعة</small></div></div></div>

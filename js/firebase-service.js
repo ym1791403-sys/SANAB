@@ -43,6 +43,12 @@ import {
 import { loadFirebaseConfig } from "./firebase-config.js";
 import { DISEASES_DATA, QUIZ_QUESTIONS } from "./data-diseases.js";
 
+const withTimeout = (p, ms = 2500) =>
+  Promise.race([
+    p,
+    new Promise((_, reject) => setTimeout(() => reject(new Error("network-timeout")), ms))
+  ]);
+
 class FirebaseService {
   constructor() {
     this.app = null;
@@ -232,7 +238,7 @@ class FirebaseService {
     if (this.db) {
       try {
         const userRef = doc(this.db, "users", uid);
-        const snap = await getDoc(userRef);
+        const snap = await withTimeout(getDoc(userRef), 2000);
         if (snap.exists()) {
           return { uid, ...snap.data() };
         }
@@ -254,13 +260,26 @@ class FirebaseService {
   }
 
   async register({ email, password, name, accountType, governorate }) {
+    if (!email || !password) {
+      throw new Error("يرجى إدخال البريد الإلكتروني وكلمة المرور");
+    }
+    if (password.length < 6) {
+      throw new Error("كلمة المرور يجب أن تتكون من 6 أحرف أو أرقام على الأقل");
+    }
+
+    // Check if email already registered locally
+    const existing = this._getLocalAccounts().find(a => a.email.toLowerCase() === email.toLowerCase());
+    if (existing) {
+      throw new Error("هذا البريد الإلكتروني مسجل بالفعل، يمكنك تسجيل الدخول مباشرة.");
+    }
+
     const isAdm = accountType === "admin" || email.toLowerCase().includes("admin");
     const chosenRole = isAdm ? "admin" : (accountType || "farmer");
 
     // Try real Firebase Auth first
     if (this.auth) {
       try {
-        const cred = await createUserWithEmailAndPassword(this.auth, email, password);
+        const cred = await withTimeout(createUserWithEmailAndPassword(this.auth, email, password), 2500);
         if (name) {
           try { await updateProfile(cred.user, { displayName: name }); } catch (_) {}
         }
@@ -276,19 +295,26 @@ class FirebaseService {
         };
         if (this.db) {
           try {
-            await setDoc(doc(this.db, "users", cred.user.uid), profile);
+            await withTimeout(setDoc(doc(this.db, "users", cred.user.uid), profile), 2000);
           } catch (e) {
             console.warn("Firestore doc write skipped, saved locally:", e.message);
           }
         }
         this._saveLocalAccount(cred.user, profile, password);
+        this._setActiveLocalSession(cred.user, profile);
         return { user: cred.user, profile, cloud: true };
       } catch (err) {
         console.warn("Firebase Auth register failed, fallback to local:", err.message);
+        if (err.code === "auth/email-already-in-use") {
+          throw new Error("هذا البريد الإلكتروني مسجل بالفعل، يمكنك تسجيل الدخول مباشرة.");
+        }
+        if (err.code === "auth/weak-password") {
+          throw new Error("كلمة المرور ضعيفة، يرجى كتابة 6 أحرف أو أرقام على الأقل.");
+        }
       }
     }
 
-    // Seamless fallback to persistent local session
+    // Persistent local registration
     const localUser = {
       uid: "usr_" + Date.now().toString(36) + Math.random().toString(36).substr(2, 5),
       email,
@@ -306,25 +332,33 @@ class FirebaseService {
       isLocal: true
     };
     this._saveLocalAccount(localUser, localProfile, password);
-    return { user: localUser, profile: localProfile, cloud: false, isConfigMissing: true };
+    return { user: localUser, profile: localProfile, cloud: false };
   }
 
   async login({ email, password, remember = true }) {
+    if (!email || !password) {
+      throw new Error("يرجى إدخال البريد الإلكتروني وكلمة المرور");
+    }
+
     const locals = this._getLocalAccounts();
     const matched = locals.find(a => a.email.toLowerCase() === email.toLowerCase());
 
     if (this.auth) {
       try {
-        await setPersistence(
+        await withTimeout(setPersistence(
           this.auth,
           remember ? browserLocalPersistence : browserSessionPersistence
-        );
-        const cred = await signInWithEmailAndPassword(this.auth, email, password);
+        ), 1500).catch(() => {});
+        const cred = await withTimeout(signInWithEmailAndPassword(this.auth, email, password), 2500);
         const profile = await this.getUserProfile(cred.user.uid, cred.user);
         this._saveLocalAccount(cred.user, profile, password);
+        this._setActiveLocalSession(cred.user, profile);
         return { user: cred.user, profile, cloud: true };
       } catch (err) {
         console.warn("Firebase Auth login failed, checking fallback:", err.message);
+        if (err.code === "auth/wrong-password" || err.code === "auth/invalid-credential") {
+          throw new Error("البريد الإلكتروني أو كلمة المرور غير صحيحة");
+        }
       }
     }
 
@@ -336,26 +370,7 @@ class FirebaseService {
       return { user: matched.user, profile: matched.profile, cloud: false };
     }
 
-    // Allow instant entry for admin or test credentials
-    const isAdm = email.toLowerCase().includes("admin");
-    const localUser = {
-      uid: "usr_" + Date.now().toString(36) + Math.random().toString(36).substr(2, 5),
-      email,
-      displayName: email.split("@")[0]
-    };
-    const localProfile = {
-      uid: localUser.uid,
-      name: email.split("@")[0],
-      email,
-      accountType: isAdm ? "admin" : "farmer",
-      governorate: "cairo",
-      favorites: [],
-      learningStats: { points: 0, streak: 0, answeredIds: [] },
-      createdAt: new Date().toISOString(),
-      isLocal: true
-    };
-    this._saveLocalAccount(localUser, localProfile, password);
-    return { user: localUser, profile: localProfile, cloud: false, isConfigMissing: true };
+    throw new Error("البريد الإلكتروني غير مسجل، يرجى إنشاء حساب جديد أولاً");
   }
 
   async loginWithGoogle(accountType = "farmer", governorate = "cairo") {
@@ -458,10 +473,10 @@ class FirebaseService {
 
     if (this.db) {
       try {
-        const docRef = await addDoc(collection(this.db, "diagnoses"), {
+        const docRef = await withTimeout(addDoc(collection(this.db, "diagnoses"), {
           ...payload,
           createdAt: serverTimestamp()
-        });
+        }), 2000);
         payload.id = docRef.id;
       } catch (err) {
         console.warn("Firestore save diagnosis failed, saved locally:", err.message);
@@ -477,7 +492,7 @@ class FirebaseService {
     if (this.db) {
       try {
         const q = query(collection(this.db, "diagnoses"), where("userId", "==", uid));
-        const snap = await getDocs(q);
+        const snap = await withTimeout(getDocs(q), 1800);
         items = snap.docs.map(d => ({ id: d.id, ...d.data() }));
       } catch (_) {}
     }
@@ -500,7 +515,7 @@ class FirebaseService {
   async deleteDiagnosis(id) {
     if (this.db) {
       try {
-        await deleteDoc(doc(this.db, "diagnoses", id));
+        await withTimeout(deleteDoc(doc(this.db, "diagnoses", id)), 1800);
       } catch (_) {}
     }
     this._deleteLocalDiagnosis(id);
@@ -534,7 +549,7 @@ class FirebaseService {
   async getDiseasesFromFirestore() {
     if (this.db) {
       try {
-        const snap = await getDocs(collection(this.db, "diseases"));
+        const snap = await withTimeout(getDocs(collection(this.db, "diseases")), 2000);
         if (!snap.empty) {
           return snap.docs.map(d => ({ id: d.id, ...d.data() }));
         }
@@ -546,7 +561,7 @@ class FirebaseService {
   async getQuizFromFirestore() {
     if (this.db) {
       try {
-        const snap = await getDocs(collection(this.db, "quiz_questions"));
+        const snap = await withTimeout(getDocs(collection(this.db, "quiz_questions")), 2000);
         if (!snap.empty) {
           return snap.docs.map(d => ({ id: d.id, ...d.data() }));
         }
