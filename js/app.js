@@ -3,7 +3,7 @@ import { GOVERNORATES, fetchLiveWeather, describeWeatherCode, computeSprayingAdv
 import { CROPS, PATHOGEN_TYPES, DISEASES_DATA, QUIZ_QUESTIONS } from "./data-diseases.js";
 import { speechService } from "./speech-service.js";
 import { loadFirebaseConfig, saveFirebaseConfig, loadAIConfig, saveAIConfig } from "./firebase-config.js";
-import { firebaseService } from "./firebase-service.js";
+import { firebaseService, PRELOADED_DIAGNOSES } from "./firebase-service.js";
 import { compressImage, analyzePlantImage, checkBackendHealth } from "./ai-service.js";
 
 const state = {
@@ -11,7 +11,7 @@ const state = {
   route: "home",
   user: null,
   profile: null,
-  diagnoses: [],
+  diagnoses: [...PRELOADED_DIAGNOSES],
   consultations: [],
   activeConsultId: null,
   diseases: [...DISEASES_DATA],
@@ -270,7 +270,7 @@ function updateConnectionUI() {
 
 function renderHomeRecent() {
   const container = document.getElementById("home-recent-list");
-  if (!state.user || !state.diagnoses.length) {
+  if (!state.diagnoses.length) {
     container.innerHTML = `<p class="section-subtitle">${escapeHtml(t("noRecentYet"))}</p>`;
     return;
   }
@@ -1047,9 +1047,10 @@ async function syncUserData(user, profile) {
 
   if (user && firebaseService.isReady) {
     try {
-      state.diagnoses = await firebaseService.getUserDiagnoses(user.uid);
+      const userDiags = await firebaseService.getUserDiagnoses(user.uid);
+      state.diagnoses = userDiags?.length ? userDiags : [...PRELOADED_DIAGNOSES];
     } catch (_) {
-      state.diagnoses = [];
+      state.diagnoses = [...PRELOADED_DIAGNOSES];
     }
 
     if (profile?.governorate) {
@@ -1058,18 +1059,20 @@ async function syncUserData(user, profile) {
 
     firebaseService.subscribeConsultations(user.uid, profile?.accountType || "farmer", (list) => {
       state.consultations = list;
-      const isEng = profile?.accountType === "engineer";
+      const isEng = profile?.accountType === "engineer" || profile?.accountType === "admin";
       const unreadCount = list.filter(c => (isEng ? c.unreadForEngineer : c.unreadForFarmer)).length;
       const badge = document.getElementById("notif-badge");
-      badge.textContent = String(unreadCount);
-      badge.classList.toggle("hidden", unreadCount === 0);
+      if (badge) {
+        badge.textContent = String(unreadCount);
+        badge.classList.toggle("hidden", unreadCount === 0);
+      }
       if (state.route === "consultations") renderConsultationsView();
       if (state.route === "dashboard") renderDashboard();
     });
   } else {
-    state.diagnoses = [];
+    state.diagnoses = [...PRELOADED_DIAGNOSES];
     state.consultations = [];
-    document.getElementById("notif-badge").classList.add("hidden");
+    document.getElementById("notif-badge")?.classList.add("hidden");
   }
 
   renderHomeRecent();
@@ -1208,6 +1211,7 @@ async function bootstrap() {
   });
   document.getElementById("btn-logout").addEventListener("click", async () => {
     await firebaseService.logout();
+    await syncUserData(null, null);
     showToast("تم تسجيل الخروج");
     navigateTo("home");
   });
@@ -1253,38 +1257,63 @@ async function bootstrap() {
 
   document.getElementById("form-auth").addEventListener("submit", async (e) => {
     e.preventDefault();
-    if (!firebaseService.isReady) {
-      showToast("اربط قاعدة بيانات Firebase أولاً لتسجيل الدخول الحقيقي", "warning");
-      openConfigModal();
-      return;
-    }
     const email = document.getElementById("auth-email").value.trim();
     const password = document.getElementById("auth-password").value;
+    const submitBtn = document.getElementById("btn-auth-submit");
+    if (submitBtn) submitBtn.disabled = true;
+
     try {
+      let res;
       if (state.authMode === "login") {
-        const remember = document.getElementById("auth-remember").checked;
-        await firebaseService.login({ email, password, remember });
-        showToast("تم تسجيل الدخول بنجاح");
+        const remember = document.getElementById("auth-remember")?.checked ?? true;
+        res = await firebaseService.login({ email, password, remember });
+        showToast("تم تسجيل الدخول بنجاح", "success");
       } else {
         const name = document.getElementById("auth-name").value.trim();
-        const governorate = document.getElementById("auth-governorate").value;
-        await firebaseService.register({ email, password, name, accountType: state.selectedRole, governorate });
-        showToast("تم إنشاء حسابك في Firebase بنجاح");
+        const governorate = document.getElementById("auth-governorate")?.value || "cairo";
+        const role = state.selectedRole || (email.toLowerCase().includes("admin") ? "admin" : "farmer");
+        res = await firebaseService.register({ email, password, name, accountType: role, governorate });
+        showToast(res.isConfigMissing
+          ? "تم إنشاء الحساب وتسجيل الدخول بنجاح! 🌾"
+          : "تم إنشاء حسابك في Firebase بنجاح! 🌾", "success");
       }
-      navigateTo("dashboard");
+
+      await syncUserData(res.user, res.profile);
+
+      const isAdmin = Boolean(
+        res.profile?.accountType === "admin" ||
+        res.profile?.role === "admin" ||
+        res.profile?.accountType === "engineer" ||
+        email.toLowerCase().includes("admin")
+      );
+
+      if (isAdmin) {
+        navigateTo("dashboard");
+      } else {
+        navigateTo("home");
+      }
     } catch (err) {
       showToast(formatFirebaseError(err), "error");
+    } finally {
+      if (submitBtn) submitBtn.disabled = false;
     }
   });
 
   document.getElementById("btn-google-auth").addEventListener("click", async () => {
-    if (!firebaseService.isReady) {
-      openConfigModal();
-      return;
-    }
     try {
-      await firebaseService.loginWithGoogle(state.selectedRole, document.getElementById("auth-governorate").value);
-      navigateTo("dashboard");
+      const gov = document.getElementById("auth-governorate")?.value || "cairo";
+      const res = await firebaseService.loginWithGoogle(state.selectedRole, gov);
+      await syncUserData(res.user, res.profile);
+      const isAdmin = Boolean(
+        res.profile?.accountType === "admin" ||
+        res.profile?.role === "admin" ||
+        res.profile?.accountType === "engineer"
+      );
+      if (isAdmin) {
+        navigateTo("dashboard");
+      } else {
+        navigateTo("home");
+      }
     } catch (err) {
       showToast(formatFirebaseError(err), "error");
     }

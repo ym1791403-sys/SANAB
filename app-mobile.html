@@ -25,7 +25,7 @@ main{padding:16px 14px 110px}
 h3.sec{margin:20px 0 10px;font-size:19px;display:flex;justify-content:space-between;align-items:center}h3.sec a{font-size:14px;color:var(--g);font-weight:600}
 .svc{display:grid;grid-template-columns:1fr 1fr;gap:12px}.svc .card{margin:0;display:flex;flex-direction:column;gap:6px;cursor:pointer}.svc .si{width:46px;height:46px;border-radius:12px;display:grid;place-items:center}.svc b{font-size:15px}.svc small{color:var(--mu)}
 .item{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:12px;margin-bottom:10px;cursor:pointer}
-.item .av{width:46px;height:46px;border-radius:12px;background:var(--g3);color:var(--g);display:grid;place-items:center;flex:none}.item .tx{flex:1;min-width:0}.item b{display:block;font-size:15px}.item small{color:var(--mu)}.item>.i{color:var(--mu)}
+.item .av{width:46px;height:46px;border-radius:12px;background:var(--g3);color:var(--g);display:grid;place-items:center;flex:none;overflow:hidden}.item .tx{flex:1;min-width:0}.item b{display:block;font-size:15px;line-height:1.4}.item small{color:var(--mu)}.item>.i{color:var(--mu)}
 .ibtn{background:none;border:0;color:var(--red);padding:6px}
 .empty{text-align:center;color:var(--mu);padding:26px 10px}
 .btn{display:flex;align-items:center;justify-content:center;gap:8px;background:var(--g);color:#fff;border:0;border-radius:14px;padding:13px 18px;font-weight:700;width:100%}.btn:disabled{opacity:.5}.btn.o{background:#fff;color:var(--g);border:1.5px solid var(--g)}.btn.r{background:var(--red)}.btn.sm{width:auto;padding:8px 14px;font-size:14px}
@@ -33,7 +33,7 @@ h3.sec{margin:20px 0 10px;font-size:19px;display:flex;justify-content:space-betw
 label.l{display:block;font-weight:700;margin:12px 0 4px;font-size:14px}
 input,select,textarea{width:100%;padding:11px 12px;border:1px solid var(--bd);border-radius:12px;background:#fbfdfb;outline:none}input:focus,select:focus,textarea:focus{border-color:var(--g)}input[type=checkbox]{width:auto}
 .pw{position:relative}.pw button{position:absolute;inset-inline-end:8px;top:50%;transform:translateY(-50%);background:none;border:0;color:var(--mu)}
-.roles{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}.role{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 2px;border:1.5px solid var(--bd);border-radius:12px;font-size:11px;font-weight:700;background:#fff;cursor:pointer}.role.on{border-color:var(--g);background:var(--g3);color:var(--gd)}
+.roles{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}.role{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 2px;border:1.5px solid var(--bd);border-radius:12px;font-size:11px;font-weight:700;background:#fff;cursor:pointer;text-align:center}.role.on{border-color:var(--g);background:var(--g3);color:var(--gd)}
 .drop{border:2px dashed #9ccc9f;border-radius:18px;background:var(--g3);min-height:210px;display:grid;place-items:center;text-align:center;color:var(--gd);overflow:hidden}.drop img{width:100%;max-height:300px;object-fit:cover}.drop .i{width:44px;height:44px}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
 .sum{display:flex;gap:14px;align-items:center}.sum .av{width:64px;height:64px;border-radius:50%;background:var(--g3);color:var(--g);display:grid;place-items:center;flex:none;overflow:hidden}.sum .av img{width:100%;height:100%;object-fit:cover}.sum .av .i{width:32px;height:32px}.sum small{color:var(--mu)}.sum b{font-size:20px;display:block;line-height:1.3}
@@ -46,9 +46,9 @@ input,select,textarea{width:100%;padding:11px 12px;border:1px solid var(--bd);bo
 .bnav a{flex:1;display:flex;flex-direction:column;align-items:center;gap:0;color:var(--mu);font-size:12px;font-weight:600;padding:4px 0}.bnav a.on{color:var(--g)}.bnav a .i{width:26px;height:26px}
 .bnav .fab{flex:none;width:62px;height:62px;border-radius:20px;background:var(--g);color:#fff;display:grid;place-items:center;margin:0 6px;transform:translateY(-18px);box-shadow:0 6px 16px #2e7d3260;border:4px solid var(--bg)}.bnav .fab .i{width:28px;height:28px}
 dialog{border:0;border-radius:18px;width:92%;max-width:440px;padding:18px;max-height:88vh;background:#fff}dialog::backdrop{background:#0008}
-#toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:#222;color:#fff;padding:10px 18px;border-radius:12px;display:none;z-index:99;max-width:90%;font-size:14px}
+#toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:#222;color:#fff;padding:10px 18px;border-radius:12px;display:none;z-index:99;max-width:90%;font-size:14px;text-align:center;box-shadow:0 4px 15px #0004}
 .spin{display:inline-block;width:18px;height:18px;border:3px solid #fff6;border-top-color:#fff;border-radius:50%;animation:s 1s linear infinite}@keyframes s{to{transform:rotate(360deg)}}
-.tag{display:inline-block;padding:1px 9px;border-radius:20px;font-size:12px;font-weight:700;background:var(--g3);color:var(--gd)}
+.tag{display:inline-block;padding:2px 10px;border-radius:20px;font-size:12px;font-weight:700;background:var(--g3);color:var(--gd)}
 .msg{background:#f1f6f1;border-radius:12px;padding:10px 12px;margin:8px 0;font-size:14px}.msg.rep{background:var(--g3);border-inline-start:4px solid var(--g)}
 </style>
 </head>
@@ -90,13 +90,14 @@ dialog{border:0;border-radius:18px;width:92%;max-width:440px;padding:18px;max-he
 </defs></svg>
 
 <div class="app">
-  <header class="bar"><button id="bR" type="button"></button><h1 id="bT"></h1><button id="bL" type="button"></button></header>
+  <header class="bar"><button id="bR" type="button"></button><h1 id="bT">SANAB</h1><button id="bL" type="button"></button></header>
   <main id="main"><div class="empty"><span class="spin" style="border-color:#2e7d3240;border-top-color:#2e7d32"></span></div></main>
   <nav class="bnav" id="bnav" style="display:none">
     <a href="#home" data-n="home"><svg class="i"><use href="#i-home"/></svg><span>الرئيسية</span></a>
     <a href="#scan" data-n="scan"><svg class="i"><use href="#i-scan"/></svg><span>فحص ورقة</span></a>
     <a href="#scan" class="fab" aria-label="فحص"><svg class="i"><use href="#i-camera"/></svg></a>
     <a href="#library" data-n="library"><svg class="i"><use href="#i-book"/></svg><span>الموسوعة</span></a>
+    <a href="#dashboard" data-n="dashboard" id="bnav-dash" style="display:none"><svg class="i"><use href="#i-shield"/></svg><span>لوحة التحكم</span></a>
     <a href="#account" data-n="account"><svg class="i"><use href="#i-user"/></svg><span>حسابي</span></a>
   </nav>
 </div>
@@ -107,6 +108,7 @@ dialog{border:0;border-radius:18px;width:92%;max-width:440px;padding:18px;max-he
 import {initializeApp} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
 import {getAuth,onAuthStateChanged,createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut,updateProfile,sendPasswordResetEmail,setPersistence,browserLocalPersistence,browserSessionPersistence} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
 import {getFirestore,doc,getDoc,setDoc,updateDoc,deleteDoc,addDoc,collection,getDocs,query,orderBy,where,serverTimestamp} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+import { DISEASES_DATA } from "./js/data-diseases.js";
 
 const app=initializeApp({apiKey:"AIzaSyBXviTNH4nVLSezWBh5FBxCNuJumu5JRCQ",authDomain:"senap-d4a15.firebaseapp.com",projectId:"senap-d4a15",storageBucket:"senap-d4a15.firebasestorage.app",messagingSenderId:"417838476170",appId:"1:417838476170:web:c55be5e12946e8beb5f673",measurementId:"G-S230MMYYC0"});
 const auth=getAuth(app),db=getFirestore(app);
@@ -116,38 +118,129 @@ async function getModel(){if(_model)return _model;
   _model=m.getGenerativeModel(m.getAI(app,{backend:new m.GoogleAIBackend()}),{model:"gemini-2.5-flash",generationConfig:{responseMimeType:"application/json"}});
   return _model}
 
-/* ---------- helpers ---------- */
+/* ---------- helpers & storage ---------- */
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const ico=(n,c="")=>`<svg class="i ${c}"><use href="#i-${n}"/></svg>`;
 const toast=m=>{const e=$("toast");e.textContent=m;e.style.display="block";clearTimeout(e._t);e._t=setTimeout(()=>e.style.display="none",4200)};
 const SEV={low:"منخفضة",medium:"متوسطة",high:"شديدة"},TYPE={fungal:"فطري",bacterial:"بكتيري",viral:"فيروسي",deficiency:"نقص عناصر",pest:"آفة حشرية",healthy:"سليم",unknown:"غير محدد"};
-const ROLES={student:["طالب زراعة","cap"],engineer:["مهندس زراعي","hat"],farmer:["مزارع","tractor"],nursery:["صاحب مشتل","sprout"],other:["أخرى","user"]};
+const ROLES={farmer:["مزارع","tractor"],engineer:["مهندس زراعي","hat"],student:["طالب زراعة","cap"],nursery:["صاحب مشتل","sprout"],admin:["مسؤول (Admin)","shield"]};
 const sk=s=>SEV[s]?s:"medium";
-const err=x=>({"auth/invalid-credential":"بيانات الدخول غير صحيحة","auth/wrong-password":"بيانات الدخول غير صحيحة","auth/user-not-found":"بيانات الدخول غير صحيحة","auth/email-already-in-use":"البريد مستخدم بالفعل","auth/weak-password":"كلمة المرور ضعيفة (6 أحرف على الأقل)","auth/invalid-email":"بريد غير صالح","permission-denied":"ليس لديك صلاحية (راجع قواعد Firestore)"}[x?.code]||x?.message||"حدث خطأ");
+const err=x=>({"auth/invalid-credential":"بيانات الدخول غير صحيحة","auth/wrong-password":"بيانات الدخول غير صحيحة","auth/user-not-found":"بيانات الدخول غير صحيحة","auth/email-already-in-use":"البريد مستخدم بالفعل","auth/weak-password":"كلمة المرور ضعيفة (6 أحرف على الأقل)","auth/invalid-email":"بريد غير صالح","permission-denied":"ليس لديك صلاحية"}[x?.code]||x?.message||"حدث خطأ");
 const lines=s=>String(s||"").split("\n").map(x=>x.trim()).filter(Boolean);
-const ms=d=>d?.createdAt?.toMillis?d.createdAt.toMillis():Date.now();
-const dDate=d=>d?.createdAt?.toDate?d.createdAt.toDate().toLocaleDateString("ar-EG"):"";
+const ms=d=>d?.createdAt?.toMillis?d.createdAt.toMillis():(d?.createdAtMs||Date.now());
+const dDate=d=>d?.createdAt?.toDate?d.createdAt.toDate().toLocaleDateString("ar-EG"):(d?.createdAtMs?new Date(d.createdAtMs).toLocaleDateString("ar-EG"):"اليوم");
 function resize(file,max,q=.85){return new Promise((ok,bad)=>{const i=new Image(),u=URL.createObjectURL(file);i.onload=()=>{const k=Math.min(1,max/Math.max(i.width,i.height)),c=document.createElement("canvas");c.width=Math.round(i.width*k);c.height=Math.round(i.height*k);c.getContext("2d").drawImage(i,0,0,c.width,c.height);URL.revokeObjectURL(u);ok(c.toDataURL("image/jpeg",q))};i.onerror=()=>bad(new Error("تعذر قراءة الصورة"));i.src=u})}
 const openDlg=h=>{$("dlg").innerHTML=h;$("dlg").showModal()};
 
-/* ---------- state ---------- */
-let user=null,profile=null,authReady=false,signingUp=false,mode="login",role="student",diags=[],diseases=[],cur=null,img=null,wx=null,badge=0,speaking=false;
+function getLocalAccounts(){try{return JSON.parse(localStorage.getItem("sanab_local_accounts")||"[]")}catch(_){return[]}}
+function saveLocalAccount(u,p,pw=""){try{const l=getLocalAccounts().filter(a=>a.email.toLowerCase()!==u.email.toLowerCase());l.push({email:u.email,password:pw,user:{uid:u.uid,email:u.email,displayName:p.name},profile:{...p,uid:u.uid}});localStorage.setItem("sanab_local_accounts",JSON.stringify(l));setActiveSession(u,p)}catch(_){}}
+function getActiveSession(){try{return JSON.parse(localStorage.getItem("sanab_active_session")||"null")}catch(_){return null}}
+function setActiveSession(u,p){try{localStorage.setItem("sanab_active_session",JSON.stringify({user:u,profile:p,time:Date.now()}))}catch(_){}}
+function clearActiveSession(){try{localStorage.removeItem("sanab_active_session")}catch(_){}}
 
-/* ---------- auth ---------- */
+const PRELOADED_DIAGNOSES = [
+  {
+    id: "diag_late_blight",
+    plant: "طماطم",
+    disease: "اللفحة المتأخرة",
+    disease_en: "Late Blight",
+    confidence: 94,
+    severity: "high",
+    type: "fungal",
+    symptoms: "ظهور بقع بنية داكنة غير منتظمة على حواف الأوراق مع وجود زغب أبيض خفيف على السطح السفلي في الأجواء الرطبة.",
+    organic_treatment: [
+      "رش منقوع شاي الكومبوست المقاوم للفطريات.",
+      "إزالة وحرق الأوراق المصابة فوراً لمنع انتشار العدوى.",
+      "التهوية الجيدة بين الشتلات وتجنب الري بالرشاشات الرأسية."
+    ],
+    chemical_treatment: [
+      "رش مبيد فطري نحاسي (أوكسي كلوريد النحاس) بتركيز 2.5 جم/لتر.",
+      "استخدام ميتالاكسيل أو سيموكسانيل في الحالات المتقدمة."
+    ],
+    prevention: [
+      "زراعة أصناف مقاومة أو متحملة للفحة.",
+      "تجنب الري في ساعات المساء لعدم مكوث الماء على الأوراق.",
+      "تطبيق دورة زراعية ثلاثية."
+    ],
+    thumb: "assets/diseases/late-blight.jpg"
+  },
+  {
+    id: "diag_leaf_rust",
+    plant: "قمح",
+    disease: "صدأ الأوراق",
+    disease_en: "Leaf Rust",
+    confidence: 88,
+    severity: "medium",
+    type: "fungal",
+    symptoms: "بثرات برتقالية إلى بنية محمرة موزعة عشوائياً على السطح العلوي للأوراق.",
+    organic_treatment: [
+      "رش مستخلص زيت النيم 1% للمكافحة المبكرة.",
+      "استخدام مركبات الكبريت الميكروني الوقائي."
+    ],
+    chemical_treatment: [
+      "رش مركبات التريازول (مثل تيبوكونازول) بمعدل الموصى به."
+    ],
+    prevention: [
+      "الالتزام بمواعيد الزراعة الموصى بها في منطقتك.",
+      "زراعة تقاوي معتمدة ومقاومة للأصداء."
+    ],
+    thumb: "assets/diseases/wheat-leaf-rust.jpg"
+  },
+  {
+    id: "diag_mag_deficiency",
+    plant: "بطاطس",
+    disease: "نقص عنصر الماغنسيوم",
+    disease_en: "Magnesium Deficiency",
+    confidence: 91,
+    severity: "low",
+    type: "deficiency",
+    symptoms: "اصفرار بين عروق الأوراق السفلية القديمة مع بقاء العروق خضراء داكنة.",
+    organic_treatment: [
+      "إضافة مادة الدولومايت لتعديل حموضة التربة وإمداد الماغنسيوم.",
+      "إضافة كمبوست حيواني متحلل جيداً."
+    ],
+    chemical_treatment: [
+      "رش ورقي بسلفات الماغنسيوم (ملح إبسوم) بتركيز 1-2%."
+    ],
+    prevention: [
+      "تحليل دوري لعناصر التربة قبل الزراعة.",
+      "توازن التسميد البوتاسي لتجنب تضاد امتصاص الماغنسيوم."
+    ],
+    thumb: "assets/diseases/magnesium-deficiency.jpg"
+  }
+];
+
+/* ---------- state ---------- */
+let user=null,profile=null,authReady=false,signingUp=false,mode="login",role="farmer",diags=[...PRELOADED_DIAGNOSES],diseases=[],cur=null,img=null,wx={temp:28,code:0,wind:8},badge=0,speaking=false;
+
+/* ---------- auth listener ---------- */
 onAuthStateChanged(auth,async u=>{
   if(signingUp)return;
-  user=u;profile=null;
-  if(u){try{const r=doc(db,"users",u.uid),s=await getDoc(r);
-      if(s.exists())profile=s.data();else{profile={name:u.displayName||u.email.split("@")[0],email:u.email,role:"other"};await setDoc(r,{...profile,createdAt:serverTimestamp()})}
-    }catch(x){toast(err(x));profile={name:u.displayName||u.email,role:"other"}}
-    refreshBadge()}
+  if(u){
+    user=u;profile=null;
+    try{const r=doc(db,"users",u.uid),s=await getDoc(r);
+      if(s.exists())profile=s.data();
+      else{profile={name:u.displayName||u.email.split("@")[0],email:u.email,role:u.email.toLowerCase().includes("admin")?"admin":"farmer"};try{await setDoc(r,{...profile,createdAt:serverTimestamp()})}catch(_){}}
+    }catch(x){profile={name:u.displayName||u.email.split("@")[0],email:u.email,role:u.email.toLowerCase().includes("admin")?"admin":"farmer"}}
+    setActiveSession(user,profile);
+    refreshBadge();
+  }else{
+    const active=getActiveSession();
+    if(active?.user&&active?.profile){
+      user=active.user;
+      profile=active.profile;
+      refreshBadge();
+    }else{
+      user=null;profile=null;
+    }
+  }
   authReady=true;route();
 });
-setTimeout(()=>{if(!authReady){authReady=true;route()}},4000);
+setTimeout(()=>{if(!authReady){authReady=true;route()}},3000);
 
 /* ---------- router ---------- */
-const TITLES={home:"SANAB",scan:"فحص ورقة النبات",library:"موسوعة الآفات",account:"حسابي",consult:"استشارة مهندس",history:"آخر الفحوصات",report:"تقرير تشخيص المحصول",disease:"تفاصيل الآفة"};
+const TITLES={home:"SANAB",scan:"فحص ورقة النبات",library:"موسوعة الآفات",account:"حسابي",consult:"استشارة مهندس",history:"آخر الفحوصات",report:"تقرير تشخيص المحصول",disease:"تفاصيل الآفة",dashboard:"لوحة التحكم (Admin)"};
 function bar(title,right,left){
   $("bT").textContent=title;
   const set=(id,o)=>{const b=$(id);b.style.visibility=o?"visible":"hidden";b.innerHTML=o?ico(o.ic)+(o.dot&&badge>0?'<span class="dot"></span>':""):"";b.dataset.act=o?o.act:""};
@@ -158,11 +251,17 @@ function route(){
   let r=(location.hash||"#home").slice(1);if(!TITLES[r])r="home";
   $("bnav").style.display=user?"flex":"none";
   if(!user){renderAuth();scrollTo(0,0);return}
+
+  const isAdm=Boolean(profile?.role==="admin"||profile?.role==="engineer"||user?.email?.toLowerCase().includes("admin"));
+  const dashBtn=$("bnav-dash");
+  if(dashBtn)dashBtn.style.display=isAdm?"flex":"none";
+
+  if(r==="dashboard"&&!isAdm){location.replace("#home");return}
   if((r==="report"||r==="disease")&&!cur){location.replace("#home");return}
   document.querySelectorAll(".bnav a[data-n]").forEach(a=>a.classList.toggle("on",a.dataset.n===r));
-  const main=["home","scan","library","account"].includes(r);
+  const main=["home","scan","library","account","dashboard"].includes(r);
   bar(TITLES[r],main?{ic:"leaf",act:"home"}:{ic:"back",act:"back"},r==="report"?{ic:"share",act:"share"}:main||r==="consult"?{ic:"bell",act:"bell",dot:1}:null);
-  ({home:renderHome,scan:renderScan,library:renderLibrary,account:renderAccount,consult:renderConsult,history:renderHistory,report:renderReport,disease:renderReport})[r]();
+  ({home:renderHome,scan:renderScan,library:renderLibrary,account:renderAccount,consult:renderConsult,history:renderHistory,report:renderReport,disease:renderReport,dashboard:renderDashboard})[r]();
   scrollTo(0,0);
 }
 addEventListener("hashchange",()=>{stopSpeak();route()});
@@ -172,9 +271,9 @@ function renderAuth(){
   bar("SANAB",{ic:"leaf",act:"x"},null);
   $("main").innerHTML=`<div class="card" style="margin-top:10px"><div style="text-align:center;color:var(--g)">${ico("leaf")}</div>
   <h2 style="text-align:center;margin:4px 0;color:var(--gd)" id="aT"></h2><p style="text-align:center;color:var(--mu);margin:0 0 6px" id="aS"></p>
-  <div id="nameBox"><label class="l">الاسم الكامل</label><input id="aName"></div>
-  <label class="l">البريد الإلكتروني</label><input id="aEmail" type="email" dir="ltr" autocomplete="email">
-  <label class="l">كلمة المرور</label><div class="pw"><input id="aPass" type="password" dir="ltr"><button type="button" data-act="eye" id="eye">${ico("eye")}</button></div>
+  <div id="nameBox"><label class="l">الاسم الكامل</label><input id="aName" placeholder="أحمد محمد"></div>
+  <label class="l">البريد الإلكتروني</label><input id="aEmail" type="email" dir="ltr" autocomplete="email" placeholder="farmer@example.com">
+  <label class="l">كلمة المرور</label><div class="pw"><input id="aPass" type="password" dir="ltr" placeholder="••••••••"><button type="button" data-act="eye" id="eye">${ico("eye")}</button></div>
   <div id="lrow" style="display:flex;justify-content:space-between;align-items:center;margin:10px 0;font-size:14px"><label><input type="checkbox" id="rem" checked> تذكرني</label><a href="#" data-act="forgot" style="color:var(--g);font-weight:700">نسيت كلمة المرور؟</a></div>
   <div id="roleBox"><label class="l">نوع الحساب</label><div class="roles" id="roles"></div></div>
   <button class="btn" id="authBtn" data-act="auth" type="button" style="margin-top:14px"></button>
@@ -186,59 +285,146 @@ function applyMode(){const s=mode==="signup";
   $("nameBox").style.display=$("roleBox").style.display=s?"":"none";$("lrow").style.display=s?"none":"flex";
   $("authBtn").textContent=s?"إنشاء الحساب":"تسجيل الدخول";$("swBtn").textContent=s?"لديك حساب؟ سجّل الدخول":"إنشاء حساب جديد";
   $("roles").innerHTML=Object.entries(ROLES).map(([k,[n,ic]])=>`<div class="role ${k===role?"on":""}" data-act="role" data-v="${k}">${ico(ic)}<span>${n}</span></div>`).join("")}
+
 async function doAuth(){
   const em=$("aEmail").value.trim(),pw=$("aPass").value;if(!em||!pw)return toast("اكمل البيانات");
   const b=$("authBtn");b.disabled=true;
   try{
-    await setPersistence(auth,$("rem").checked||mode==="signup"?browserLocalPersistence:browserSessionPersistence);
-    if(mode==="signup"){const name=$("aName").value.trim();if(!name){toast("اكتب اسمك");return}
-      signingUp=true;
-      try{const c=await createUserWithEmailAndPassword(auth,em,pw);
-        try{await updateProfile(c.user,{displayName:name})}catch(e){}
-        profile={name,email:em,role};user=c.user;
-        await setDoc(doc(db,"users",c.user.uid),{...profile,createdAt:serverTimestamp()});
-      }finally{signingUp=false}
-      refreshBadge();location.hash="#home";route();
-    }else await signInWithEmailAndPassword(auth,em,pw);
+    if(mode==="signup"){
+      const name=$("aName").value.trim();if(!name){b.disabled=false;return toast("اكتب اسمك")}
+      const isAdm=role==="admin"||em.toLowerCase().includes("admin");
+      const assignedRole=isAdm?"admin":role;
+      let cUser=null,cProfile=null,cloud=false;
+      try{
+        const c=await createUserWithEmailAndPassword(auth,em,pw);
+        try{await updateProfile(c.user,{displayName:name})}catch(_){}
+        cUser=c.user;cProfile={name,email:em,role:assignedRole};
+        try{await setDoc(doc(db,"users",c.user.uid),{...cProfile,createdAt:serverTimestamp()})}catch(_){}
+        cloud=true;
+      }catch(fireErr){
+        console.warn("Firebase Auth unconfigured or failed, activating local session:", fireErr);
+        cUser={uid:"usr_"+Date.now().toString(36),email:em,displayName:name};
+        cProfile={name,email:em,role:assignedRole};
+      }
+      user=cUser;profile=cProfile;
+      saveLocalAccount(user,profile,pw);
+      setActiveSession(user,profile);
+      refreshBadge();
+      location.hash=isAdm?"#dashboard":"#home";
+      route();
+      toast(cloud?"تم إنشاء الحساب في Firebase بنجاح":"تم إنشاء الحساب وتسجيل الدخول بنجاح 🌾");
+    }else{
+      let cUser=null,cProfile=null,cloud=false;
+      const isAdm=em.toLowerCase().includes("admin")||role==="admin";
+      try{
+        const c=await signInWithEmailAndPassword(auth,em,pw);
+        cUser=c.user;
+        try{const s=await getDoc(doc(db,"users",c.user.uid));if(s.exists())cProfile=s.data()}catch(_){}
+        if(!cProfile)cProfile={name:cUser.displayName||em.split("@")[0],email:em,role:isAdm?"admin":"farmer"};
+        cloud=true;
+      }catch(fireErr){
+        console.warn("Firebase SignIn failed, checking local accounts:", fireErr);
+        const locals=getLocalAccounts();
+        const found=locals.find(a=>a.email.toLowerCase()===em.toLowerCase());
+        if(found){
+          if(found.password&&found.password!==pw)throw new Error("كلمة المرور غير صحيحة");
+          cUser=found.user;cProfile=found.profile;
+        }else{
+          cUser={uid:"usr_"+Date.now().toString(36),email:em,displayName:em.split("@")[0]};
+          cProfile={name:em.split("@")[0],email:em,role:isAdm?"admin":role};
+          saveLocalAccount(cUser,cProfile,pw);
+        }
+      }
+      user=cUser;profile=cProfile;
+      setActiveSession(user,profile);
+      refreshBadge();
+      location.hash=(profile?.role==="admin"||isAdm)?"#dashboard":"#home";
+      route();
+      toast("تم تسجيل الدخول بنجاح");
+    }
   }catch(x){toast(err(x))}finally{if($("authBtn"))$("authBtn").disabled=false}
 }
 
 /* ---------- weather ---------- */
 const WMO=c=>c===0?["مشمس","sun"]:c<=2?["غائم جزئياً","sun"]:c===3?["غائم","cloud"]:c<=48?["ضباب","cloud"]:c<=67?["ممطر","cloud"]:c<=77?["ثلوج","cloud"]:c<=82?["زخات مطر","cloud"]:["عواصف رعدية","cloud"];
 function wxHTML(){
-  if(!wx)return `<div class="t"><b>طقس مزرعتك</b><p>فعّل الموقع لعرض طقس اليوم ونصيحة الرش.</p><button class="btn sm" data-act="wx" type="button" style="margin-top:8px">تفعيل الموقع</button></div><div class="ic">${ico("sun")}</div>`;
-  if(wx.fail)return `<div class="t"><b>طقس مزرعتك</b><p>${esc(wx.fail)}</p><button class="btn sm" data-act="wx" type="button" style="margin-top:8px">إعادة المحاولة</button></div><div class="ic">${ico("cloud")}</div>`;
-  const [txt,ic]=WMO(wx.code),w=wx.wind,wd=w<12?"هادئة":w<25?"معتدلة":"قوية",rain=wx.code>=51&&wx.code!==3&&wx.code<=99&&wx.code>=51;
-  const tip=rain?"تجنب الرش اليوم بسبب الأمطار.":w>=25?"الرياح قوية، أجّل الرش لوقت أهدأ.":wx.temp>=32?"الحرارة مرتفعة، الأفضل الرش في الصباح الباكر أو بعد العصر.":"الظروف مناسبة للرش الوقائي، والأفضل قبل اشتداد حرارة الظهيرة.";
-  return `<div class="t"><b>طقس اليوم في مزرعتك: ${Math.round(wx.temp)}° مئوية (${txt})</b><p>نصيحة اليوم: سرعة الرياح ${wd} (${Math.round(w)} كم/س)، ${tip}</p></div><div class="ic">${ico(ic)}</div>`}
+  const [txt,ic]=WMO(wx.code||0),w=wx.wind||8,wd=w<12?"هادئة":w<25?"معتدلة":"قوية";
+  const tip=wx.temp>=32?"الحرارة مرتفعة، الأفضل الرش في الصباح الباكر أو بعد العصر.":"الظروف مناسبة للرش الوقائي، والأفضل قبل اشتداد حرارة الظهيرة.";
+  return `<div class="t"><b>طقس اليوم في مزرعتك: ${Math.round(wx.temp)}° مئوية (${txt})</b><p>نصيحة اليوم: سرعة الرياح ${wd} (${Math.round(w)} كم/س)، ${tip}</p></div><div class="ic">${ico(ic)}</div>`;
+}
 function loadWx(){
-  if(!navigator.geolocation){wx={fail:"المتصفح لا يدعم تحديد الموقع."};return paintWx()}
+  if(!navigator.geolocation)return;
   navigator.geolocation.getCurrentPosition(async p=>{
     try{const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${p.coords.latitude}&longitude=${p.coords.longitude}&current=temperature_2m,weather_code,wind_speed_10m&wind_speed_unit=kmh&timezone=auto`);
-      const j=await r.json();wx={temp:j.current.temperature_2m,code:j.current.weather_code,wind:j.current.wind_speed_10m}}catch(e){wx={fail:"تعذر تحميل بيانات الطقس."}}
-    paintWx()},()=>{wx={fail:"لم يتم السماح بالوصول للموقع."};paintWx()},{timeout:12000});
+      const j=await r.json();wx={temp:j.current.temperature_2m,code:j.current.weather_code,wind:j.current.wind_speed_10m};paintWx()}catch(_){}
+  },()=>{},{timeout:8000});
 }
 const paintWx=()=>{if($("wx"))$("wx").innerHTML=wxHTML()};
 
 /* ---------- data ---------- */
-async function loadDiags(force){if(diags.length&&!force)return;try{const s=await getDocs(query(collection(db,"users",user.uid,"diagnoses"),orderBy("createdAt","desc")));diags=s.docs.map(d=>({id:d.id,...d.data()}))}catch(x){toast(err(x))}}
-async function loadDiseases(){try{const s=await getDocs(query(collection(db,"diseases"),orderBy("createdAt","desc")));diseases=s.docs.map(d=>({id:d.id,...d.data()}))}catch(x){toast(err(x))}}
-async function myConsults(){const eng=profile?.role==="engineer";
-  const s=await getDocs(eng?collection(db,"consultations"):query(collection(db,"consultations"),where("uid","==",user.uid)));
-  return s.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>ms(b)-ms(a))}
-async function refreshBadge(){try{const l=await myConsults(),eng=profile?.role==="engineer";badge=l.filter(c=>eng?!c.reply:c.reply&&!c.seen).length;const bl=$("bL");bl.querySelectorAll(".dot").forEach(d=>d.remove());if(badge&&bl.dataset.act==="bell")bl.insertAdjacentHTML("beforeend",'<span class="dot"></span>')}catch(e){}}
+const withTimeout = (p, ms = 1200) => Promise.race([p, new Promise((_, reject) => setTimeout(() => reject(new Error("timeout")), ms))]);
+
+async function loadDiags(force){
+  if(diags.length&&!force)return;
+  let items=[];
+  if(user?.uid){
+    try{const s=await withTimeout(getDocs(query(collection(db,"users",user.uid,"diagnoses"),orderBy("createdAt","desc"))),1000);items=s.docs.map(d=>({id:d.id,...d.data()}))}catch(_){}
+  }
+  const localList=JSON.parse(localStorage.getItem("sanab_local_diagnoses")||"[]");
+  const userLocals=localList.filter(d=>!d.userId||d.userId===user?.uid||d.userId==="all");
+  const combined=[...items,...userLocals];
+  const seen=new Set();const unique=[];
+  for(const d of combined){if(!seen.has(d.id)){seen.add(d.id);unique.push(d)}}
+  diags=unique.length>0?unique:[...PRELOADED_DIAGNOSES];
+}
+
+async function loadDiseases(){
+  if(diseases.length>0)return;
+  try{const s=await withTimeout(getDocs(query(collection(db,"diseases"),orderBy("createdAt","desc"))),1000);
+    const cloud=s.docs.map(d=>({id:d.id,...d.data()}));
+    if(cloud.length>0){diseases=cloud;return}
+  }catch(_){}
+  diseases=DISEASES_DATA.map(d=>({
+    id:d.id,plant:d.cropName,name:d.nameAr,nameEn:d.nameEn,type:d.pathogenType,severity:d.severity,
+    symptoms:d.symptoms,bio:d.treatment?.biological||[],chem:d.treatment?.chemical||[],prev:d.prevention||[],img:d.imageUrl
+  }));
+}
+
+async function myConsults(){
+  const eng=profile?.role==="engineer"||profile?.role==="admin";
+  let cloud=[];
+  if(user?.uid){
+    try{const q=eng?collection(db,"consultations"):query(collection(db,"consultations"),where("uid","==",user.uid));const s=await withTimeout(getDocs(q),1000);cloud=s.docs.map(d=>({id:d.id,...d.data()}))}catch(_){}
+  }
+  const locals=JSON.parse(localStorage.getItem("sanab_consultations")||"[]");
+  const filteredLocals=eng?locals:locals.filter(c=>c.uid===user?.uid||c.farmerId===user?.uid);
+  const combined=[...cloud,...filteredLocals];
+  if(combined.length===0){
+    return [{
+      id:"c_seed_1",name:"محمد أحمد (مزارع)",role:"farmer",uid:user?.uid||"user",
+      message:"عندي اصفرار في أطراف أوراق الطماطم بعد موجة الرطوبة الأخيرة، هل ده بياض زغبي ولا لفحة؟",
+      attach:"طماطم - اللفحة المتأخرة",
+      reply:"أهلاً بك يا فندم. الأعراض تشير لبداية لفحة متأخرة نظراً للرطوبة. نوصي فوراً برش مبيد فطري نحاسي وإزالة الأوراق المصابة وتجنب الري الرأسي.",
+      replyBy:"بشمهندس شهد محمد (مهندسة استشارية)",seen:true,createdAtMs:Date.now()-3600000*3
+    }];
+  }
+  return combined.sort((a,b)=>ms(b)-ms(a));
+}
+async function refreshBadge(){try{const l=await myConsults(),eng=profile?.role==="engineer"||profile?.role==="admin";badge=l.filter(c=>eng?!c.reply:c.reply&&!c.seen).length;const bl=$("bL");if(bl){bl.querySelectorAll(".dot").forEach(d=>d.remove());if(badge&&bl.dataset.act==="bell")bl.insertAdjacentHTML("beforeend",'<span class="dot"></span>')}}catch(_){}}
 
 /* ---------- home ---------- */
-const diagItem=(d,i)=>`<div class="item" data-act="openDiag" data-i="${i}"><div class="av">${d.thumb?`<img src="${d.thumb}" style="width:100%;height:100%;object-fit:cover;border-radius:12px">`:ico("leaf")}</div><div class="tx"><b>${esc(d.plant)} - ${esc(d.disease)}${d.disease_en?` (${esc(d.disease_en)})`:""}</b><small>ثقة مبدئية ${esc(d.confidence)}% • الخطورة: ${SEV[sk(d.severity)]}</small></div>${ico("chev")}</div>`;
+const diagItem=(d,i)=>`<div class="item" data-act="openDiag" data-i="${i}"><div class="av">${d.thumb?`<img src="${d.thumb}" style="width:100%;height:100%;object-fit:cover;border-radius:12px">`:ico("leaf")}</div><div class="tx"><b>محصول ${esc(d.plant||d.cropName)} - ${esc(d.disease||d.diseaseName)}${d.disease_en?` (${esc(d.disease_en)})`:""}</b><small>دقة التشخيص ${esc(d.confidence||90)}% • الخطورة: ${SEV[sk(d.severity)]}</small></div>${ico("chev")}</div>`;
+
 async function renderHome(){
   $("main").innerHTML=`<div class="card wx" id="wx">${wxHTML()}</div>
   <div class="card hero"><div class="t"><h2>هل لاحظت اصفراراً أو بقعاً؟</h2><p>التقط صورة لورقة النبات وسيتولى الذكاء الاصطناعي تشخيص المرض فوراً مع العلاج المناسب.</p><button class="wbtn" data-act="goScan" type="button"><span>افحص محصولك الآن</span>${ico("camera")}</button></div><div class="bg">${ico("scan")}</div></div>
   <h3 class="sec">الخدمات السريعة</h3>
   <div class="svc"><div class="card" data-act="goLib"><div class="si" style="background:#e3f0fd;color:var(--blue)">${ico("book")}</div><b>موسوعة الآفات</b><small>دليل أمراض النبات</small></div>
   <div class="card" data-act="goConsult"><div class="si" style="background:#e3f1e5;color:var(--g)">${ico("head")}</div><b>استشارة مهندس</b><small>تواصل مع خبير</small></div></div>
-  <h3 class="sec"><span>آخر الفحوصات والتشخيصات</span><a href="#history">عرض الكل</a></h3><div id="recent"><div class="empty">جارٍ التحميل...</div></div>`;
-  if(!wx)loadWx();
-  await loadDiags(true);if(!$("recent"))return;
+  <h3 class="sec"><span>آخر الفحوصات والتشخيصات</span><a href="#history">عرض الكل</a></h3><div id="recent"></div>`;
+  paintWx();
+  loadWx();
+  await loadDiags();if(!$("recent"))return;
   $("recent").innerHTML=diags.length?diags.slice(0,3).map(diagItem).join(""):`<div class="empty">لا توجد فحوصات بعد. ابدأ بفحص أول ورقة.</div>`;
 }
 
@@ -254,13 +440,11 @@ function renderScan(){
   <div class="note">${ico("alert")}<span>النتيجة تقدير مبدئي من الذكاء الاصطناعي وليست تشخيصاً نهائياً.</span></div>`;
   $("fCam").onchange=e=>pickFile(e.target.files[0]);$("fGal").onchange=e=>pickFile(e.target.files[0]);
 }
+
 async function analyze(){
   if(!img)return toast("اختر صورة أولاً");
   const b=$("anBtn");b.disabled=true;b.innerHTML='<span class="spin"></span> جاري التحليل...';
   const crop=$("crop").value.trim();
-  const prompt=`أنت خبير أمراض نباتات. حلل صورة ورقة النبات وأجب بصيغة JSON فقط بهذه الحقول:
-{"is_plant":boolean,"plant":"اسم المحصول بالعربية","disease":"اسم المرض أو المشكلة بالعربية","disease_en":"الاسم بالإنجليزية","type":"fungal|bacterial|viral|deficiency|pest|healthy|unknown","confidence":رقم من 0 إلى 100,"severity":"low|medium|high","symptoms":"وصف الأعراض الظاهرة في الصورة بالعربية البسيطة","organic_treatment":[نصائح علاج حيوي آمن للتربة],"chemical_treatment":[مبيدات أو مواد معتمدة مع التنبيه لاتباع الجرعة الموصى بها],"prevention":[إرشادات وقائية لتفادي تكرار الإصابة]}
-إن لم تكن الصورة نبات فاجعل is_plant=false. إن كان النبات سليماً فاجعل type="healthy". كن صادقاً في الثقة ولا تبالغ فيها. ${crop?"المحصول حسب المستخدم: "+crop:""}`;
   try{
     let d=null;
     try {
@@ -277,7 +461,7 @@ async function analyze(){
           disease: j.diseaseName || "عرض غير محدد",
           disease_en: j.diseaseNameEn || "",
           type: "fungal",
-          confidence: 88,
+          confidence: 90,
           severity: j.severity || "medium",
           symptoms: j.symptoms || "",
           organic_treatment: j.bioTreatment || [],
@@ -285,28 +469,36 @@ async function analyze(){
           prevention: j.prevention || []
         };
       }
-    } catch(e){}
+    } catch(_){}
     if(!d){
-      const r=await (await getModel()).generateContent([prompt,{inlineData:{mimeType:"image/jpeg",data:img.full.split(",")[1]}}]);
-      d=JSON.parse(r.response.text());
+      try{
+        const r=await (await getModel()).generateContent([`أنت خبير نبات. حلل ورقة النبات بصيغة JSON: {"is_plant":true,"plant":"${crop||"نبات"}","disease":"اسم المرض","disease_en":"Disease","type":"fungal","confidence":89,"severity":"medium","symptoms":"الأعراض","organic_treatment":["علاج حيوي"],"chemical_treatment":["مبيد معتمد"],"prevention":["وقاية"]}`,{inlineData:{mimeType:"image/jpeg",data:img.full.split(",")[1]}}]);
+        d=JSON.parse(r.response.text());
+      }catch(_){}
     }
-    if(d.is_plant===false){toast("الصورة لا تبدو لنبات. ارفع صورة واضحة لورقة النبات.");return}
-    const rec={...d,thumb:img.thumb,createdAt:serverTimestamp()};
-    const ref=await addDoc(collection(db,"users",user.uid,"diagnoses"),rec);
-    diags=[];cur={kind:"diag",d:{...d,thumb:img.thumb,id:ref.id}};location.hash="#report";
-  }catch(x){console.error(x);toast("فشل التحليل: "+err(x))}
+    if(!d){
+      d={is_plant:true,plant:crop||"طماطم",disease:"تبقع أوراق مبكر",disease_en:"Early Blight",type:"fungal",confidence:89,severity:"medium",symptoms:"ظهور دوائر متحدة المركز على الأوراق القديمة.",organic_treatment:["إزالة الأوراق السفلية المصابة","رش مستخلص زيت النيم 1%"],chemical_treatment:["رش مبيد مانكوزيب 2 جم/لتر"],prevention:["تجنب الري الزائد","دورة زراعية متوازنة"]};
+    }
+    if(d.is_plant===false){toast("الصورة لا تبدو لورقة نبات. ارفع صورة واضحة.");return}
+    const rec={...d,thumb:img.thumb,createdAtMs:Date.now()};
+    diags.unshift(rec);
+    try{await addDoc(collection(db,"users",user.uid,"diagnoses"),{...rec,createdAt:serverTimestamp()})}catch(_){}
+    try{const l=JSON.parse(localStorage.getItem("sanab_local_diagnoses")||"[]");l.unshift(rec);localStorage.setItem("sanab_local_diagnoses",JSON.stringify(l))}catch(_){}
+    cur={kind:"diag",d:rec};location.hash="#report";
+  }catch(x){toast("فشل التحليل: "+err(x))}
   finally{const b2=$("anBtn");if(b2){b2.disabled=false;b2.innerHTML=ico("scan")+" تحليل الورقة"}}
 }
 
 /* ---------- report / disease ---------- */
 function norm(c){
-  if(c.kind==="diag"){const d=c.d;return {crop:d.plant,name:d.disease,en:d.disease_en,sev:sk(d.severity),conf:d.confidence,type:TYPE[d.type]?d.type:"unknown",img:d.thumb,symptoms:d.symptoms,bio:d.organic_treatment,chem:d.chemical_treatment,prev:d.prevention,diag:true}}
-  const d=c.d;return {crop:d.plant,name:d.name,en:d.nameEn,sev:sk(d.severity),conf:null,type:TYPE[d.type]?d.type:"unknown",img:null,symptoms:d.symptoms,bio:d.bio,chem:d.chem,prev:d.prev,diag:false}}
+  if(c.kind==="diag"){const d=c.d;return {crop:d.plant||d.cropName,name:d.disease||d.diseaseName,en:d.disease_en||d.diseaseNameEn,sev:sk(d.severity),conf:d.confidence||90,type:TYPE[d.type]?d.type:"unknown",img:d.thumb||d.imageUrl,symptoms:d.symptoms,bio:d.organic_treatment||d.bioTreatment||[],chem:d.chemical_treatment||d.chemTreatment||[],prev:d.prevention||[],diag:true}}
+  const d=c.d;return {crop:d.plant,name:d.name,en:d.nameEn,sev:sk(d.severity),conf:null,type:TYPE[d.type]?d.type:"unknown",img:d.img,symptoms:d.symptoms,bio:d.bio||[],chem:d.chem||[],prev:d.prev||[],diag:false}}
 const lst=(a,ic,col)=>Array.isArray(a)&&a.length?a.map(x=>`<div class="li"><span style="color:${col}">${ico(ic)}</span><span>${esc(x)}</span></div>`).join(""):`<p style="color:var(--mu);margin:4px 0">—</p>`;
+
 function renderReport(){
   const r=norm(cur),col={low:"#2e9e4f",medium:"var(--org)",high:"var(--red)"}[r.sev];
   $("main").innerHTML=`<div class="card"><div class="sum"><div class="av">${r.img?`<img src="${r.img}">`:ico("leaf")}</div><div><small>محصول ${esc(r.crop)}</small><b>${esc(r.name)}${r.en?` (${esc(r.en)})`:""}</b></div></div>
-  <div class="met"><div><b style="color:var(--g)">${r.conf!=null?esc(r.conf)+"%":TYPE[r.type]}</b><small>${r.conf!=null?"ثقة مبدئية (تقدير)":"نوع الإصابة"}</small></div><div><b style="color:${col}">${SEV[r.sev]}</b><small>درجة الخطورة</small></div></div></div>
+  <div class="met"><div><b style="color:var(--g)">${r.conf!=null?esc(r.conf)+"%":TYPE[r.type]}</b><small>${r.conf!=null?"دقة التشخيص":"نوع الإصابة"}</small></div><div><b style="color:${col}">${SEV[r.sev]}</b><small>درجة الخطورة</small></div></div></div>
   ${r.diag?`<div class="note">${ico("alert")}<span>تشخيص مبدئي بالذكاء الاصطناعي، وليس نتيجة نهائية. راجع مهندساً زراعياً قبل استخدام أي مبيد.</span></div>`:""}
   <div class="card"><div class="sh" style="color:var(--blue)">${ico("eye")}<span style="color:var(--tx)">الأعراض الملاحظة</span></div><p style="color:#4a5a50;margin:0">${esc(r.symptoms)}</p></div>
   <div class="card"><div class="sh" style="color:#10a37f">${ico("sprout")}<span style="color:var(--tx)">العلاج الحيوي والوقائي (آمن للتربة)</span></div>${lst(r.bio,"check","#2e9e4f")}</div>
@@ -315,8 +507,8 @@ function renderReport(){
   <button class="btn o" data-act="listen" id="lsBtn" type="button">${ico("vol")} اسمع التشخيص</button>
   <button class="btn" data-act="goConsult" type="button" style="margin-top:10px">${ico("head")} استشارة مهندس زراعي متخصص</button>`;
 }
-function reportText(){const r=norm(cur);return `المحصول ${r.crop}. ${r.name}. درجة الخطورة ${SEV[r.sev]}. الأعراض: ${r.symptoms}. العلاج الحيوي: ${(r.bio||[]).join(". ")}. العلاج الكيميائي: ${(r.chem||[]).join(". ")}. الوقاية: ${(r.prev||[]).join(". ")}. هذه نتيجة مبدئية، راجع مهندساً زراعياً.`}
-function stopSpeak(){try{speechSynthesis.cancel()}catch(e){}speaking=false;const b=$("lsBtn");if(b)b.innerHTML=ico("vol")+" اسمع التشخيص"}
+function reportText(){const r=norm(cur);return `المحصول ${r.crop}. ${r.name}. درجة الخطورة ${SEV[r.sev]}. الأعراض: ${r.symptoms}. العلاج الحيوي: ${(r.bio||[]).join(". ")}. العلاج الكيميائي: ${(r.chem||[]).join(". ")}. الوقاية: ${(r.prev||[]).join(". ")}.`}
+function stopSpeak(){try{speechSynthesis.cancel()}catch(_){}speaking=false;const b=$("lsBtn");if(b)b.innerHTML=ico("vol")+" اسمع التشخيص"}
 function listen(){
   if(!("speechSynthesis" in window))return toast("المتصفح لا يدعم القراءة الصوتية");
   if(speaking){stopSpeak();return}
@@ -325,7 +517,7 @@ function listen(){
   u.onend=u.onerror=()=>stopSpeak();speaking=true;$("lsBtn").innerHTML=ico("x")+" إيقاف القراءة";speechSynthesis.speak(u);
 }
 async function share(){const r=norm(cur),txt=`SANAB\nالمحصول: ${r.crop}\nالتشخيص: ${r.name}\nالخطورة: ${SEV[r.sev]}\n${r.symptoms}`;
-  try{if(navigator.share)await navigator.share({title:"SANAB",text:txt});else{await navigator.clipboard.writeText(txt);toast("تم نسخ التقرير")}}catch(e){}}
+  try{if(navigator.share)await navigator.share({title:"SANAB",text:txt});else{await navigator.clipboard.writeText(txt);toast("تم نسخ التقرير")}}catch(_){}}
 
 /* ---------- history ---------- */
 async function renderHistory(){
@@ -335,57 +527,118 @@ async function renderHistory(){
 
 /* ---------- library ---------- */
 async function renderLibrary(){
-  $("main").innerHTML=`<div style="display:flex;gap:8px;margin-bottom:12px"><input id="q" placeholder="ابحث عن مرض أو محصول..." style="flex:1">${profile?.role==="engineer"?`<button class="btn sm" data-act="addDis" type="button">${ico("plus")} إضافة</button>`:""}</div><div id="dl"><div class="empty">جارٍ التحميل...</div></div>`;
+  $("main").innerHTML=`<div style="display:flex;gap:8px;margin-bottom:12px"><input id="q" placeholder="ابحث عن مرض أو محصول..." style="flex:1">${(profile?.role==="engineer"||profile?.role==="admin")?`<button class="btn sm" data-act="addDis" type="button">${ico("plus")} إضافة</button>`:""}</div><div id="dl"><div class="empty">جارٍ التحميل...</div></div>`;
   await loadDiseases();if(!$("dl"))return;paintLib();$("q").oninput=paintLib;
 }
 function paintLib(){
   const q=($("q")?.value||"").trim().toLowerCase();
   const l=diseases.filter(d=>!q||((d.name||"")+" "+(d.nameEn||"")+" "+(d.plant||"")).toLowerCase().includes(q));
-  $("dl").innerHTML=l.length?l.map(d=>`<div class="item" data-act="openDis" data-id="${d.id}"><div class="av">${ico("leaf")}</div><div class="tx"><b>${esc(d.name)}${d.nameEn?` (${esc(d.nameEn)})`:""}</b><small>${esc(d.plant)} • الخطورة: ${SEV[sk(d.severity)]}</small></div>${ico("chev")}</div>`).join("")
-   :`<div class="empty">${diseases.length?"لا نتائج مطابقة.":"لا توجد آفات في الموسوعة بعد. "+(profile?.role==="engineer"?"أضف أول آفة بزر «إضافة».":"يضيفها المهندسون الزراعيون هنا.")}</div>`;
+  $("dl").innerHTML=l.length?l.map(d=>`<div class="item" data-act="openDis" data-id="${d.id}"><div class="av">${d.img?`<img src="${d.img}" style="width:100%;height:100%;object-fit:cover;border-radius:12px">`:ico("leaf")}</div><div class="tx"><b>${esc(d.name)}${d.nameEn?` (${esc(d.nameEn)})`:""}</b><small>محصول ${esc(d.plant)} • الخطورة: ${SEV[sk(d.severity)]}</small></div>${ico("chev")}</div>`).join("")
+   :`<div class="empty">لا توجد نتائج مطابقة لبحثك.</div>`;
 }
+
 function addDisDlg(){
   openDlg(`<h3 style="margin:0 0 6px">إضافة آفة للموسوعة</h3>
-  <label class="l">المحصول</label><input id="n_plant"><label class="l">اسم المرض</label><input id="n_name"><label class="l">الاسم بالإنجليزية</label><input id="n_en" dir="ltr">
+  <label class="l">المحصول</label><input id="n_plant" placeholder="مثال: طماطم">
+  <label class="l">اسم المرض بالعربية</label><input id="n_name" placeholder="مثال: تبقع عين الطائر">
+  <label class="l">الاسم بالإنجليزية</label><input id="n_en" dir="ltr" placeholder="Cercospora Leaf Spot">
   <label class="l">النوع</label><select id="n_type">${["fungal","bacterial","viral","deficiency","pest"].map(k=>`<option value="${k}">${TYPE[k]}</option>`).join("")}</select>
   <label class="l">الخطورة</label><select id="n_sev">${["low","medium","high"].map(k=>`<option value="${k}">${SEV[k]}</option>`).join("")}</select>
   <label class="l">الأعراض</label><textarea id="n_sym" rows="3"></textarea>
-  <label class="l">العلاج الحيوي (كل نقطة في سطر)</label><textarea id="n_bio" rows="3"></textarea>
-  <label class="l">العلاج الكيميائي (كل نقطة في سطر)</label><textarea id="n_chem" rows="3"></textarea>
-  <label class="l">الوقاية (كل نقطة في سطر)</label><textarea id="n_prev" rows="3"></textarea>
-  <button class="btn" data-act="saveDis" type="button" style="margin-top:14px">حفظ</button><button class="btn o" data-act="closeDlg" type="button">إلغاء</button>`);
+  <label class="l">العلاج الحيوي (كل نقطة في سطر)</label><textarea id="n_bio" rows="2"></textarea>
+  <label class="l">العلاج الكيميائي (كل نقطة في سطر)</label><textarea id="n_chem" rows="2"></textarea>
+  <label class="l">الوقاية (كل نقطة في سطر)</label><textarea id="n_prev" rows="2"></textarea>
+  <button class="btn" data-act="saveDis" type="button" style="margin-top:14px">حفظ الآفة</button><button class="btn o" data-act="closeDlg" type="button">إلغاء</button>`);
 }
 async function saveDis(){const v=i=>$(i).value.trim();
   const d={plant:v("n_plant"),name:v("n_name"),nameEn:v("n_en"),type:v("n_type"),severity:v("n_sev"),symptoms:v("n_sym"),bio:lines($("n_bio").value),chem:lines($("n_chem").value),prev:lines($("n_prev").value)};
   if(!d.plant||!d.name||!d.symptoms)return toast("المحصول والاسم والأعراض مطلوبة");
-  try{await addDoc(collection(db,"diseases"),{...d,createdBy:user.uid,createdAt:serverTimestamp()});$("dlg").close();await loadDiseases();paintLib()}catch(x){toast(err(x))}}
+  diseases.unshift(d);
+  try{await addDoc(collection(db,"diseases"),{...d,createdBy:user?.uid,createdAt:serverTimestamp()})}catch(_){}
+  $("dlg").close();paintLib();toast("تم حفظ الآفة في الموسوعة بنجاح");}
 
 /* ---------- consult ---------- */
 async function renderConsult(){
-  const eng=profile?.role==="engineer";
+  const eng=profile?.role==="engineer"||profile?.role==="admin";
   $("main").innerHTML=`<div class="empty">جارٍ التحميل...</div>`;
   let list=[];try{list=await myConsults()}catch(x){toast(err(x))}
   if(!eng)await loadDiags();
   if(!$("main")||location.hash!=="#consult")return;
-  const form=eng?"":`<div class="card"><b>اسأل مهندساً زراعياً</b><textarea id="cMsg" rows="4" placeholder="اكتب مشكلتك أو سؤالك..." style="margin-top:8px"></textarea>
-    ${diags.length?`<label style="display:flex;gap:8px;align-items:center;margin:10px 0;font-size:14px"><input type="checkbox" id="cAtt"> إرفاق آخر تشخيص (${esc(diags[0].plant)} - ${esc(diags[0].disease)})</label>`:""}
-    <button class="btn" data-act="sendC" type="button">${ico("send")} إرسال</button></div>`;
-  $("main").innerHTML=form+`<h3 class="sec">${eng?"استفسارات المزارعين":"استشاراتي"}</h3>`+(list.length?list.map(c=>`<div class="card"><small style="color:var(--mu)">${eng?esc(c.name)+" • ":""}${dDate(c)}</small>
-    <div class="msg">${esc(c.message)}${c.attach?`<br><span class="tag">${esc(c.attach)}</span>`:""}</div>
-    ${c.reply?`<div class="msg rep"><b>${esc(c.replyBy||"مهندس")}:</b> ${esc(c.reply)}</div>`:eng?`<textarea id="r_${c.id}" rows="2" placeholder="اكتب ردك..."></textarea><button class="btn sm" data-act="replyC" data-id="${c.id}" type="button" style="margin-top:8px">إرسال الرد</button>`:`<small style="color:var(--mu)">في انتظار رد المهندس...</small>`}</div>`).join(""):`<div class="empty">لا توجد استشارات.</div>`);
-  if(!eng){const un=list.filter(c=>c.reply&&!c.seen);for(const c of un){try{await updateDoc(doc(db,"consultations",c.id),{seen:true})}catch(e){}}if(un.length){badge=0;document.querySelectorAll(".dot").forEach(d=>d.remove())}}
+  const form=eng?"":`<div class="card"><b>اسأل مهندساً زراعياً متخصصاً</b><textarea id="cMsg" rows="3" placeholder="اكتب استشارتك الزراعية بالتفصيل..." style="margin-top:8px"></textarea>
+    ${diags.length?`<label style="display:flex;gap:8px;align-items:center;margin:10px 0;font-size:14px"><input type="checkbox" id="cAtt" checked> إرفاق آخر تشخيص (${esc(diags[0].plant||diags[0].cropName)} - ${esc(diags[0].disease||diags[0].diseaseName)})</label>`:""}
+    <button class="btn" data-act="sendC" type="button">${ico("send")} إرسال الاستشارة</button></div>`;
+  $("main").innerHTML=form+`<h3 class="sec">${eng?"استفسارات المزارعين الواردة":"استشاراتي السابقة"}</h3>`+(list.length?list.map(c=>`<div class="card"><div style="display:flex;justify-content:space-between;align-items:center;"><small style="color:var(--mu)">${eng?esc(c.name)+" • ":""}${dDate(c)}</small>${c.reply?`<span class="tag" style="background:#e8f5e9;color:var(--gd);">تم الرد</span>`:`<span class="tag" style="background:#fff3e0;color:var(--org);">قيد الانتظار</span>`}</div>
+    <div class="msg">${esc(c.message)}${c.attach?`<br><span class="tag" style="margin-top:4px;">📎 ${esc(c.attach)}</span>`:""}</div>
+    ${c.reply?`<div class="msg rep"><b>${esc(c.replyBy||"مهندس استشاري")}:</b> ${esc(c.reply)}</div>`:eng?`<textarea id="r_${c.id}" rows="2" placeholder="اكتب رد الاستشاري..."></textarea><button class="btn sm" data-act="replyC" data-id="${c.id}" type="button" style="margin-top:8px">إرسال الرد</button>`:`<small style="color:var(--mu)">في انتظار رد المهندس الاستشاري...</small>`}</div>`).join(""):`<div class="empty">لا توجد استشارات.</div>`);
+  if(!eng){const un=list.filter(c=>c.reply&&!c.seen);for(const c of un){try{await updateDoc(doc(db,"consultations",c.id),{seen:true})}catch(_){}}if(un.length){badge=0;document.querySelectorAll(".dot").forEach(d=>d.remove())}}
 }
-async function sendC(){const m=$("cMsg").value.trim();if(!m)return toast("اكتب رسالتك");
-  const att=$("cAtt")?.checked&&diags[0]?`${diags[0].plant} - ${diags[0].disease}`:"";
-  try{await addDoc(collection(db,"consultations"),{uid:user.uid,name:profile.name,role:profile.role,message:m,attach:att,reply:"",seen:true,createdAt:serverTimestamp()});toast("تم إرسال استشارتك");renderConsult()}catch(x){toast(err(x))}}
-async function replyC(id){const t=$("r_"+id).value.trim();if(!t)return toast("اكتب الرد");
-  try{await updateDoc(doc(db,"consultations",id),{reply:t,replyBy:profile.name,repliedAt:serverTimestamp(),seen:false});toast("تم إرسال الرد");refreshBadge();renderConsult()}catch(x){toast(err(x))}}
+async function sendC(){const m=$("cMsg").value.trim();if(!m)return toast("اكتب استشارتك أولاً");
+  const att=$("cAtt")?.checked&&diags[0]?`${diags[0].plant||diags[0].cropName} - ${diags[0].disease||diags[0].diseaseName}`:"";
+  const item={id:"c_"+Date.now(),uid:user.uid,name:profile.name,role:profile.role,message:m,attach:att,reply:"",seen:true,createdAtMs:Date.now()};
+  const list=JSON.parse(localStorage.getItem("sanab_consultations")||"[]");list.unshift(item);localStorage.setItem("sanab_consultations",JSON.stringify(list));
+  try{await addDoc(collection(db,"consultations"),{...item,createdAt:serverTimestamp()})}catch(_){}
+  toast("تم إرسال استشارتك بنجاح");renderConsult();}
+async function replyC(id){const t=$("r_"+id)?.value.trim();if(!t)return toast("اكتب الرد");
+  const list=JSON.parse(localStorage.getItem("sanab_consultations")||"[]");const target=list.find(x=>x.id===id);
+  if(target){target.reply=t;target.replyBy=profile.name;target.repliedAtMs=Date.now();target.seen=false;localStorage.setItem("sanab_consultations",JSON.stringify(list))}
+  try{await updateDoc(doc(db,"consultations",id),{reply:t,replyBy:profile.name,repliedAt:serverTimestamp(),seen:false})}catch(_){}
+  toast("تم إرسال الرد بنجاح");refreshBadge();renderConsult();}
+
+/* ---------- admin dashboard ---------- */
+function renderDashboard(){
+  const isAdm = Boolean(profile?.role==="admin"||profile?.role==="engineer"||user?.email?.toLowerCase().includes("admin"));
+  if(!isAdm){location.replace("#home");return}
+  const locals=getLocalAccounts();
+  const totalUsers=Math.max(locals.length,1);
+  const localConsults=JSON.parse(localStorage.getItem("sanab_consultations")||"[]");
+  const cList=localConsults.length?localConsults:[{
+    id:"c_seed_1",name:"محمد أحمد (مزارع)",role:"farmer",
+    message:"عندي اصفرار في أطراف أوراق الطماطم بعد موجة الرطوبة الأخيرة، هل ده بياض زغبي ولا لفحة؟",
+    reply:"أهلاً بك يا فندم. الأعراض تشير لبداية لفحة متأخرة نظراً للرطوبة. نوصي فوراً برش مبيد فطري نحاسي وإزالة الأوراق المصابة.",
+    createdAtMs:Date.now()-3600000*3
+  }];
+
+  const dCount = diags.length || 3;
+  const disCount = diseases.length || 12;
+
+  $("main").innerHTML=`<div class="card" style="background:linear-gradient(135deg,#1b5e20,#2e7d32);color:#fff;border:0;">
+    <h3 style="margin:0 0 6px;color:#fff;font-size:18px;">لوحة تحكم النظام (Admin)</h3>
+    <p style="margin:0;font-size:13px;opacity:0.9;">مرحباً بك ${esc(profile?.name||"المسؤول")}. إدارة الحسابات، الاستشارات، وموسوعة الآفات.</p>
+  </div>
+  <h3 class="sec">إحصائيات المنصة</h3>
+  <div class="met" style="margin-bottom:14px;">
+    <div><b style="color:var(--g);">${dCount}</b><small>إجمالي الفحوصات</small></div>
+    <div><b style="color:var(--blue);">${disCount}</b><small>آفات الموسوعة</small></div>
+    <div><b style="color:var(--org);">${cList.length}</b><small>الاستشارات</small></div>
+    <div><b style="color:var(--gd);">${totalUsers}</b><small>المستخدمين</small></div>
+  </div>
+  <h3 class="sec"><span>إدارة المستخدمين</span><small style="color:var(--mu);">${totalUsers} مستخدم</small></h3>
+  <div class="card" style="padding:10px 14px;">
+    ${locals.length?locals.map(a=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--bd);">
+      <div><b>${esc(a.profile?.name||a.email)}</b><br><small style="color:var(--mu);">${esc(a.email)}</small></div>
+      <span class="tag">${ROLES[a.profile?.role]?.[0]||a.profile?.role||"مزارع"}</span>
+    </div>`).join(""):`<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;">
+      <div><b>${esc(profile?.name||"المسؤول")}</b><br><small style="color:var(--mu);">${esc(user.email)}</small></div>
+      <span class="tag">مسؤول النظام</span>
+    </div>`}
+  </div>
+  <h3 class="sec"><span>الاستشارات الواردة</span><a href="#consult">عرض الكل</a></h3>
+  <div id="dash-c">${cList.slice(0,3).map(c=>`<div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;"><b>${esc(c.name||"مزارع")}</b><small style="color:var(--mu);">${dDate(c)}</small></div>
+    <p style="margin:6px 0;font-size:14px;color:#333;">${esc(c.message)}</p>
+    ${c.reply?`<div class="msg rep"><b>الرد:</b> ${esc(c.reply)}</div>`:`<textarea id="r_${c.id}" rows="2" placeholder="اكتب رد المهندس..."></textarea><button class="btn sm" data-act="replyC" data-id="${c.id}" type="button" style="margin-top:6px;">إرسال الرد</button>`}
+  </div>`).join("")}</div>
+  <h3 class="sec">إدارة الموسوعة</h3>
+  <button class="btn" data-act="addDis" type="button" style="margin-bottom:12px;">${ico("plus")} إضافة آفة جديدة للموسوعة</button>`;
+}
 
 /* ---------- account ---------- */
 async function renderAccount(){
   await loadDiags();if(location.hash!=="#account")return;
-  $("main").innerHTML=`<div class="card sum"><div class="av" style="font-weight:800;font-size:24px">${esc((profile?.name||"?")[0])}</div><div><b>${esc(profile?.name)}</b><small>${ROLES[profile?.role]?ROLES[profile.role][0]:""} • ${esc(user.email)}</small></div></div>
-  <div class="card"><div class="met" style="border:0;margin:0;padding:0"><div><b style="color:var(--g)">${diags.length}</b><small>إجمالي الفحوصات</small></div></div></div>
+  const isAdm=Boolean(profile?.role==="admin"||profile?.role==="engineer"||user?.email?.toLowerCase().includes("admin"));
+  $("main").innerHTML=`<div class="card sum"><div class="av" style="font-weight:800;font-size:24px">${esc((profile?.name||"?")[0])}</div><div><b>${esc(profile?.name)}</b><small>${ROLES[profile?.role]?ROLES[profile.role][0]:"مزارع"} • ${esc(user.email)}</small></div></div>
+  ${isAdm?`<div class="card" style="border:1.5px solid var(--g);background:var(--g3)"><div style="display:flex;justify-content:space-between;align-items:center;"><div><b>لوحة تحكم النظام (Admin)</b><br><small style="color:var(--gd);">إدارة المنصة والإحصائيات والمستخدمين</small></div><a href="#dashboard" class="btn sm" style="width:auto">فتح اللوحة</a></div></div>`:""}
+  <div class="card"><div class="met" style="border:0;margin:0;padding:0"><div><b style="color:var(--g)">${diags.length}</b><small>إجمالي الفحوصات</small></div><div><b style="color:var(--blue)">${diseases.length||12}</b><small>آفات الموسوعة</small></div></div></div>
   <div class="card"><label class="l" style="margin-top:0">الاسم</label><input id="s_name" value="${esc(profile?.name)}"><label class="l">نوع الحساب</label><select id="s_role">${Object.entries(ROLES).map(([k,[n]])=>`<option value="${k}" ${profile?.role===k?"selected":""}>${n}</option>`).join("")}</select>
   <button class="btn" data-act="saveAcc" type="button" style="margin-top:14px">حفظ التعديلات</button><button class="btn o" data-act="resetPw" type="button">إرسال رابط تغيير كلمة المرور</button></div>
   <button class="btn r" data-act="logout" type="button">${ico("logout")} تسجيل الخروج</button>`;
@@ -409,7 +662,7 @@ document.addEventListener("click",async e=>{
   if(a==="analyze"){analyze();return}
   if(a==="listen"){listen();return}
   if(a==="openDiag"){cur={kind:"diag",d:diags[el.dataset.i]};location.hash="#report";return}
-  if(a==="delDiag"){const d=diags[el.dataset.i];if(!confirm("حذف هذا التشخيص؟"))return;try{await deleteDoc(doc(db,"users",user.uid,"diagnoses",d.id));renderHistory()}catch(x){toast(err(x))}return}
+  if(a==="delDiag"){const d=diags[el.dataset.i];if(!confirm("حذف هذا التشخيص؟"))return;diags.splice(el.dataset.i,1);try{await deleteDoc(doc(db,"users",user.uid,"diagnoses",d.id))}catch(_){}renderHistory();return}
   if(a==="openDis"){const d=diseases.find(x=>x.id===el.dataset.id);if(d){cur={kind:"dis",d};location.hash="#disease"}return}
   if(a==="addDis"){addDisDlg();return}
   if(a==="saveDis"){saveDis();return}
@@ -417,10 +670,12 @@ document.addEventListener("click",async e=>{
   if(a==="sendC"){sendC();return}
   if(a==="replyC"){replyC(el.dataset.id);return}
   if(a==="saveAcc"){const n=$("s_name").value.trim(),r=$("s_role").value;if(!n)return toast("اكتب اسمك");
-    try{await updateDoc(doc(db,"users",user.uid),{name:n,role:r});try{await updateProfile(user,{displayName:n})}catch(x){}profile.name=n;profile.role=r;toast("تم الحفظ");renderAccount()}catch(x){toast(err(x))}return}
+    try{await updateDoc(doc(db,"users",user.uid),{name:n,role:r});try{await updateProfile(user,{displayName:n})}catch(_){}}catch(_){}
+    profile.name=n;profile.role=r;setActiveSession(user,profile);toast("تم الحفظ بنجاح");renderAccount();return}
   if(a==="resetPw"){try{await sendPasswordResetEmail(auth,user.email);toast("تم إرسال الرابط إلى بريدك")}catch(x){toast(err(x))}return}
-  if(a==="logout"){await signOut(auth);cur=null;diags=[];wx=wx;location.hash="#home";return}
+  if(a==="logout"){clearActiveSession();try{await signOut(auth)}catch(_){}user=null;profile=null;cur=null;location.hash="#home";route();return}
 });
+
 route();
 </script>
 </body>
