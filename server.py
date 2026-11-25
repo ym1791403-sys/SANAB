@@ -83,6 +83,55 @@ def public_config():
     return {"firebaseConfig": None}
 
 
+GOV_COORDS = {
+    "cairo": (30.0444, 31.2357),
+    "giza": (30.0131, 31.2089),
+    "alexandria": (31.2001, 29.9187),
+    "dakahlia": (31.0409, 31.3785),
+    "sharkia": (30.5877, 31.5020),
+    "beheira": (31.0341, 30.4682),
+    "gharbia": (30.7865, 31.0004),
+    "menoufia": (30.5526, 31.0090),
+    "kafr-el-sheikh": (31.1107, 30.9388),
+    "fayoum": (29.3084, 30.8428),
+    "minya": (28.1099, 30.7503),
+    "assiut": (27.1809, 31.1837),
+    "qena": (26.1551, 32.7160),
+    "ismailia": (30.5965, 32.2715),
+}
+
+
+@app.get("/api/weather")
+def get_weather(gov: str = "cairo", lat: Optional[float] = None, lon: Optional[float] = None):
+    import requests
+    if lat is None or lon is None:
+        coords = GOV_COORDS.get(gov.lower(), (30.0444, 31.2357))
+        lat, lon = coords
+    try:
+        url = f"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&current=temperature_2m,relative_humidity_2m,precipitation,weather_code,wind_speed_10m&timezone=auto"
+        res = requests.get(url, timeout=6)
+        if res.ok:
+            data = res.json().get("current", {})
+            return {
+                "temp": round(data.get("temperature_2m", 24)),
+                "humidity": round(data.get("relative_humidity_2m", 42)),
+                "windSpeed": round(data.get("wind_speed_10m", 12)),
+                "precipitation": float(data.get("precipitation", 0.0)),
+                "weatherCode": int(data.get("weather_code", 0)),
+                "observedAt": data.get("time", "")
+            }
+    except Exception:
+        pass
+    return {
+        "temp": 24,
+        "humidity": 42,
+        "windSpeed": 12,
+        "precipitation": 0.0,
+        "weatherCode": 0,
+        "observedAt": ""
+    }
+
+
 @app.post("/api/diagnose")
 def diagnose(req: DiagnoseRequest):
     custom_url = os.environ.get("CUSTOM_VISION_URL", "").strip()

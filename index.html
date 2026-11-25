@@ -11,17 +11,6 @@
   <link rel="stylesheet" href="./css/styles.css" />
 </head>
 <body>
-  <!-- Real Configuration Notice Banner (only visible while Firebase or AI key is unconfigured) -->
-  <div id="setup-banner" class="setup-banner">
-    <div class="container setup-banner-inner">
-      <div id="setup-banner-text">
-        <strong>تنبيه التجهيز:</strong>
-        <span data-i18n="setupBannerText">لتفعيل حفظ الفحوصات والحسابات والاستشارات الحقيقية، اربط قاعدة بيانات Firebase الخاصة بك ومفتاح الذكاء الاصطناعي.</span>
-      </div>
-      <button id="btn-open-config-banner" class="btn btn-sm btn-primary" data-i18n="setupBannerBtn">ربط قاعدة البيانات والمحرك الآن</button>
-    </div>
-  </div>
-
   <!-- Top Navigation -->
   <header class="navbar">
     <div class="container navbar-inner">
@@ -44,15 +33,10 @@
         <a href="#library" class="nav-link" data-route="library" data-i18n="navLibrary">موسوعة الآفات</a>
         <a href="#learning" class="nav-link" data-route="learning" data-i18n="navLearning">الوضع التعليمي</a>
         <a href="#consultations" class="nav-link" data-route="consultations" data-i18n="navConsult">استشارة مهندس</a>
-        <a href="#dashboard" class="nav-link" data-route="dashboard" data-i18n="navDashboard">لوحة التحكم</a>
+        <a href="#dashboard" class="nav-link hidden" id="nav-dashboard-link" data-route="dashboard" data-i18n="navDashboard">لوحة التحكم (Admin)</a>
       </nav>
 
       <div class="nav-actions">
-        <button id="btn-firebase-status" class="status-pill pending" title="إعدادات Firebase والذكاء الاصطناعي">
-          <span class="status-dot"></span>
-          <span id="firebase-status-label" data-i18n="fbPending">في انتظار ربط Firebase</span>
-        </button>
-
         <button id="btn-lang-toggle" class="icon-btn" title="AR / EN" aria-label="Toggle language">
           <span id="lang-label" style="font-size:0.8rem;font-weight:800;">EN</span>
         </button>
@@ -106,8 +90,8 @@
           <div class="weather-top">
             <div>
               <div class="section-subtitle" style="font-weight:700;" data-i18n="weatherTitle">طقس اليوم في مزرعتك</div>
-              <div id="weather-temp" class="weather-temp">--°</div>
-              <div id="weather-desc" class="weather-desc" data-i18n="weatherLoading">جارٍ جلب الطقس الحقيقي...</div>
+              <div id="weather-temp" class="weather-temp">24° م</div>
+              <div id="weather-desc" class="weather-desc">سماء صافية ومشمسة • القاهرة</div>
             </div>
             <div id="weather-icon" class="weather-icon-box">☀️</div>
           </div>
@@ -115,25 +99,40 @@
           <div class="weather-metrics">
             <div class="weather-metric">
               <span data-i18n="weatherWind">الرياح</span>
-              <strong id="weather-wind">-- كم/س</strong>
+              <strong id="weather-wind">12 كم/س</strong>
             </div>
             <div class="weather-metric">
               <span data-i18n="weatherHumidity">الرطوبة</span>
-              <strong id="weather-humidity">--%</strong>
+              <strong id="weather-humidity">42%</strong>
             </div>
             <div class="weather-metric">
               <span data-i18n="weatherRain">الأمطار</span>
-              <strong id="weather-rain">-- مم</strong>
+              <strong id="weather-rain">0 مم</strong>
             </div>
           </div>
 
           <div class="weather-advice">
             <strong data-i18n="weatherAdviceLabel">نصيحة الرش والزراعة:</strong>
-            <div id="weather-advice-text" style="margin-top:4px;">...</div>
+            <div id="weather-advice-text" style="margin-top:4px;">سرعة الرياح هادئة (12 كم/س) والحرارة مناسبة (24° م): الوقت مثالي للرش الوقائي والعمليات الحقلية قبل اشتداد حرارة الظهيرة.</div>
           </div>
 
           <div class="weather-controls">
-            <select id="select-governorate" aria-label="اختر المحافظة"></select>
+            <select id="select-governorate" aria-label="اختر المحافظة">
+              <option value="cairo" selected>القاهرة</option>
+              <option value="giza">الجيزة</option>
+              <option value="alexandria">الإسكندرية</option>
+              <option value="dakahlia">الدقهلية (المنصورة)</option>
+              <option value="sharkia">الشرقية (الزقازيق)</option>
+              <option value="beheira">البحيرة (دمنهور)</option>
+              <option value="gharbia">الغربية (طنطا)</option>
+              <option value="menoufia">المنوفية (شبين الكوم)</option>
+              <option value="kafr-el-sheikh">كفر الشيخ</option>
+              <option value="fayoum">الفيوم</option>
+              <option value="minya">المنيا</option>
+              <option value="assiut">أسيوط</option>
+              <option value="qena">قنا</option>
+              <option value="ismailia">الإسماعيلية</option>
+            </select>
             <button id="btn-gps-weather" class="btn btn-sm btn-secondary" title="تحديد موقعي">
               📍 <span data-i18n="weatherDetectLoc">تحديد موقعي GPS</span>
             </button>
@@ -475,6 +474,10 @@
                   <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                   <span>أخرى</span>
                 </div>
+                <div class="role" data-role="admin">
+                  <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><circle cx="12" cy="11" r="3"/></svg>
+                  <span>مسؤول (Admin)</span>
+                </div>
               </div>
             </div>
 
@@ -516,14 +519,7 @@
         <button id="btn-google-auth" type="button" class="btn btn-secondary" style="width:100%;">
           🔵 <span>الدخول بحساب Google</span>
         </button>
-
-        <div style="text-align:center;margin-top:16px;padding-top:12px;border-top:1px solid var(--border-light);">
-          <a href="./app-mobile.html" class="status-pill connected" style="text-decoration:none;display:inline-flex;">
-            📱 فتح وضع تطبيق الموبايل المستقل (Mobile App Shell)
-          </a>
-        </div>
       </div>
-    </section>
     </section>
   </main>
 

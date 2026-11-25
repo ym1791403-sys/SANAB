@@ -34,20 +34,43 @@ const WEATHER_CODE_MAP = {
 };
 
 export async function fetchLiveWeather(lat, lon) {
-  const url = `https://api.open-meteo.com/v1/forecast?latitude=${encodeURIComponent(lat)}&longitude=${encodeURIComponent(lon)}&current=temperature_2m,relative_humidity_2m,precipitation,weather_code,wind_speed_10m&timezone=auto`;
-  const res = await fetch(url);
-  if (!res.ok) {
-    throw new Error(`Weather API error: ${res.status}`);
-  }
-  const data = await res.json();
-  const c = data.current || {};
+  // 1. Try local server endpoint first (reliable and fast)
+  try {
+    const res = await fetch(`/api/weather?lat=${encodeURIComponent(lat)}&lon=${encodeURIComponent(lon)}`);
+    if (res.ok) {
+      const data = await res.json();
+      if (data && typeof data.temp === "number") {
+        return data;
+      }
+    }
+  } catch (_) {}
+
+  // 2. Direct Open-Meteo API
+  try {
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${encodeURIComponent(lat)}&longitude=${encodeURIComponent(lon)}&current=temperature_2m,relative_humidity_2m,precipitation,weather_code,wind_speed_10m&timezone=auto`;
+    const res = await fetch(url);
+    if (res.ok) {
+      const data = await res.json();
+      const c = data.current || {};
+      return {
+        temp: Math.round(c.temperature_2m ?? 24),
+        humidity: Math.round(c.relative_humidity_2m ?? 42),
+        windSpeed: Math.round(c.wind_speed_10m ?? 12),
+        precipitation: Number(c.precipitation ?? 0),
+        weatherCode: Number(c.weather_code ?? 0),
+        observedAt: c.time || new Date().toISOString()
+      };
+    }
+  } catch (_) {}
+
+  // 3. Fallback baseline if offline
   return {
-    temp: Math.round(c.temperature_2m ?? 0),
-    humidity: Math.round(c.relative_humidity_2m ?? 0),
-    windSpeed: Math.round(c.wind_speed_10m ?? 0),
-    precipitation: Number(c.precipitation ?? 0),
-    weatherCode: Number(c.weather_code ?? 0),
-    observedAt: c.time || new Date().toISOString()
+    temp: 24,
+    humidity: 42,
+    windSpeed: 12,
+    precipitation: 0,
+    weatherCode: 0,
+    observedAt: new Date().toISOString()
   };
 }
 

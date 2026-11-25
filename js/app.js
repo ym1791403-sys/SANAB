@@ -151,6 +151,18 @@ function applyLanguage() {
 }
 
 function navigateTo(route) {
+  if (route === "dashboard") {
+    const isAdmin = Boolean(
+      state.profile?.accountType === "admin" ||
+      state.profile?.role === "admin" ||
+      state.profile?.accountType === "engineer" ||
+      state.user?.email?.toLowerCase().includes("admin")
+    );
+    if (!isAdmin) {
+      showToast("لوحة التحكم مخصصة لحسابات الإدارة (Admin) فقط", "warning");
+      route = "home";
+    }
+  }
   state.route = route;
   window.location.hash = route;
   document.querySelectorAll(".app-view").forEach(v => v.classList.add("hidden"));
@@ -227,35 +239,30 @@ async function loadWeatherCoords(lat, lon, label = "") {
   }
 }
 
-// ==================== CONNECTION & SETUP BANNER ====================
+// ==================== CONNECTION & ADMIN VISIBILITY ====================
 
 function updateConnectionUI() {
-  const pill = document.getElementById("btn-firebase-status");
-  const label = document.getElementById("firebase-status-label");
-  const banner = document.getElementById("setup-banner");
-  const aiCfg = loadAIConfig();
-  const aiReady = Boolean(aiCfg.geminiApiKey || aiCfg.customEndpoint || state.backendHealth.aiConfigured);
+  const isAdmin = Boolean(
+    state.profile?.accountType === "admin" ||
+    state.profile?.role === "admin" ||
+    state.profile?.accountType === "engineer" ||
+    state.user?.email?.toLowerCase().includes("admin")
+  );
 
-  if (firebaseService.isReady) {
-    pill.classList.remove("pending");
-    pill.classList.add("connected");
-    label.textContent = t("fbConnected");
-  } else {
-    pill.classList.remove("connected");
-    pill.classList.add("pending");
-    label.textContent = t("fbPending");
+  const navDash = document.getElementById("nav-dashboard-link");
+  if (navDash) {
+    navDash.classList.toggle("hidden", !isAdmin);
   }
 
-  // Hide banner only when BOTH Firebase AND real AI Engine are configured
-  banner.classList.toggle("hidden", firebaseService.isReady && aiReady);
-
   const authBtn = document.getElementById("btn-nav-auth");
-  if (state.user) {
-    authBtn.textContent = state.profile?.name ? `👤 ${state.profile.name.split(" ")[0]}` : t("accountBtn");
-    authBtn.setAttribute("data-route", "dashboard");
-  } else {
-    authBtn.textContent = t("loginBtn");
-    authBtn.setAttribute("data-route", "auth");
+  if (authBtn) {
+    if (state.user) {
+      authBtn.textContent = state.profile?.name ? `👤 ${state.profile.name.split(" ")[0]}` : (isAdmin ? "لوحة الإدارة" : t("accountBtn"));
+      authBtn.setAttribute("data-route", isAdmin ? "dashboard" : "home");
+    } else {
+      authBtn.textContent = t("loginBtn");
+      authBtn.setAttribute("data-route", "auth");
+    }
   }
 }
 
@@ -1072,8 +1079,12 @@ async function syncUserData(user, profile) {
 async function bootstrap() {
   applyLanguage();
 
+  // Instant live weather initialization (runs in parallel, never blocks UI)
+  const savedGov = localStorage.getItem("tabib_gov") || "cairo";
+  loadWeatherForGov(savedGov).catch(() => {});
+
   // Check backend FastAPI health & public Firebase config if present
-  state.backendHealth = await checkBackendHealth();
+  state.backendHealth = await checkBackendHealth().catch(() => ({ available: false }));
   if (state.backendHealth.available && state.backendHealth.hasFirebaseJson && !loadFirebaseConfig()) {
     try {
       const res = await fetch("/api/public-config");
@@ -1085,20 +1096,23 @@ async function bootstrap() {
   }
 
   // Init Firebase if config exists
-  const fbRes = await firebaseService.init();
-  if (fbRes.ready) {
-    firebaseService.listenAuth(syncUserData);
-    const fsDiseases = await firebaseService.getDiseasesFromFirestore();
-    if (fsDiseases?.length) state.diseases = fsDiseases;
-    const fsQuiz = await firebaseService.getQuizFromFirestore();
-    if (fsQuiz?.length) state.quizQuestions = fsQuiz;
-    state.channelSettings = await firebaseService.getChannelSettings();
-  }
-  updateConnectionUI();
+  try {
+    const fbRes = await firebaseService.init();
+    if (fbRes.ready) {
+      firebaseService.listenAuth(syncUserData);
+      firebaseService.getDiseasesFromFirestore().then(fsDiseases => {
+        if (fsDiseases?.length) state.diseases = fsDiseases;
+      }).catch(() => {});
+      firebaseService.getQuizFromFirestore().then(fsQuiz => {
+        if (fsQuiz?.length) state.quizQuestions = fsQuiz;
+      }).catch(() => {});
+      firebaseService.getChannelSettings().then(cs => {
+        state.channelSettings = cs;
+      }).catch(() => {});
+    }
+  } catch (_) {}
 
-  // Live weather initialization
-  const savedGov = localStorage.getItem("tabib_gov") || "cairo";
-  await loadWeatherForGov(savedGov);
+  updateConnectionUI();
 
   // Global navigation clicks
   document.addEventListener("click", (e) => {
@@ -1109,29 +1123,29 @@ async function bootstrap() {
     }
   });
 
-  document.getElementById("btn-mobile-menu").addEventListener("click", () => {
-    document.getElementById("main-nav").classList.toggle("open");
+  document.getElementById("btn-mobile-menu")?.addEventListener("click", () => {
+    document.getElementById("main-nav")?.classList.toggle("open");
   });
 
-  document.getElementById("btn-lang-toggle").addEventListener("click", () => {
+  document.getElementById("btn-lang-toggle")?.addEventListener("click", () => {
     state.lang = state.lang === "ar" ? "en" : "ar";
     localStorage.setItem("tabib_lang", state.lang);
     applyLanguage();
   });
 
-  document.getElementById("btn-notifications").addEventListener("click", () => {
+  document.getElementById("btn-notifications")?.addEventListener("click", () => {
     navigateTo("consultations");
   });
 
-  document.getElementById("btn-firebase-status").addEventListener("click", openConfigModal);
-  document.getElementById("btn-open-config-banner").addEventListener("click", openConfigModal);
-  document.getElementById("btn-diag-config").addEventListener("click", openConfigModal);
+  document.getElementById("btn-firebase-status")?.addEventListener("click", openConfigModal);
+  document.getElementById("btn-open-config-banner")?.addEventListener("click", openConfigModal);
+  document.getElementById("btn-diag-config")?.addEventListener("click", openConfigModal);
 
   // Weather controls
-  document.getElementById("select-governorate").addEventListener("change", (e) => {
+  document.getElementById("select-governorate")?.addEventListener("change", (e) => {
     loadWeatherForGov(e.target.value);
   });
-  document.getElementById("btn-gps-weather").addEventListener("click", () => {
+  document.getElementById("btn-gps-weather")?.addEventListener("click", () => {
     if (!navigator.geolocation) {
       showToast("المتصفح لا يدعم تحديد الموقع الجغرافي", "warning");
       return;
