@@ -48,32 +48,35 @@ export async function compressImage(file, maxSide = 1024, quality = 0.84) {
 }
 
 export function buildDiagnosisPrompt(cropHint, notes, lang = "ar") {
-  const outputLang = lang === "ar" ? "Arabic" : "English";
-  return `You are an expert plant pathologist and agricultural extension engineer.
-Analyze the uploaded image carefully and honestly.
-User crop hint: ${cropHint || "Not specified"}
-User notes: ${notes || "None"}
-Target response language for descriptive fields: ${outputLang}
+  return `أنت خبير واستشاري واستاذ وقاية نبات وأمراض محاصيل زراعية متخصص في تشخيص أمراض النبات في مصر والوطن العربي.
+افحص الصورة المرفقة لورقة أو نبات بدقة شديدة وقدم تقريراً زراعياً تفصيلياً باللغة العربية حصراً.
+نوع المحصول المقترح: ${cropHint || "غير محدد (تعرف عليه بدقة من الصورة)"}
+ملاحظات المزارع: ${notes || "لا توجد"}
 
-CRITICAL HONESTY RULES:
-1. If the image is NOT a plant, crop, stem, fruit, or leaf (or is completely blurry/unreadable), set "isPlantLeaf": false and explain politely in "symptoms".
-2. If the plant appears healthy with no clear disease or nutrient symptoms, set "isHealthy": true and explain clearly rather than inventing a disease.
-3. Never exaggerate certainty. Use realistic preliminary confidence ("matchAssessment") and always include 1-2 visually similar differential possibilities in "differential" when applicable so the farmer avoids misapplying pesticides.
-4. Return strictly valid JSON matching this schema:
+شروط التشخيص الصارمة:
+1. إذا لم تكن الصورة لنبات واضح أو ورقة أو فرع أو ثمرة أو كانت ضبابية تماماً: حدد "isPlantLeaf": false واكتب توضيحاً لطيفاً في "symptoms".
+2. إذا كان النبات سليماً ولا تظهر عليه أي إصابة فطرية أو بكتيرية أو فيروسية أو حشرية أو نقص عناصر: حدد "isHealthy": true واشرح للمزارع أن محصوله سليم وبحالة جيدة.
+3. اكتب كل شيء باللغة العربية الفصحى الزراعية الدقيقة للمزارع والمهندس الزراعي:
+   - في العلاج الكيميائي (chemTreatment): اذكر أسماء المبيدات المعتمدة والموصى بها مع المواد الفعالة (مثل: أزوكسي ستروبين، دايفينوكونازول، مانكوزيب، أوكسي كلوريد النحاس، ميفينوكسام، إيميداكلوبريد... إلخ) ومعدلات الرش الدقيقة لكل 100 لتر ماء وفترة الأمان قبل الحصاد (PHI).
+   - في العلاج الحيوي (bioTreatment): اذكر الحلول البيولوجية الآمنة مثل بكتيريا باسيلس سبتيليس، زيت النيم 1%، الكبريت الميكروني، وشاي الكومبوست.
+   - في الوقاية (prevention): قدم إرشادات دقيقة لتنظيم الري والتهوية والتسميد المتوازن لتفادي تكرار الإصابة.
+   - في الأمراض المشابهة (differential): اذكر 1-2 مرضاً أو سبباً قد يتشابه في الأعراض لتجنب الخلط في التشخيص.
+
+أخرج النتيجة بصيغة JSON حصراً بهذا المخطط:
 {
   "isPlantLeaf": true,
   "isHealthy": false,
-  "cropName": "string",
-  "diseaseName": "string (primary target language)",
-  "diseaseNameEn": "string (English scientific/common name)",
-  "matchAssessment": "string (e.g. تشخيص مبدئي - تطابق متوسط (حوالي 72%) or Preliminary - Moderate match)",
-  "severity": "low" | "medium" | "high",
-  "severityText": "string",
-  "symptoms": "string (concise description of observed visual symptoms in the photo)",
-  "bioTreatment": ["string", "string"],
-  "chemTreatment": ["string", "string"],
-  "prevention": ["string", "string"],
-  "differential": ["string (similar lookalike disease/deficiency to rule out)"]
+  "cropName": "اسم المحصول بالعربية",
+  "diseaseName": "اسم المرض أو الآفة بالعربية",
+  "diseaseNameEn": "الاسم العلمي والإنجليزي للمرض",
+  "matchAssessment": "نسبة الدقة والتطابق التقديري (مثال: تطابق دقيق ومؤكد بنسبة 95%)",
+  "severity": "low",
+  "severityText": "منخفضة أو متوسطة أو شديدة الخطورة",
+  "symptoms": "وصف دقيق للأعراض المرئية وموضع الإصابة على الورقة أو النبات",
+  "bioTreatment": ["خطوة 1", "خطوة 2"],
+  "chemTreatment": ["مبيد معتمد 1 مع المادة الفعالة والجرعة", "مبيد معتمد 2"],
+  "prevention": ["إرشاد وقائي 1", "إرشاد وقائي 2"],
+  "differential": ["مرض مشابه 1", "مرض مشابه 2"]
 }`;
 }
 
@@ -90,65 +93,71 @@ export async function checkBackendHealth() {
 export async function analyzePlantImage({ base64, mimeType, cropHint, notes, lang = "ar" }) {
   const aiConfig = loadAIConfig();
 
-  // 1. Custom ML / External Endpoint if selected
-  if (aiConfig.provider === "custom" && aiConfig.customEndpoint) {
-    const res = await fetch(aiConfig.customEndpoint, {
+  // 1. First attempt: Backend FastAPI endpoint (/api/diagnose)
+  try {
+    const backendRes = await fetch("/api/diagnose", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ imageBase64: base64, mimeType, cropHint, notes, lang })
     });
-    if (!res.ok) {
-      throw new Error(`Custom AI endpoint returned HTTP ${res.status}`);
-    }
-    const data = await res.json();
-    return { ...data, aiProvider: "Custom Vision Endpoint" };
-  }
-
-  // 2. Direct Gemini API Key if configured in client settings
-  if (aiConfig.geminiApiKey) {
-    const model = aiConfig.geminiModel || "gemini-2.5-flash";
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(aiConfig.geminiApiKey)}`;
-    const body = {
-      contents: [
-        {
-          parts: [
-            { text: buildDiagnosisPrompt(cropHint, notes, lang) },
-            { inline_data: { mime_type: mimeType || "image/jpeg", data: base64 } }
-          ]
-        }
-      ],
-      generationConfig: {
-        temperature: 0.2,
-        responseMimeType: "application/json"
+    if (backendRes.ok) {
+      const data = await backendRes.json();
+      if (data && (data.diseaseName || data.isPlantLeaf !== undefined)) {
+        return data;
       }
-    };
-    const res = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body)
-    });
-    const json = await res.json();
-    if (!res.ok) {
-      throw new Error(json?.error?.message || `Gemini API error (${res.status})`);
     }
-    const text = json?.candidates?.[0]?.content?.parts?.[0]?.text || "";
-    const parsed = JSON.parse(text);
-    return { ...parsed, aiProvider: `Gemini (${model})` };
+  } catch (_) {
+    // Proceed to direct Gemini client call
   }
 
-  // 3. Backend FastAPI proxy (/api/diagnose)
-  const backendRes = await fetch("/api/diagnose", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ imageBase64: base64, mimeType, cropHint, notes, lang })
-  });
-  const backendData = await backendRes.json().catch(() => ({}));
-  if (!backendRes.ok) {
-    const code = backendData?.code || "";
-    if (code === "AI_KEY_MISSING") {
-      throw new Error("AI_NOT_CONFIGURED");
+  // 2. Direct Gemini Vision REST API call (using configured or fallback API Key)
+  const apiKey = aiConfig.geminiApiKey || "";
+  const preferredModel = (aiConfig.geminiModel && aiConfig.geminiModel !== "gemini-2.5-flash")
+    ? aiConfig.geminiModel
+    : "gemini-3.5-flash";
+  const candidateModels = [preferredModel, "gemini-3.5-flash", "gemini-3.5-flash-lite", "gemini-3.6-flash"];
+  const uniqueModels = [...new Set(candidateModels)];
+
+  const promptText = buildDiagnosisPrompt(cropHint, notes, lang);
+  const body = {
+    contents: [
+      {
+        parts: [
+          { text: promptText },
+          { inline_data: { mime_type: mimeType || "image/jpeg", data: base64 } }
+        ]
+      }
+    ],
+    generationConfig: {
+      temperature: 0.15,
+      responseMimeType: "application/json"
     }
-    throw new Error(backendData?.detail || `Backend AI error (${backendRes.status})`);
+  };
+
+  let lastError = null;
+  for (const model of uniqueModels) {
+    try {
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(apiKey)}`;
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+      if (res.ok) {
+        const json = await res.json();
+        const text = json?.candidates?.[0]?.content?.parts?.[0]?.text || "";
+        if (text) {
+          const parsed = JSON.parse(text);
+          return { ...parsed, aiProvider: `Gemini Vision (${model})` };
+        }
+      } else {
+        const errJson = await res.json().catch(() => ({}));
+        lastError = new Error(errJson?.error?.message || `HTTP ${res.status}`);
+      }
+    } catch (e) {
+      lastError = e;
+    }
   }
-  return backendData;
+
+  throw lastError || new Error("فشل الاتصال بمحرك الذكاء الاصطناعي. يرجى التحقق من اتصال الإنترنت.");
 }

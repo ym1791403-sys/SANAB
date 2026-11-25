@@ -27,21 +27,21 @@
         </span>
       </a>
 
-      <nav id="main-nav" class="nav-links" aria-label="Main Navigation">
+      <nav id="main-nav" class="nav-links" aria-label="القائمة الرئيسية">
         <a href="#home" class="nav-link active" data-route="home" data-i18n="navHome">الرئيسية</a>
         <a href="#diagnosis" class="nav-link" data-route="diagnosis" data-i18n="navDiagnosis">التشخيص الذكي</a>
         <a href="#library" class="nav-link" data-route="library" data-i18n="navLibrary">موسوعة الآفات</a>
         <a href="#learning" class="nav-link" data-route="learning" data-i18n="navLearning">الوضع التعليمي</a>
         <a href="#consultations" class="nav-link" data-route="consultations" data-i18n="navConsult">استشارة مهندس</a>
-        <a href="#dashboard" class="nav-link hidden" id="nav-dashboard-link" data-route="dashboard" data-i18n="navDashboard">لوحة التحكم (Admin)</a>
+        <a href="#dashboard" class="nav-link hidden" id="nav-dashboard-link" data-route="dashboard" data-i18n="navDashboard">لوحة التحكم الإدارية</a>
       </nav>
 
       <div class="nav-actions">
-        <button id="btn-lang-toggle" class="icon-btn" title="AR / EN" aria-label="Toggle language">
+        <button id="btn-lang-toggle" class="icon-btn" title="تبديل اللغة (عربي / إنجليزي)" aria-label="تبديل اللغة">
           <span id="lang-label" style="font-size:0.8rem;font-weight:800;">EN</span>
         </button>
 
-        <button id="btn-notifications" class="icon-btn" title="التنبيهات" aria-label="Notifications">
+        <button id="btn-notifications" class="icon-btn" title="التنبيهات والإشعارات" aria-label="التنبيهات والإشعارات">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
             <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
@@ -51,7 +51,7 @@
 
         <button id="btn-nav-auth" class="btn btn-sm btn-primary" data-route="auth" data-i18n="loginBtn">تسجيل الدخول</button>
 
-        <button id="btn-mobile-menu" class="icon-btn mobile-menu-btn" aria-label="Menu">
+        <button id="btn-mobile-menu" class="icon-btn mobile-menu-btn" aria-label="قائمة التصفح">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
             <line x1="3" y1="6" x2="21" y2="6" />
             <line x1="3" y1="12" x2="21" y2="12" />
@@ -269,15 +269,15 @@
           <div class="form-group" style="margin-top:18px;">
             <label class="form-label" for="diag-crop-select" data-i18n="cropLabel">نوع المحصول (اختياري — يحسّن دقة التحليل)</label>
             <select id="diag-crop-select" class="form-control">
-              <option value="">-- غير محدد / دَع المحرك يتعرف عليه --</option>
-              <option value="طماطم (Tomato)">طماطم (Tomato)</option>
-              <option value="بطاطس (Potato)">بطاطس (Potato)</option>
-              <option value="قمح (Wheat)">قمح (Wheat)</option>
-              <option value="فلفل (Pepper)">فلفل (Pepper)</option>
-              <option value="خيار / قرعيات (Cucumber)">خيار / قرعيات (Cucumber)</option>
-              <option value="عنب (Grape)">عنب (Grape)</option>
-              <option value="ذرة (Corn)">ذرة (Corn)</option>
-              <option value="أخرى (Other)">أخرى (Other)</option>
+              <option value="">-- غير محدد / دَع المحرك يتعرف عليه تلقائياً --</option>
+              <option value="طماطم">طماطم</option>
+              <option value="بطاطس">بطاطس</option>
+              <option value="قمح">قمح</option>
+              <option value="فلفل">فلفل</option>
+              <option value="خيار وقرعيات">خيار وقرعيات</option>
+              <option value="عنب">عنب</option>
+              <option value="ذرة">ذرة</option>
+              <option value="محاصيل أخرى">محاصيل أخرى</option>
             </select>
           </div>
 
@@ -476,7 +476,7 @@
                 </div>
                 <div class="role" data-role="admin">
                   <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><circle cx="12" cy="11" r="3"/></svg>
-                  <span>مسؤول (Admin)</span>
+                  <span>مسؤول النظام</span>
                 </div>
               </div>
             </div>
@@ -489,7 +489,7 @@
 
           <div class="form-group" style="margin-bottom:12px;">
             <label class="form-label" for="auth-email" style="font-weight:700;font-size:14px;">البريد الإلكتروني</label>
-            <input id="auth-email" type="email" class="form-control" dir="ltr" autocomplete="email" placeholder="example@email.com" required />
+            <input id="auth-email" type="email" class="form-control" dir="ltr" autocomplete="email" placeholder="البريد الإلكتروني (مثال: farmer@gmail.com)" required />
           </div>
 
           <div class="form-group" style="margin-bottom:12px;">
@@ -553,22 +553,22 @@
         </div>
 
         <div class="form-group">
-          <label class="form-label" for="cfg-ai-provider">2. محرك تشخيص صور النبات (Vision AI)</label>
+          <label class="form-label" for="cfg-ai-provider">2. محرك تشخيص صور النبات بالذكاء الاصطناعي</label>
           <select id="cfg-ai-provider" class="form-control">
-            <option value="gemini">Google Gemini Vision API (مباشر من المتصفح بمفتاحك)</option>
-            <option value="backend">خادم Python المحلي (/api/diagnose عبر ملف .env)</option>
-            <option value="custom">رابط نموذج مخصص (Custom ML / FastAPI / Firebase Function)</option>
+            <option value="gemini">محرك الذكاء الاصطناعي السحابي (Gemini Vision)</option>
+            <option value="backend">الخادم المحلي الداخلي (/api/diagnose)</option>
+            <option value="custom">رابط نموذج مخصص خارجي</option>
           </select>
         </div>
 
         <div id="cfg-gemini-group" class="form-group">
-          <label class="form-label" for="cfg-gemini-key">مفتاح Gemini API Key (من Google AI Studio)</label>
-          <input id="cfg-gemini-key" type="password" class="form-control" style="direction:ltr;text-align:left;" placeholder="AIza..." />
+          <label class="form-label" for="cfg-gemini-key">مفتاح الذكاء الاصطناعي (Gemini API Key)</label>
+          <input id="cfg-gemini-key" type="password" class="form-control" style="direction:ltr;text-align:left;" placeholder="الصق مفتاح API الخاص بك هنا" />
         </div>
 
         <div id="cfg-custom-group" class="form-group hidden">
-          <label class="form-label" for="cfg-custom-url">رابط Endpoint المخصص</label>
-          <input id="cfg-custom-url" type="url" class="form-control" style="direction:ltr;text-align:left;" placeholder="https://your-ml-api.example.com/diagnose" />
+          <label class="form-label" for="cfg-custom-url">رابط نقطة الاتصال المخصصة</label>
+          <input id="cfg-custom-url" type="url" class="form-control" style="direction:ltr;text-align:left;" placeholder="https://api.example.com/diagnose" />
         </div>
 
         <div style="display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-top:20px;">

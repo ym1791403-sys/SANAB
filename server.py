@@ -30,7 +30,7 @@ def load_dotenv(path: Path) -> None:
         key, val = line.split("=", 1)
         key = key.strip()
         val = val.strip().strip('"').strip("'")
-        if key and key not in os.environ:
+        if key:
             os.environ[key] = val
 
 
@@ -162,41 +162,87 @@ def diagnose(req: DiagnoseRequest):
         raise HTTPException(status_code=500, detail=f"google-genai package missing: {exc}")
 
     output_lang = "Arabic" if req.lang == "ar" else "English"
-    prompt = f"""You are an expert plant pathologist and agricultural extension engineer.
-Analyze the uploaded image carefully and honestly.
-User crop hint: {req.cropHint or "Not specified"}
-User notes: {req.notes or "None"}
-Target response language for descriptive fields: {output_lang}
+    prompt = f"""أنت خبير واستشاري واستاذ وقاية نبات وأمراض محاصيل زراعية متخصص في تشخيص أمراض النبات في مصر والوطن العربي.
+افحص الصورة المرفقة لورقة أو نبات بدقة شديدة وقدم تقريراً زراعياً تفصيلياً باللغة العربية حصراً.
+نوع المحصول المقترح: {req.cropHint or "غير محدد (تعرف عليه بدقة من الصورة)"}
+ملاحظات المزارع: {req.notes or "لا توجد"}
 
-CRITICAL HONESTY RULES:
-1. If the image is NOT a plant, crop, stem, fruit, or leaf (or is completely blurry/unreadable), set "isPlantLeaf": false and explain politely in "symptoms".
-2. If the plant appears healthy with no clear disease or nutrient symptoms, set "isHealthy": true and explain clearly rather than inventing a disease.
-3. Never exaggerate certainty. Frame confidence honestly as preliminary ("matchAssessment") and list 1-2 visually similar differential possibilities in "differential" so farmers verify before spraying.
-4. Return strictly valid JSON with keys:
-isPlantLeaf (bool), isHealthy (bool), cropName (string), diseaseName (string), diseaseNameEn (string),
-matchAssessment (string), severity ("low"|"medium"|"high"), severityText (string), symptoms (string),
-bioTreatment (list of strings), chemTreatment (list of strings), prevention (list of strings), differential (list of strings)."""
+شروط التشخيص الصارمة:
+1. إذا لم تكن الصورة لنبات واضح أو ورقة أو فرع أو ثمرة أو كانت ضبابية تماماً: حدد "isPlantLeaf": false واكتب توضيحاً لطيفاً في "symptoms".
+2. إذا كان النبات سليماً ولا تظهر عليه أي إصابة فطرية أو بكتيرية أو فيروسية أو حشرية أو نقص عناصر: حدد "isHealthy": true واشرح للمزارع أن محصوله سليم وبحالة جيدة.
+3. اكتب كل شيء باللغة العربية الفصحى الزراعية الدقيقة للمزارع والمهندس الزراعي:
+   - في العلاج الكيميائي (chemTreatment): اذكر أسماء المبيدات المعتمدة والموصى بها مع المواد الفعالة (مثل: أزوكسي ستروبين، دايفينوكونازول، مانكوزيب، أوكسي كلوريد النحاس، ميفينوكسام، إيميداكلوبريد... إلخ) ومعدلات الرش الدقيقة لكل 100 لتر ماء وفترة الأمان قبل الحصاد (PHI).
+   - في العلاج الحيوي (bioTreatment): اذكر الحلول البيولوجية الآمنة مثل بكتيريا باسيلس سبتيليس، زيت النيم 1%، الكبريت الميكروني، وشاي الكومبوست.
+   - في الوقاية (prevention): قدم إرشادات دقيقة لتنظيم الري والتهوية والتسميد المتوازن لتفادي تكرار الإصابة.
+   - في الأمراض المشابهة (differential): اذكر 1-2 مرضاً أو سبباً قد يتشابه في الأعراض لتجنب الخلط في التشخيص.
 
-    try:
-        img_bytes = base64.b64decode(req.imageBase64)
-        client = genai.Client(api_key=gemini_key)
-        model_name = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")
-        response = client.models.generate_content(
-            model=model_name,
-            contents=[
-                types.Part.from_bytes(data=img_bytes, mime_type=req.mimeType or "image/jpeg"),
-                prompt,
-            ],
-            config=types.GenerateContentConfig(
-                temperature=0.2,
-                response_mime_type="application/json",
-            ),
-        )
-        parsed = json.loads(response.text)
-        parsed["aiProvider"] = f"Gemini Vision ({model_name})"
-        return parsed
-    except Exception as exc:
-        raise HTTPException(status_code=500, detail=f"Vision analysis failed: {exc}")
+أخرج النتيجة بصيغة JSON حصراً بهذا المخطط:
+{{
+  "isPlantLeaf": true,
+  "isHealthy": false,
+  "cropName": "اسم المحصول بالعربية",
+  "diseaseName": "اسم المرض أو الآفة بالعربية",
+  "diseaseNameEn": "الاسم العلمي والإنجليزي للمرض",
+  "matchAssessment": "نسبة الدقة والتطابق التقديري (مثال: تطابق دقيق ومؤكد بنسبة 95%)",
+  "severity": "low",
+  "severityText": "منخفضة أو متوسطة أو شديدة الخطورة",
+  "symptoms": "وصف دقيق للأعراض المرئية وموضع الإصابة على الورقة أو النبات",
+  "bioTreatment": ["خطوة 1", "خطوة 2"],
+  "chemTreatment": ["مبيد معتمد 1 مع المادة الفعالة والجرعة", "مبيد معتمد 2"],
+  "prevention": ["إرشاد وقائي 1", "إرشاد وقائي 2"],
+  "differential": ["مرض مشابه 1", "مرض مشابه 2"]
+}}"""
+
+    import requests
+    headers = {
+        "Content-Type": "application/json",
+        "x-goog-api-key": gemini_key
+    }
+    payload = {
+        "contents": [
+            {
+                "parts": [
+                    {"text": prompt},
+                    {
+                        "inline_data": {
+                            "mime_type": req.mimeType or "image/jpeg",
+                            "data": req.imageBase64
+                        }
+                    }
+                ]
+            }
+        ],
+        "generationConfig": {
+            "temperature": 0.15,
+            "responseMimeType": "application/json"
+        }
+    }
+
+    preferred_model = os.environ.get("GEMINI_MODEL", "gemini-3.5-flash")
+    candidate_models = [preferred_model, "gemini-3.5-flash", "gemini-3.5-flash-lite", "gemini-3.6-flash"]
+    unique_models = []
+    for m in candidate_models:
+        if m not in unique_models:
+            unique_models.append(m)
+
+    last_err = None
+    for model_name in unique_models:
+        try:
+            url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent?key={gemini_key}"
+            res = requests.post(url, headers=headers, json=payload, timeout=45)
+            if res.ok:
+                j = res.json()
+                raw_text = j.get("candidates", [{}])[0].get("content", {}).get("parts", [{}])[0].get("text", "")
+                parsed = json.loads(raw_text)
+                parsed["aiProvider"] = f"Gemini Vision ({model_name})"
+                return parsed
+            else:
+                last_err = RuntimeError(f"Model {model_name} returned {res.status_code}: {res.text[:200]}")
+        except Exception as e:
+            last_err = e
+            continue
+
+    raise HTTPException(status_code=500, detail=f"Vision analysis failed: {last_err}")
 
 
 # Serve static files (css, js, assets, index.html)

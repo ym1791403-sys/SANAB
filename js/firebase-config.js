@@ -37,16 +37,24 @@ export function clearFirebaseConfig() {
 }
 
 export function loadAIConfig() {
-  try {
-    const saved = localStorage.getItem(STORAGE_KEY_AI);
-    if (saved) return JSON.parse(saved);
-  } catch (_) {}
-  return {
+  const defaultCfg = {
     provider: "backend", // "backend" | "gemini" | "custom"
     geminiApiKey: "",
-    geminiModel: "gemini-2.5-flash",
+    geminiModel: "gemini-3.5-flash",
     customEndpoint: ""
   };
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY_AI);
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (parsed) {
+        if (!parsed.geminiApiKey) parsed.geminiApiKey = defaultCfg.geminiApiKey;
+        if (!parsed.geminiModel || parsed.geminiModel === "gemini-2.5-flash") parsed.geminiModel = defaultCfg.geminiModel;
+        return parsed;
+      }
+    }
+  } catch (_) {}
+  return defaultCfg;
 }
 
 export function saveAIConfig(cfg) {

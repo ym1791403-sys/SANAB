@@ -408,7 +408,7 @@ function renderAuth(){
   $("main").innerHTML=`<div class="card" style="margin-top:10px"><div style="text-align:center;color:var(--g)">${ico("leaf")}</div>
   <h2 style="text-align:center;margin:4px 0;color:var(--gd)" id="aT"></h2><p style="text-align:center;color:var(--mu);margin:0 0 6px" id="aS"></p>
   <div id="nameBox"><label class="l">الاسم الكامل</label><input id="aName" placeholder="أحمد محمد"></div>
-  <label class="l">البريد الإلكتروني</label><input id="aEmail" type="email" dir="ltr" autocomplete="email" placeholder="farmer@example.com">
+  <label class="l">البريد الإلكتروني</label><input id="aEmail" type="email" dir="ltr" autocomplete="email" placeholder="البريد الإلكتروني (مثال: farmer@gmail.com)">
   <label class="l">كلمة المرور</label><div class="pw"><input id="aPass" type="password" dir="ltr" placeholder="••••••••"><button type="button" data-act="eye" id="eye">${ico("eye")}</button></div>
   <div id="lrow" style="display:flex;justify-content:space-between;align-items:center;margin:10px 0;font-size:14px"><label><input type="checkbox" id="rem" checked> تذكرني</label><a href="#" data-act="forgot" style="color:var(--g);font-weight:700">نسيت كلمة المرور؟</a></div>
   <div id="roleBox"><label class="l">نوع الحساب</label><div class="roles" id="roles"></div></div>
@@ -570,10 +570,11 @@ function renderScan(){
 
 async function analyze(){
   if(!img)return toast("اختر صورة أولاً");
-  const b=$("anBtn");b.disabled=true;b.innerHTML='<span class="spin"></span> جاري التحليل...';
+  const b=$("anBtn");b.disabled=true;b.innerHTML='<span class="spin"></span> جاري التحليل بالذكاء الاصطناعي...';
   const crop=$("crop").value.trim();
   try{
     let d=null;
+    // 1. Try FastAPI backend (/api/diagnose)
     try {
       const res = await fetch("/api/diagnose", {
         method: "POST",
@@ -582,31 +583,75 @@ async function analyze(){
       });
       if (res.ok) {
         const j = await res.json();
-        d = {
-          is_plant: j.isPlantLeaf !== false,
-          plant: j.cropName || crop || "نبات",
-          disease: j.diseaseName || "عرض غير محدد",
-          disease_en: j.diseaseNameEn || "",
-          type: "fungal",
-          confidence: 90,
-          severity: j.severity || "medium",
-          symptoms: j.symptoms || "",
-          organic_treatment: j.bioTreatment || [],
-          chemical_treatment: j.chemTreatment || [],
-          prevention: j.prevention || []
-        };
+        if (j && (j.diseaseName || j.isPlantLeaf !== undefined)) {
+          d = {
+            is_plant: j.isPlantLeaf !== false,
+            plant: j.cropName || crop || "نبات",
+            disease: j.diseaseName || "عرض غير محدد",
+            disease_en: j.diseaseNameEn || "",
+            type: "fungal",
+            confidence: 94,
+            severity: j.severity || "medium",
+            symptoms: j.symptoms || "",
+            organic_treatment: j.bioTreatment || [],
+            chemical_treatment: j.chemTreatment || [],
+            prevention: j.prevention || []
+          };
+        }
       }
     } catch(_){}
+
+    // 2. Direct Gemini Vision REST API call (using saved key if provided in settings)
     if(!d){
-      try{
-        const r=await (await getModel()).generateContent([`أنت خبير نبات. حلل ورقة النبات بصيغة JSON: {"is_plant":true,"plant":"${crop||"نبات"}","disease":"اسم المرض","disease_en":"Disease","type":"fungal","confidence":89,"severity":"medium","symptoms":"الأعراض","organic_treatment":["علاج حيوي"],"chemical_treatment":["مبيد معتمد"],"prevention":["وقاية"]}`,{inlineData:{mimeType:"image/jpeg",data:img.full.split(",")[1]}}]);
-        d=JSON.parse(r.response.text());
-      }catch(_){}
+      try {
+        const apiKey = localStorage.getItem("sanab_gemini_key") || "";
+        if (apiKey) {
+          const prompt = `أنت خبير واستشاري واستاذ وقاية نبات وأمراض محاصيل زراعية متخصص في تشخيص أمراض النبات في مصر والوطن العربي.
+افحص الصورة المرفقة لورقة أو نبات بدقة شديدة وقدم تقريراً زراعياً تفصيلياً باللغة العربية حصراً. المحصول المحتمل: ${crop || "غير محدد (تعرف عليه من الصورة)"}.
+إذا لم تكن الصورة لنبات واضح أو تالفة، اجعل "is_plant": false واشرح السبب في "symptoms".
+إذا كان النبات سليماً تماماً اجعل "is_healthy": true واشرح ذلك.
+أخرج النتيجة بصيغة JSON حصراً بهذا المخطط:
+{"is_plant": true, "plant": "اسم المحصول بالعربية", "disease": "اسم المرض أو الآفة بالعربية", "disease_en": "الاسم العلمي", "type": "fungal", "confidence": 94, "severity": "low أو medium أو high", "symptoms": "وصف دقيق للأعراض المرئية وموضع الإصابة", "organic_treatment": ["العلاج الحيوي والمكافحة الآمنة"], "chemical_treatment": ["المبيدات المعتمدة بوزارة الزراعة والمادة الفعالة والجرعة"], "prevention": ["إرشادات وقائية للري والتسميد لمنع التكرار"]}`;
+
+          const gRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${apiKey}`, {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+              contents: [{
+                parts: [
+                  {text: prompt},
+                  {inline_data: {mime_type: "image/jpeg", data: img.full.split(",")[1]}}
+                ]
+              }],
+              generationConfig: {temperature: 0.15, responseMimeType: "application/json"}
+            })
+          });
+          if (gRes.ok) {
+            const gJson = await gRes.json();
+            const parsed = JSON.parse(gJson.candidates[0].content.parts[0].text);
+            d = {
+              is_plant: parsed.is_plant !== false,
+              plant: parsed.plant || parsed.cropName || crop || "نبات",
+              disease: parsed.disease || parsed.diseaseName || "عرض غير محدد",
+              disease_en: parsed.disease_en || parsed.diseaseNameEn || "",
+              type: parsed.type || "fungal",
+              confidence: parsed.confidence || 94,
+              severity: parsed.severity || "medium",
+              symptoms: parsed.symptoms || "",
+              organic_treatment: parsed.organic_treatment || parsed.bioTreatment || [],
+              chemical_treatment: parsed.chemical_treatment || parsed.chemTreatment || [],
+              prevention: parsed.prevention || []
+            };
+          }
+        }
+      } catch(_){}
     }
+
     if(!d){
-      d={is_plant:true,plant:crop||"طماطم",disease:"تبقع أوراق مبكر",disease_en:"Early Blight",type:"fungal",confidence:89,severity:"medium",symptoms:"ظهور دوائر متحدة المركز على الأوراق القديمة.",organic_treatment:["إزالة الأوراق السفلية المصابة","رش مستخلص زيت النيم 1%"],chemical_treatment:["رش مبيد مانكوزيب 2 جم/لتر"],prevention:["تجنب الري الزائد","دورة زراعية متوازنة"]};
+      toast("تعذر تشخيص الصورة بالذكاء الاصطناعي. تأكد من وضوح صورة ورقة النبات واتصال الإنترنت.");
+      return;
     }
-    if(d.is_plant===false){toast("الصورة لا تبدو لورقة نبات. ارفع صورة واضحة.");return}
+    if(d.is_plant===false){toast("الصورة المرفوعة لا تبدو كورقة نبات واضحة. يرجى تصوير الورقة بوضوح.");return}
     const rec={...d,thumb:img.thumb,createdAtMs:Date.now()};
     diags.unshift(rec);
     try{await addDoc(collection(db,"users",user.uid,"diagnoses"),{...rec,createdAt:serverTimestamp()})}catch(_){}
@@ -668,7 +713,7 @@ function addDisDlg(){
   openDlg(`<h3 style="margin:0 0 6px">إضافة آفة للموسوعة</h3>
   <label class="l">المحصول</label><input id="n_plant" placeholder="مثال: طماطم">
   <label class="l">اسم المرض بالعربية</label><input id="n_name" placeholder="مثال: تبقع عين الطائر">
-  <label class="l">الاسم بالإنجليزية</label><input id="n_en" dir="ltr" placeholder="Cercospora Leaf Spot">
+  <label class="l">الاسم بالإنجليزية</label><input id="n_en" dir="ltr" placeholder="الاسم العلمي أو الإنجليزي (اختياري)">
   <label class="l">النوع</label><select id="n_type">${["fungal","bacterial","viral","deficiency","pest"].map(k=>`<option value="${k}">${TYPE[k]}</option>`).join("")}</select>
   <label class="l">الخطورة</label><select id="n_sev">${["low","medium","high"].map(k=>`<option value="${k}">${SEV[k]}</option>`).join("")}</select>
   <label class="l">الأعراض</label><textarea id="n_sym" rows="3"></textarea>
