@@ -2,54 +2,262 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover">
 <meta name="theme-color" content="#2e7d32">
 <title>SANAB</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--g:#2e7d32;--gd:#1b5e20;--g3:#e8f5e9;--bg:#f4f8f4;--card:#fff;--tx:#1d2b22;--mu:#6e7c73;--bd:#e3ebe4;--red:#e53935;--org:#f59e0b;--blue:#1e88e5}
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0}body{font-family:Cairo,system-ui,sans-serif;background:#dfe8e0;color:var(--tx);line-height:1.6}
-button,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer}a{color:inherit;text-decoration:none}
-.i{width:1.3em;height:1.3em;vertical-align:-.28em;flex:none}
-.app{max-width:480px;margin:0 auto;min-height:100vh;background:var(--bg);position:relative;box-shadow:0 0 30px #0002}
-.bar{position:sticky;top:0;z-index:30;background:var(--g);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:12px 14px;min-height:58px}
-.bar h1{margin:0;font-size:20px;font-weight:800}.bar button{position:relative;background:none;border:0;color:#fff;width:40px;height:40px;display:grid;place-items:center;font-size:20px;border-radius:50%}.bar button:active{background:#fff3}
-.dot{position:absolute;top:7px;inset-inline-end:7px;width:10px;height:10px;border-radius:50%;background:#ff5252;border:2px solid var(--g)}
-main{padding:16px 14px 110px}
-.card{background:var(--card);border:1px solid var(--bd);border-radius:18px;padding:16px;margin-bottom:14px;box-shadow:0 2px 10px #1b5e2010}
-.wx{background:#e3f2e4;border-color:#d3e8d4;display:flex;gap:12px;align-items:center;justify-content:space-between}.wx .t{flex:1}.wx b{color:var(--gd);font-size:17px;display:block}.wx p{margin:4px 0 0;color:var(--mu);font-size:14px}
-.wx .ic{width:62px;height:62px;border-radius:14px;background:#fff;display:grid;place-items:center;color:#f9a825}.wx .ic .i{width:36px;height:36px}
-.hero{background:linear-gradient(135deg,#2e7d32,#1b5e20);color:#fff;border:0;display:flex;gap:10px;align-items:center;position:relative;overflow:hidden}
-.hero .t{flex:1;z-index:1}.hero h2{margin:0 0 6px;font-size:20px}.hero p{margin:0 0 14px;opacity:.85;font-size:14px}.hero .bg{position:absolute;inset-inline-start:12px;top:14px;opacity:.3}.hero .bg .i{width:96px;height:96px}
-.wbtn{background:#fff;color:var(--gd);border:0;border-radius:14px;padding:12px 16px;font-weight:800;display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%}
-h3.sec{margin:20px 0 10px;font-size:19px;display:flex;justify-content:space-between;align-items:center}h3.sec a{font-size:14px;color:var(--g);font-weight:600}
-.svc{display:grid;grid-template-columns:1fr 1fr;gap:12px}.svc .card{margin:0;display:flex;flex-direction:column;gap:6px;cursor:pointer}.svc .si{width:46px;height:46px;border-radius:12px;display:grid;place-items:center}.svc b{font-size:15px}.svc small{color:var(--mu)}
-.item{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:12px;margin-bottom:10px;cursor:pointer}
-.item .av{width:46px;height:46px;border-radius:12px;background:var(--g3);color:var(--g);display:grid;place-items:center;flex:none;overflow:hidden}.item .tx{flex:1;min-width:0}.item b{display:block;font-size:15px;line-height:1.4}.item small{color:var(--mu)}.item>.i{color:var(--mu)}
-.ibtn{background:none;border:0;color:var(--red);padding:6px}
-.empty{text-align:center;color:var(--mu);padding:26px 10px}
-.btn{display:flex;align-items:center;justify-content:center;gap:8px;background:var(--g);color:#fff;border:0;border-radius:14px;padding:13px 18px;font-weight:700;width:100%}.btn:disabled{opacity:.5}.btn.o{background:#fff;color:var(--g);border:1.5px solid var(--g)}.btn.r{background:var(--red)}.btn.sm{width:auto;padding:8px 14px;font-size:14px}
-.btn+.btn{margin-top:10px}
-label.l{display:block;font-weight:700;margin:12px 0 4px;font-size:14px}
-input,select,textarea{width:100%;padding:11px 12px;border:1px solid var(--bd);border-radius:12px;background:#fbfdfb;outline:none}input:focus,select:focus,textarea:focus{border-color:var(--g)}input[type=checkbox]{width:auto}
-.pw{position:relative}.pw button{position:absolute;inset-inline-end:8px;top:50%;transform:translateY(-50%);background:none;border:0;color:var(--mu)}
-.roles{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}.role{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 2px;border:1.5px solid var(--bd);border-radius:12px;font-size:11px;font-weight:700;background:#fff;cursor:pointer;text-align:center}.role.on{border-color:var(--g);background:var(--g3);color:var(--gd)}
-.drop{border:2px dashed #9ccc9f;border-radius:18px;background:var(--g3);min-height:210px;display:grid;place-items:center;text-align:center;color:var(--gd);overflow:hidden}.drop img{width:100%;max-height:300px;object-fit:cover}.drop .i{width:44px;height:44px}
-.two{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
-.sum{display:flex;gap:14px;align-items:center}.sum .av{width:64px;height:64px;border-radius:50%;background:var(--g3);color:var(--g);display:grid;place-items:center;flex:none;overflow:hidden}.sum .av img{width:100%;height:100%;object-fit:cover}.sum .av .i{width:32px;height:32px}.sum small{color:var(--mu)}.sum b{font-size:20px;display:block;line-height:1.3}
-.met{display:flex;border-top:1px solid var(--bd);margin-top:14px;padding-top:14px}.met>div{flex:1;text-align:center}.met>div+div{border-inline-start:1px solid var(--bd)}.met b{display:block;font-size:19px}.met small{color:var(--mu)}
-.sv-low{color:#2e9e4f}.sv-medium{color:var(--org)}.sv-high{color:var(--red)}
-.sh{display:flex;align-items:center;gap:8px;font-weight:800;font-size:17px;margin-bottom:8px}.sh .i{width:24px;height:24px}
-.li{display:flex;gap:10px;align-items:flex-start;color:#4a5a50;margin:8px 0;font-size:15px}.li .i{margin-top:3px}
-.note{background:#fff8e1;color:#6d4c00;border-radius:12px;padding:10px 12px;font-size:13px;margin-bottom:14px;display:flex;gap:8px}
-.bnav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:#fff;border-top:1px solid var(--bd);display:flex;align-items:flex-end;justify-content:space-around;padding:6px 4px calc(6px + env(safe-area-inset-bottom));z-index:40}
-.bnav a{flex:1;display:flex;flex-direction:column;align-items:center;gap:0;color:var(--mu);font-size:12px;font-weight:600;padding:4px 0}.bnav a.on{color:var(--g)}.bnav a .i{width:26px;height:26px}
-.bnav .fab{flex:none;width:62px;height:62px;border-radius:20px;background:var(--g);color:#fff;display:grid;place-items:center;margin:0 6px;transform:translateY(-18px);box-shadow:0 6px 16px #2e7d3260;border:4px solid var(--bg)}.bnav .fab .i{width:28px;height:28px}
-dialog{border:0;border-radius:18px;width:92%;max-width:440px;padding:18px;max-height:88vh;background:#fff}dialog::backdrop{background:#0008}
-#toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:#222;color:#fff;padding:10px 18px;border-radius:12px;display:none;z-index:99;max-width:90%;font-size:14px;text-align:center;box-shadow:0 4px 15px #0004}
-.spin{display:inline-block;width:18px;height:18px;border:3px solid #fff6;border-top-color:#fff;border-radius:50%;animation:s 1s linear infinite}@keyframes s{to{transform:rotate(360deg)}}
-.tag{display:inline-block;padding:2px 10px;border-radius:20px;font-size:12px;font-weight:700;background:var(--g3);color:var(--gd)}
-.msg{background:#f1f6f1;border-radius:12px;padding:10px 12px;margin:8px 0;font-size:14px}.msg.rep{background:var(--g3);border-inline-start:4px solid var(--g)}
+:root {
+  --g: #2e7d32;
+  --gd: #1b5e20;
+  --g3: #e8f5e9;
+  --bg: #f4f8f4;
+  --card: #fff;
+  --tx: #1d2b22;
+  --mu: #6e7c73;
+  --bd: #e3ebe4;
+  --red: #e53935;
+  --org: #f59e0b;
+  --blue: #1e88e5;
+  --max-w: 480px;
+}
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { margin: 0; min-height: 100vh; }
+body { font-family: Cairo, system-ui, -apple-system, sans-serif; background: #dfe8e0; color: var(--tx); line-height: 1.6; }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+a { color: inherit; text-decoration: none; }
+.i { width: 1.3em; height: 1.3em; vertical-align: -.28em; flex: none; }
+
+.app {
+  width: 100%;
+  max-width: var(--max-w);
+  margin: 0 auto;
+  min-height: 100vh;
+  background: var(--bg);
+  position: relative;
+  box-shadow: 0 0 35px rgba(0,0,0,0.08);
+  transition: max-width 0.25s ease;
+}
+
+.bar {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: var(--g);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px max(14px, env(safe-area-inset-right)) 12px max(14px, env(safe-area-inset-left));
+  min-height: 58px;
+}
+.bar h1 { margin: 0; font-size: 20px; font-weight: 800; }
+.bar button {
+  position: relative; background: none; border: 0; color: #fff; width: 40px; height: 40px;
+  display: grid; place-items: center; font-size: 20px; border-radius: 50%;
+}
+.bar button:active { background: #fff3; }
+.dot {
+  position: absolute; top: 7px; inset-inline-end: 7px; width: 10px; height: 10px;
+  border-radius: 50%; background: #ff5252; border: 2px solid var(--g);
+}
+
+main {
+  padding: 16px max(14px, env(safe-area-inset-right)) 110px max(14px, env(safe-area-inset-left));
+}
+.card {
+  background: var(--card); border: 1px solid var(--bd); border-radius: 18px;
+  padding: 16px; margin-bottom: 14px; box-shadow: 0 2px 10px #1b5e2010;
+}
+.wx {
+  background: #e3f2e4; border-color: #d3e8d4; display: flex; gap: 12px;
+  align-items: center; justify-content: space-between;
+}
+.wx .t { flex: 1; }
+.wx b { color: var(--gd); font-size: 17px; display: block; }
+.wx p { margin: 4px 0 0; color: var(--mu); font-size: 14px; }
+.wx .ic {
+  width: 62px; height: 62px; border-radius: 14px; background: #fff;
+  display: grid; place-items: center; color: #f9a825; flex-shrink: 0;
+}
+.wx .ic .i { width: 36px; height: 36px; }
+
+.hero {
+  background: linear-gradient(135deg, #2e7d32, #1b5e20); color: #fff; border: 0;
+  display: flex; gap: 10px; align-items: center; position: relative; overflow: hidden;
+}
+.hero .t { flex: 1; z-index: 1; }
+.hero h2 { margin: 0 0 6px; font-size: 20px; }
+.hero p { margin: 0 0 14px; opacity: .85; font-size: 14px; }
+.hero .bg { position: absolute; inset-inline-start: 12px; top: 14px; opacity: .3; }
+.hero .bg .i { width: 96px; height: 96px; }
+.wbtn {
+  background: #fff; color: var(--gd); border: 0; border-radius: 14px;
+  padding: 12px 16px; font-weight: 800; display: flex; align-items: center;
+  justify-content: space-between; gap: 10px; width: 100%;
+}
+
+h3.sec {
+  margin: 20px 0 10px; font-size: 19px; display: flex;
+  justify-content: space-between; align-items: center;
+}
+h3.sec a { font-size: 14px; color: var(--g); font-weight: 600; }
+.svc { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.svc .card { margin: 0; display: flex; flex-direction: column; gap: 6px; cursor: pointer; }
+.svc .si { width: 46px; height: 46px; border-radius: 12px; display: grid; place-items: center; }
+.svc b { font-size: 15px; }
+.svc small { color: var(--mu); }
+
+.item {
+  display: flex; align-items: center; gap: 12px; background: var(--card);
+  border: 1px solid var(--bd); border-radius: 16px; padding: 12px;
+  margin-bottom: 10px; cursor: pointer;
+}
+.item .av {
+  width: 46px; height: 46px; border-radius: 12px; background: var(--g3);
+  color: var(--g); display: grid; place-items: center; flex: none; overflow: hidden;
+}
+.item .tx { flex: 1; min-width: 0; }
+.item b { display: block; font-size: 15px; line-height: 1.4; }
+.item small { color: var(--mu); }
+.item > .i { color: var(--mu); }
+.ibtn { background: none; border: 0; color: var(--red); padding: 6px; }
+.empty { text-align: center; color: var(--mu); padding: 26px 10px; }
+
+.btn {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  background: var(--g); color: #fff; border: 0; border-radius: 14px;
+  padding: 13px 18px; font-weight: 700; width: 100%;
+}
+.btn:disabled { opacity: .5; }
+.btn.o { background: #fff; color: var(--g); border: 1.5px solid var(--g); }
+.btn.r { background: var(--red); }
+.btn.sm { width: auto; padding: 8px 14px; font-size: 14px; }
+.btn + .btn { margin-top: 10px; }
+
+label.l { display: block; font-weight: 700; margin: 12px 0 4px; font-size: 14px; }
+input, select, textarea {
+  width: 100%; padding: 11px 12px; border: 1px solid var(--bd);
+  border-radius: 12px; background: #fbfdfb; outline: none;
+}
+input:focus, select:focus, textarea:focus { border-color: var(--g); }
+input[type=checkbox] { width: auto; }
+.pw { position: relative; }
+.pw button {
+  position: absolute; inset-inline-end: 8px; top: 50%;
+  transform: translateY(-50%); background: none; border: 0; color: var(--mu);
+}
+
+.roles { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+.role {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  padding: 8px 2px; border: 1.5px solid var(--bd); border-radius: 12px;
+  font-size: 11px; font-weight: 700; background: #fff; cursor: pointer; text-align: center;
+}
+.role.on { border-color: var(--g); background: var(--g3); color: var(--gd); }
+
+.drop {
+  border: 2px dashed #9ccc9f; border-radius: 18px; background: var(--g3);
+  min-height: 210px; display: grid; place-items: center; text-align: center;
+  color: var(--gd); overflow: hidden;
+}
+.drop img { width: 100%; max-height: 300px; object-fit: cover; }
+.drop .i { width: 44px; height: 44px; }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 12px 0; }
+
+.sum { display: flex; gap: 14px; align-items: center; }
+.sum .av {
+  width: 64px; height: 64px; border-radius: 50%; background: var(--g3);
+  color: var(--g); display: grid; place-items: center; flex: none; overflow: hidden;
+}
+.sum .av img { width: 100%; height: 100%; object-fit: cover; }
+.sum .av .i { width: 32px; height: 32px; }
+.sum small { color: var(--mu); }
+.sum b { font-size: 20px; display: block; line-height: 1.3; }
+
+.met { display: flex; border-top: 1px solid var(--bd); margin-top: 14px; padding-top: 14px; }
+.met > div { flex: 1; text-align: center; }
+.met > div + div { border-inline-start: 1px solid var(--bd); }
+.met b { display: block; font-size: 19px; }
+.met small { color: var(--mu); }
+
+.sh { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 17px; margin-bottom: 8px; }
+.sh .i { width: 24px; height: 24px; }
+.li { display: flex; gap: 10px; align-items: flex-start; color: #4a5a50; margin: 8px 0; font-size: 15px; }
+.li .i { margin-top: 3px; }
+.note {
+  background: #fff8e1; color: #6d4c00; border-radius: 12px; padding: 10px 12px;
+  font-size: 13px; margin-bottom: 14px; display: flex; gap: 8px;
+}
+
+.bnav {
+  position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+  width: 100%; max-width: var(--max-w); background: #fff;
+  border-top: 1px solid var(--bd); display: flex; align-items: flex-end;
+  justify-content: space-around; padding: 6px 4px calc(8px + env(safe-area-inset-bottom));
+  z-index: 40; box-shadow: 0 -3px 15px rgba(0,0,0,0.05); transition: max-width 0.25s ease;
+}
+.bnav a {
+  flex: 1; display: flex; flex-direction: column; align-items: center; gap: 0;
+  color: var(--mu); font-size: 12px; font-weight: 600; padding: 4px 0;
+}
+.bnav a.on { color: var(--g); }
+.bnav a .i { width: 26px; height: 26px; }
+.bnav .fab {
+  flex: none; width: 62px; height: 62px; border-radius: 20px;
+  background: var(--g); color: #fff; display: grid; place-items: center;
+  margin: 0 6px; transform: translate(0, -18px);
+  box-shadow: 0 6px 16px #2e7d3260; border: 4px solid var(--bg);
+}
+.bnav .fab .i { width: 28px; height: 28px; }
+
+dialog {
+  border: 0; border-radius: 18px; width: 92%; max-width: 440px;
+  padding: 18px; max-height: 88vh; background: #fff;
+}
+dialog::backdrop { background: #0008; }
+#toast {
+  position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%);
+  background: #222; color: #fff; padding: 10px 18px; border-radius: 12px;
+  display: none; z-index: 99; max-width: 90%; font-size: 14px;
+  text-align: center; box-shadow: 0 4px 15px #0004;
+}
+.spin {
+  display: inline-block; width: 18px; height: 18px; border: 3px solid #fff6;
+  border-top-color: #fff; border-radius: 50%; animation: s 1s linear infinite;
+}
+@keyframes s { to { transform: rotate(360deg); } }
+.tag {
+  display: inline-block; padding: 2px 10px; border-radius: 20px;
+  font-size: 12px; font-weight: 700; background: var(--g3); color: var(--gd);
+}
+.msg { background: #f1f6f1; border-radius: 12px; padding: 10px 12px; margin: 8px 0; font-size: 14px; }
+.msg.rep { background: var(--g3); border-inline-start: 4px solid var(--g); }
+
+/* ========== RESPONSIVE RULES FOR ALL DEVICES ========== */
+@media (min-width: 641px) {
+  :root { --max-w: 780px; }
+  .svc { grid-template-columns: repeat(4, 1fr); }
+  .roles { grid-template-columns: repeat(5, 1fr); }
+  .bar h1 { font-size: 22px; }
+  main { padding-inline: 20px; }
+}
+
+@media (min-width: 1025px) {
+  :root { --max-w: 960px; }
+  body { background: #d3dfd4; }
+  .app { border-radius: 22px; margin: 24px auto; overflow: hidden; min-height: calc(100vh - 48px); }
+  .bnav { border-radius: 0 0 22px 22px; }
+  main { padding-bottom: 120px; }
+}
+
+@media (max-width: 360px) {
+  .roles { grid-template-columns: repeat(3, 1fr); }
+  .bar h1 { font-size: 17px; }
+  .met b { font-size: 16px; }
+  .svc { grid-template-columns: 1fr; }
+}
 </style>
 </head>
 <body>
@@ -134,85 +342,13 @@ function resize(file,max,q=.85){return new Promise((ok,bad)=>{const i=new Image(
 const openDlg=h=>{$("dlg").innerHTML=h;$("dlg").showModal()};
 
 function getLocalAccounts(){try{return JSON.parse(localStorage.getItem("sanab_local_accounts")||"[]")}catch(_){return[]}}
-function saveLocalAccount(u,p,pw=""){try{const l=getLocalAccounts().filter(a=>a.email.toLowerCase()!==u.email.toLowerCase());l.push({email:u.email,password:pw,user:{uid:u.uid,email:u.email,displayName:p.name},profile:{...p,uid:u.uid}});localStorage.setItem("sanab_local_accounts",JSON.stringify(l));setActiveSession(u,p)}catch(_){}}
+function saveLocalAccount(u,p,pw=""){try{const l=getLocalAccounts().filter(a=>a.email.toLowerCase()!==u.email.toLowerCase());l.push({email:u.email,password:pw,user:{uid:u.uid,email:u.email,displayName:p.name},profile:{...p,uid:u.uid}});localStorage.setItem("sanab_local_accounts",JSON.stringify(l));setActiveSession(u,p)}catch(_){} }
 function getActiveSession(){try{return JSON.parse(localStorage.getItem("sanab_active_session")||"null")}catch(_){return null}}
-function setActiveSession(u,p){try{localStorage.setItem("sanab_active_session",JSON.stringify({user:u,profile:p,time:Date.now()}))}catch(_){}}
-function clearActiveSession(){try{localStorage.removeItem("sanab_active_session")}catch(_){}}
+function setActiveSession(u,p){try{localStorage.setItem("sanab_active_session",JSON.stringify({user:u,profile:p,time:Date.now()}))}catch(_){} }
+function clearActiveSession(){try{localStorage.removeItem("sanab_active_session")}catch(_){} }
 
-const PRELOADED_DIAGNOSES = [
-  {
-    id: "diag_late_blight",
-    plant: "طماطم",
-    disease: "اللفحة المتأخرة",
-    disease_en: "Late Blight",
-    confidence: 94,
-    severity: "high",
-    type: "fungal",
-    symptoms: "ظهور بقع بنية داكنة غير منتظمة على حواف الأوراق مع وجود زغب أبيض خفيف على السطح السفلي في الأجواء الرطبة.",
-    organic_treatment: [
-      "رش منقوع شاي الكومبوست المقاوم للفطريات.",
-      "إزالة وحرق الأوراق المصابة فوراً لمنع انتشار العدوى.",
-      "التهوية الجيدة بين الشتلات وتجنب الري بالرشاشات الرأسية."
-    ],
-    chemical_treatment: [
-      "رش مبيد فطري نحاسي (أوكسي كلوريد النحاس) بتركيز 2.5 جم/لتر.",
-      "استخدام ميتالاكسيل أو سيموكسانيل في الحالات المتقدمة."
-    ],
-    prevention: [
-      "زراعة أصناف مقاومة أو متحملة للفحة.",
-      "تجنب الري في ساعات المساء لعدم مكوث الماء على الأوراق.",
-      "تطبيق دورة زراعية ثلاثية."
-    ],
-    thumb: "assets/diseases/late-blight.jpg"
-  },
-  {
-    id: "diag_leaf_rust",
-    plant: "قمح",
-    disease: "صدأ الأوراق",
-    disease_en: "Leaf Rust",
-    confidence: 88,
-    severity: "medium",
-    type: "fungal",
-    symptoms: "بثرات برتقالية إلى بنية محمرة موزعة عشوائياً على السطح العلوي للأوراق.",
-    organic_treatment: [
-      "رش مستخلص زيت النيم 1% للمكافحة المبكرة.",
-      "استخدام مركبات الكبريت الميكروني الوقائي."
-    ],
-    chemical_treatment: [
-      "رش مركبات التريازول (مثل تيبوكونازول) بمعدل الموصى به."
-    ],
-    prevention: [
-      "الالتزام بمواعيد الزراعة الموصى بها في منطقتك.",
-      "زراعة تقاوي معتمدة ومقاومة للأصداء."
-    ],
-    thumb: "assets/diseases/wheat-leaf-rust.jpg"
-  },
-  {
-    id: "diag_mag_deficiency",
-    plant: "بطاطس",
-    disease: "نقص عنصر الماغنسيوم",
-    disease_en: "Magnesium Deficiency",
-    confidence: 91,
-    severity: "low",
-    type: "deficiency",
-    symptoms: "اصفرار بين عروق الأوراق السفلية القديمة مع بقاء العروق خضراء داكنة.",
-    organic_treatment: [
-      "إضافة مادة الدولومايت لتعديل حموضة التربة وإمداد الماغنسيوم.",
-      "إضافة كمبوست حيواني متحلل جيداً."
-    ],
-    chemical_treatment: [
-      "رش ورقي بسلفات الماغنسيوم (ملح إبسوم) بتركيز 1-2%."
-    ],
-    prevention: [
-      "تحليل دوري لعناصر التربة قبل الزراعة.",
-      "توازن التسميد البوتاسي لتجنب تضاد امتصاص الماغنسيوم."
-    ],
-    thumb: "assets/diseases/magnesium-deficiency.jpg"
-  }
-];
-
-/* ---------- state ---------- */
-let user=null,profile=null,authReady=false,signingUp=false,mode="login",role="farmer",diags=[...PRELOADED_DIAGNOSES],diseases=[],cur=null,img=null,wx={temp:28,code:0,wind:8},badge=0,speaking=false;
+/* ---------- state (Pure real data only) ---------- */
+let user=null,profile=null,authReady=false,signingUp=false,mode="login",role="farmer",diags=[],diseases=[],cur=null,img=null,wx={temp:28,code:0,wind:8},badge=0,speaking=false;
 
 /* ---------- auth listener ---------- */
 onAuthStateChanged(auth,async u=>{
@@ -361,7 +497,7 @@ function loadWx(){
 }
 const paintWx=()=>{if($("wx"))$("wx").innerHTML=wxHTML()};
 
-/* ---------- data ---------- */
+/* ---------- data (Real User Data Only) ---------- */
 const withTimeout = (p, ms = 1200) => Promise.race([p, new Promise((_, reject) => setTimeout(() => reject(new Error("timeout")), ms))]);
 
 async function loadDiags(force){
@@ -375,7 +511,7 @@ async function loadDiags(force){
   const combined=[...items,...userLocals];
   const seen=new Set();const unique=[];
   for(const d of combined){if(!seen.has(d.id)){seen.add(d.id);unique.push(d)}}
-  diags=unique.length>0?unique:[...PRELOADED_DIAGNOSES];
+  diags=unique;
 }
 
 async function loadDiseases(){
@@ -399,15 +535,6 @@ async function myConsults(){
   const locals=JSON.parse(localStorage.getItem("sanab_consultations")||"[]");
   const filteredLocals=eng?locals:locals.filter(c=>c.uid===user?.uid||c.farmerId===user?.uid);
   const combined=[...cloud,...filteredLocals];
-  if(combined.length===0){
-    return [{
-      id:"c_seed_1",name:"محمد أحمد (مزارع)",role:"farmer",uid:user?.uid||"user",
-      message:"عندي اصفرار في أطراف أوراق الطماطم بعد موجة الرطوبة الأخيرة، هل ده بياض زغبي ولا لفحة؟",
-      attach:"طماطم - اللفحة المتأخرة",
-      reply:"أهلاً بك يا فندم. الأعراض تشير لبداية لفحة متأخرة نظراً للرطوبة. نوصي فوراً برش مبيد فطري نحاسي وإزالة الأوراق المصابة وتجنب الري الرأسي.",
-      replyBy:"بشمهندس شهد محمد (مهندسة استشارية)",seen:true,createdAtMs:Date.now()-3600000*3
-    }];
-  }
   return combined.sort((a,b)=>ms(b)-ms(a));
 }
 async function refreshBadge(){try{const l=await myConsults(),eng=profile?.role==="engineer"||profile?.role==="admin";badge=l.filter(c=>eng?!c.reply:c.reply&&!c.seen).length;const bl=$("bL");if(bl){bl.querySelectorAll(".dot").forEach(d=>d.remove());if(badge&&bl.dataset.act==="bell")bl.insertAdjacentHTML("beforeend",'<span class="dot"></span>')}}catch(_){}}
@@ -425,7 +552,7 @@ async function renderHome(){
   paintWx();
   loadWx();
   await loadDiags();if(!$("recent"))return;
-  $("recent").innerHTML=diags.length?diags.slice(0,3).map(diagItem).join(""):`<div class="empty">لا توجد فحوصات بعد. ابدأ بفحص أول ورقة.</div>`;
+  $("recent").innerHTML=diags.length?diags.slice(0,3).map(diagItem).join(""):`<div class="empty">لا توجد فحوصات محفوظة بعد. اضغط «افحص محصولك الآن» لتحليل ورقة النبات بالذكاء الاصطناعي.</div>`;
 }
 
 /* ---------- scan ---------- */
@@ -517,12 +644,12 @@ function listen(){
   u.onend=u.onerror=()=>stopSpeak();speaking=true;$("lsBtn").innerHTML=ico("x")+" إيقاف القراءة";speechSynthesis.speak(u);
 }
 async function share(){const r=norm(cur),txt=`SANAB\nالمحصول: ${r.crop}\nالتشخيص: ${r.name}\nالخطورة: ${SEV[r.sev]}\n${r.symptoms}`;
-  try{if(navigator.share)await navigator.share({title:"SANAB",text:txt});else{await navigator.clipboard.writeText(txt);toast("تم نسخ التقرير")}}catch(_){}}
+  try{if(navigator.share)await navigator.share({title:"SANAB",text:txt});else{await navigator.clipboard.writeText(txt);toast("تم نسخ التقرير")}}catch(_){} }
 
 /* ---------- history ---------- */
 async function renderHistory(){
   $("main").innerHTML=`<div class="empty">جارٍ التحميل...</div>`;await loadDiags(true);if(!$("main"))return;
-  $("main").innerHTML=diags.length?diags.map((d,i)=>`<div style="display:flex;align-items:flex-start;gap:6px"><div style="flex:1;min-width:0">${diagItem(d,i)}</div><button class="ibtn" data-act="delDiag" data-i="${i}" type="button" style="margin-top:14px">${ico("trash")}</button></div>`).join(""):`<div class="empty">لا توجد فحوصات بعد.</div>`;
+  $("main").innerHTML=diags.length?diags.map((d,i)=>`<div style="display:flex;align-items:flex-start;gap:6px"><div style="flex:1;min-width:0">${diagItem(d,i)}</div><button class="ibtn" data-act="delDiag" data-i="${i}" type="button" style="margin-top:14px">${ico("trash")}</button></div>`).join(""):`<div class="empty">لا توجد فحوصات محفوظة بعد.</div>`;
 }
 
 /* ---------- library ---------- */
@@ -567,9 +694,9 @@ async function renderConsult(){
   const form=eng?"":`<div class="card"><b>اسأل مهندساً زراعياً متخصصاً</b><textarea id="cMsg" rows="3" placeholder="اكتب استشارتك الزراعية بالتفصيل..." style="margin-top:8px"></textarea>
     ${diags.length?`<label style="display:flex;gap:8px;align-items:center;margin:10px 0;font-size:14px"><input type="checkbox" id="cAtt" checked> إرفاق آخر تشخيص (${esc(diags[0].plant||diags[0].cropName)} - ${esc(diags[0].disease||diags[0].diseaseName)})</label>`:""}
     <button class="btn" data-act="sendC" type="button">${ico("send")} إرسال الاستشارة</button></div>`;
-  $("main").innerHTML=form+`<h3 class="sec">${eng?"استفسارات المزارعين الواردة":"استشاراتي السابقة"}</h3>`+(list.length?list.map(c=>`<div class="card"><div style="display:flex;justify-content:space-between;align-items:center;"><small style="color:var(--mu)">${eng?esc(c.name)+" • ":""}${dDate(c)}</small>${c.reply?`<span class="tag" style="background:#e8f5e9;color:var(--gd);">تم الرد</span>`:`<span class="tag" style="background:#fff3e0;color:var(--org);">قيد الانتظار</span>`}</div>
+  $("main").innerHTML=form+`<h3 class="sec">${eng?"استفسارات المزارعين الواردة":"استشاراتي"}</h3>`+(list.length?list.map(c=>`<div class="card"><div style="display:flex;justify-content:space-between;align-items:center;"><small style="color:var(--mu)">${eng?esc(c.name)+" • ":""}${dDate(c)}</small>${c.reply?`<span class="tag" style="background:#e8f5e9;color:var(--gd);">تم الرد</span>`:`<span class="tag" style="background:#fff3e0;color:var(--org);">قيد الانتظار</span>`}</div>
     <div class="msg">${esc(c.message)}${c.attach?`<br><span class="tag" style="margin-top:4px;">📎 ${esc(c.attach)}</span>`:""}</div>
-    ${c.reply?`<div class="msg rep"><b>${esc(c.replyBy||"مهندس استشاري")}:</b> ${esc(c.reply)}</div>`:eng?`<textarea id="r_${c.id}" rows="2" placeholder="اكتب رد الاستشاري..."></textarea><button class="btn sm" data-act="replyC" data-id="${c.id}" type="button" style="margin-top:8px">إرسال الرد</button>`:`<small style="color:var(--mu)">في انتظار رد المهندس الاستشاري...</small>`}</div>`).join(""):`<div class="empty">لا توجد استشارات.</div>`);
+    ${c.reply?`<div class="msg rep"><b>${esc(c.replyBy||"مهندس استشاري")}:</b> ${esc(c.reply)}</div>`:eng?`<textarea id="r_${c.id}" rows="2" placeholder="اكتب رد الاستشاري..."></textarea><button class="btn sm" data-act="replyC" data-id="${c.id}" type="button" style="margin-top:8px">إرسال الرد</button>`:`<small style="color:var(--mu)">في انتظار رد المهندس الاستشاري...</small>`}</div>`).join(""):`<div class="empty">لا توجد استشارات سابقة. اكتب سؤالك وسيقوم المهندس الزراعي بالرد عليك.</div>`);
   if(!eng){const un=list.filter(c=>c.reply&&!c.seen);for(const c of un){try{await updateDoc(doc(db,"consultations",c.id),{seen:true})}catch(_){}}if(un.length){badge=0;document.querySelectorAll(".dot").forEach(d=>d.remove())}}
 }
 async function sendC(){const m=$("cMsg").value.trim();if(!m)return toast("اكتب استشارتك أولاً");
@@ -584,21 +711,16 @@ async function replyC(id){const t=$("r_"+id)?.value.trim();if(!t)return toast("�
   try{await updateDoc(doc(db,"consultations",id),{reply:t,replyBy:profile.name,repliedAt:serverTimestamp(),seen:false})}catch(_){}
   toast("تم إرسال الرد بنجاح");refreshBadge();renderConsult();}
 
-/* ---------- admin dashboard ---------- */
+/* ---------- admin dashboard (Real Platform Data Only) ---------- */
 function renderDashboard(){
   const isAdm = Boolean(profile?.role==="admin"||profile?.role==="engineer"||user?.email?.toLowerCase().includes("admin"));
   if(!isAdm){location.replace("#home");return}
   const locals=getLocalAccounts();
   const totalUsers=Math.max(locals.length,1);
   const localConsults=JSON.parse(localStorage.getItem("sanab_consultations")||"[]");
-  const cList=localConsults.length?localConsults:[{
-    id:"c_seed_1",name:"محمد أحمد (مزارع)",role:"farmer",
-    message:"عندي اصفرار في أطراف أوراق الطماطم بعد موجة الرطوبة الأخيرة، هل ده بياض زغبي ولا لفحة؟",
-    reply:"أهلاً بك يا فندم. الأعراض تشير لبداية لفحة متأخرة نظراً للرطوبة. نوصي فوراً برش مبيد فطري نحاسي وإزالة الأوراق المصابة.",
-    createdAtMs:Date.now()-3600000*3
-  }];
+  const cList=localConsults;
 
-  const dCount = diags.length || 3;
+  const dCount = diags.length;
   const disCount = diseases.length || 12;
 
   $("main").innerHTML=`<div class="card" style="background:linear-gradient(135deg,#1b5e20,#2e7d32);color:#fff;border:0;">
@@ -623,11 +745,11 @@ function renderDashboard(){
     </div>`}
   </div>
   <h3 class="sec"><span>الاستشارات الواردة</span><a href="#consult">عرض الكل</a></h3>
-  <div id="dash-c">${cList.slice(0,3).map(c=>`<div class="card">
+  <div id="dash-c">${cList.length?cList.slice(0,3).map(c=>`<div class="card">
     <div style="display:flex;justify-content:space-between;align-items:center;"><b>${esc(c.name||"مزارع")}</b><small style="color:var(--mu);">${dDate(c)}</small></div>
     <p style="margin:6px 0;font-size:14px;color:#333;">${esc(c.message)}</p>
     ${c.reply?`<div class="msg rep"><b>الرد:</b> ${esc(c.reply)}</div>`:`<textarea id="r_${c.id}" rows="2" placeholder="اكتب رد المهندس..."></textarea><button class="btn sm" data-act="replyC" data-id="${c.id}" type="button" style="margin-top:6px;">إرسال الرد</button>`}
-  </div>`).join("")}</div>
+  </div>`).join("") : `<div class="empty" style="padding:16px;">لا توجد استشارات واردة حالياً.</div>`}</div>
   <h3 class="sec">إدارة الموسوعة</h3>
   <button class="btn" data-act="addDis" type="button" style="margin-bottom:12px;">${ico("plus")} إضافة آفة جديدة للموسوعة</button>`;
 }

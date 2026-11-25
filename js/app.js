@@ -3,7 +3,7 @@ import { GOVERNORATES, fetchLiveWeather, describeWeatherCode, computeSprayingAdv
 import { CROPS, PATHOGEN_TYPES, DISEASES_DATA, QUIZ_QUESTIONS } from "./data-diseases.js";
 import { speechService } from "./speech-service.js";
 import { loadFirebaseConfig, saveFirebaseConfig, loadAIConfig, saveAIConfig } from "./firebase-config.js";
-import { firebaseService, PRELOADED_DIAGNOSES } from "./firebase-service.js";
+import { firebaseService } from "./firebase-service.js";
 import { compressImage, analyzePlantImage, checkBackendHealth } from "./ai-service.js";
 
 const state = {
@@ -11,7 +11,7 @@ const state = {
   route: "home",
   user: null,
   profile: null,
-  diagnoses: [...PRELOADED_DIAGNOSES],
+  diagnoses: [],
   consultations: [],
   activeConsultId: null,
   diseases: [...DISEASES_DATA],
@@ -271,7 +271,14 @@ function updateConnectionUI() {
 function renderHomeRecent() {
   const container = document.getElementById("home-recent-list");
   if (!state.diagnoses.length) {
-    container.innerHTML = `<p class="section-subtitle">${escapeHtml(t("noRecentYet"))}</p>`;
+    container.innerHTML = `
+      <div style="text-align:center;padding:36px 16px;background:var(--bg-light);border-radius:16px;border:1.5px dashed var(--border-light);">
+        <div style="font-size:2.2rem;margin-bottom:8px;">🌿</div>
+        <p style="margin:0 0 6px;font-weight:800;color:var(--text-dark);font-size:1.05rem;">لا توجد فحوصات سابقة محفوظة بعد</p>
+        <p style="margin:0 0 16px;font-size:0.88rem;color:var(--text-muted);max-width:400px;margin-inline:auto;">التقط صورة لورقة محصولك وسيتولى الذكاء الاصطناعي تشخيص الإصابة وتحديد العلاج وحفظ الفحص في حسابك.</p>
+        <button class="btn btn-primary" data-route="scan" style="margin-inline:auto;display:inline-flex;"><span>📸 افحص محصولك الآن</span></button>
+      </div>
+    `;
     return;
   }
 
@@ -1048,9 +1055,9 @@ async function syncUserData(user, profile) {
   if (user && firebaseService.isReady) {
     try {
       const userDiags = await firebaseService.getUserDiagnoses(user.uid);
-      state.diagnoses = userDiags?.length ? userDiags : [...PRELOADED_DIAGNOSES];
+      state.diagnoses = userDiags || [];
     } catch (_) {
-      state.diagnoses = [...PRELOADED_DIAGNOSES];
+      state.diagnoses = [];
     }
 
     if (profile?.governorate) {
@@ -1058,9 +1065,9 @@ async function syncUserData(user, profile) {
     }
 
     firebaseService.subscribeConsultations(user.uid, profile?.accountType || "farmer", (list) => {
-      state.consultations = list;
+      state.consultations = list || [];
       const isEng = profile?.accountType === "engineer" || profile?.accountType === "admin";
-      const unreadCount = list.filter(c => (isEng ? c.unreadForEngineer : c.unreadForFarmer)).length;
+      const unreadCount = (list || []).filter(c => (isEng ? c.unreadForEngineer : c.unreadForFarmer)).length;
       const badge = document.getElementById("notif-badge");
       if (badge) {
         badge.textContent = String(unreadCount);
@@ -1070,7 +1077,7 @@ async function syncUserData(user, profile) {
       if (state.route === "dashboard") renderDashboard();
     });
   } else {
-    state.diagnoses = [...PRELOADED_DIAGNOSES];
+    state.diagnoses = [];
     state.consultations = [];
     document.getElementById("notif-badge")?.classList.add("hidden");
   }

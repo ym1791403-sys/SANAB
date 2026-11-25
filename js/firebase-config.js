@@ -1,4 +1,4 @@
-// Firebase Project Configuration for طبيب الغيط (Tabib El-Gheit)
+// Firebase Project Configuration for SANAB
 // Connected Project: senap-d4a15
 
 export const DEFAULT_FIREBASE_CONFIG = {

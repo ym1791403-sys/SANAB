@@ -43,87 +43,6 @@ import {
 import { loadFirebaseConfig } from "./firebase-config.js";
 import { DISEASES_DATA, QUIZ_QUESTIONS } from "./data-diseases.js";
 
-export const PRELOADED_DIAGNOSES = [
-  {
-    id: "diag_late_blight",
-    cropName: "طماطم",
-    diseaseName: "اللفحة المتأخرة",
-    diseaseNameEn: "Late Blight",
-    matchAssessment: "مطابقة واضحة لأعراض فطر Phytophthora infestans بدقة 94%",
-    confidence: 94,
-    severity: "high",
-    severityText: "شديدة",
-    symptoms: "ظهور بقع بنية داكنة غير منتظمة على حواف الأوراق مع وجود زغب أبيض خفيف على السطح السفلي في الأجواء الرطبة.",
-    bioTreatment: [
-      "رش منقوع شاي الكومبوست المقاوم للفطريات.",
-      "إزالة وحرق الأوراق المصابة فوراً لمنع انتشار العدوى.",
-      "التهوية الجيدة بين الشتلات وتجنب الري بالرشاشات الرأسية."
-    ],
-    chemTreatment: [
-      "رش مبيد فطري نحاسي (أوكسي كلوريد النحاس) بتركيز 2.5 جم/لتر.",
-      "استخدام ميتالاكسيل أو سيموكسانيل في الحالات المتقدمة."
-    ],
-    prevention: [
-      "زراعة أصناف مقاومة أو متحملة للفحة.",
-      "تجنب الري في ساعات المساء لعدم مكوث الماء على الأوراق.",
-      "تطبيق دورة زراعية ثلاثية."
-    ],
-    imageUrl: "assets/diseases/late-blight.jpg",
-    thumb: "assets/diseases/late-blight.jpg",
-    createdAtMs: Date.now() - 3600000 * 2
-  },
-  {
-    id: "diag_leaf_rust",
-    cropName: "قمح",
-    diseaseName: "صدأ الأوراق",
-    diseaseNameEn: "Leaf Rust",
-    matchAssessment: "مطابقة واضحة لبثرات فطر Puccinia triticina بدقة 88%",
-    confidence: 88,
-    severity: "medium",
-    severityText: "متوسطة",
-    symptoms: "بثرات برتقالية إلى بنية محمرة موزعة عشوائياً على السطح العلوي للأوراق.",
-    bioTreatment: [
-      "رش مستخلص زيت النيم 1% للمكافحة المبكرة.",
-      "استخدام مركبات الكبريت الميكروني الوقائي."
-    ],
-    chemTreatment: [
-      "رش مركبات التريازول (مثل تيبوكونازول) بمعدل الموصى به."
-    ],
-    prevention: [
-      "الالتزام بمواعيد الزراعة الموصى بها في منطقتك.",
-      "زراعة تقاوي معتمدة ومقاومة للأصداء."
-    ],
-    imageUrl: "assets/diseases/wheat-leaf-rust.jpg",
-    thumb: "assets/diseases/wheat-leaf-rust.jpg",
-    createdAtMs: Date.now() - 3600000 * 6
-  },
-  {
-    id: "diag_mag_deficiency",
-    cropName: "بطاطس",
-    diseaseName: "نقص عنصر الماغنسيوم",
-    diseaseNameEn: "Magnesium Deficiency",
-    matchAssessment: "اصفرار مميز بين عروق الأوراق السفلية القديمة بدقة 91%",
-    confidence: 91,
-    severity: "low",
-    severityText: "منخفضة",
-    symptoms: "اصفرار بين عروق الأوراق السفلية القديمة مع بقاء العروق خضراء داكنة.",
-    bioTreatment: [
-      "إضافة مادة الدولومايت لتعديل حموضة التربة وإمداد الماغنسيوم.",
-      "إضافة كمبوست حيواني متحلل جيداً."
-    ],
-    chemTreatment: [
-      "رش ورقي بسلفات الماغنسيوم (ملح إبسوم) بتركيز 1-2%."
-    ],
-    prevention: [
-      "تحليل دوري لعناصر التربة قبل الزراعة.",
-      "توازن التسميد البوتاسي لتجنب تضاد امتصاص الماغنسيوم."
-    ],
-    imageUrl: "assets/diseases/magnesium-deficiency.jpg",
-    thumb: "assets/diseases/magnesium-deficiency.jpg",
-    createdAtMs: Date.now() - 3600000 * 24
-  }
-];
-
 class FirebaseService {
   constructor() {
     this.app = null;
@@ -216,41 +135,7 @@ class FirebaseService {
 
   _getLocalConsultations() {
     try {
-      const list = JSON.parse(localStorage.getItem("sanab_consultations") || "[]");
-      if (list.length === 0) {
-        return [{
-          id: "c_seed_1",
-          farmerId: "farmer_seed",
-          farmerName: "محمد علي",
-          governorate: "beheira",
-          crop: "طماطم",
-          subject: "اصفرار حواف أوراق الطماطم بعد التشتيل",
-          status: "answered",
-          attachedReport: null,
-          imageUrl: "assets/diseases/late-blight.jpg",
-          lastMessage: "يرجى فحص الرطوبة الزائدة حول الجذور واستخدام مبيد نحاسي وقائي.",
-          unreadForFarmer: false,
-          unreadForEngineer: false,
-          createdAtMs: Date.now() - 3600000 * 4,
-          messages: [
-            {
-              id: "m1",
-              senderName: "محمد علي",
-              senderRole: "farmer",
-              text: "لاحظت اصفرار خفيف مع بقع بنية بعد يومين من الري الغزير، ما العمل؟",
-              createdAtMs: Date.now() - 3600000 * 5
-            },
-            {
-              id: "m2",
-              senderName: "م. عبد الرحمن (مهندس استشاري)",
-              senderRole: "engineer",
-              text: "يرجى تنظيم الري والتهوية الجيدة بين الشتلات ورش مبيد فطري وقائي مثل أوكسي كلوريد النحاس.",
-              createdAtMs: Date.now() - 3600000 * 4
-            }
-          ]
-        }];
-      }
-      return list;
+      return JSON.parse(localStorage.getItem("sanab_consultations") || "[]");
     } catch (_) {
       return [];
     }
@@ -606,10 +491,6 @@ class FirebaseService {
         seen.add(d.id);
         unique.push(d);
       }
-    }
-
-    if (unique.length === 0) {
-      return PRELOADED_DIAGNOSES;
     }
 
     unique.sort((a, b) => (b.createdAtMs || 0) - (a.createdAtMs || 0));

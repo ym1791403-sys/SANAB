@@ -54,6 +54,7 @@
 html {
   scroll-behavior: smooth;
   font-size: 16px;
+  overflow-x: hidden;
 }
 
 body {
@@ -65,6 +66,8 @@ body {
   display: flex;
   flex-direction: column;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
 html[dir="ltr"] body {
@@ -1407,5 +1410,270 @@ main {
   .kpi-grid,
   .role-grid {
     grid-template-columns: 1fr 1fr;
+  }
+
+  .weather-controls {
+    flex-wrap: wrap;
+  }
+
+  .weather-controls select {
+    min-width: 140px;
+  }
+}
+
+/* Smart phones & Narrow Viewports (<= 480px) */
+@media (max-width: 480px) {
+  :root {
+    --radius-lg: 16px;
+    --radius-md: 12px;
+  }
+
+  .container {
+    padding: 0 12px;
+  }
+
+  .navbar {
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+
+  .navbar-inner {
+    padding: 10px 0;
+  }
+
+  .brand {
+    font-size: 1.12rem;
+    gap: 8px;
+  }
+
+  .brand-icon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .brand-sub {
+    display: none;
+  }
+
+  .nav-actions {
+    gap: 6px;
+  }
+
+  .btn-sm {
+    padding: 7px 11px;
+    font-size: 0.8rem;
+  }
+
+  .hero-section {
+    padding: 20px 0 32px;
+  }
+
+  .hero-title {
+    font-size: 1.7rem;
+    line-height: 1.25;
+  }
+
+  .hero-subtitle {
+    font-size: 0.95rem;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .hero-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .weather-card {
+    padding: 18px 14px;
+    gap: 12px;
+  }
+
+  .weather-top {
+    gap: 10px;
+  }
+
+  .weather-icon-box {
+    width: 52px;
+    height: 52px;
+    font-size: 1.6rem;
+  }
+
+  .weather-temp {
+    font-size: 1.6rem;
+  }
+
+  .weather-metrics {
+    gap: 6px;
+  }
+
+  .weather-metric {
+    padding: 8px 4px;
+  }
+
+  .weather-metric strong {
+    font-size: 0.84rem;
+  }
+
+  .weather-controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    width: 100%;
+  }
+
+  .weather-controls select,
+  .weather-controls button {
+    width: 100%;
+    min-width: 100%;
+  }
+
+  .features-grid,
+  .kpi-grid,
+  .role-grid,
+  .steps-grid,
+  .quick-services-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .diagnosis-layout {
+    gap: 16px;
+  }
+
+  .diagnosis-upload-box {
+    padding: 22px 14px;
+  }
+
+  .diagnosis-report-card {
+    padding: 16px 12px;
+  }
+
+  .report-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .report-actions {
+    flex-direction: column;
+    width: 100%;
+    gap: 8px;
+  }
+
+  .report-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .modal-content {
+    margin: 10px;
+    padding: 20px 14px;
+    max-height: 92vh;
+    border-radius: 18px;
+  }
+
+  .auth-card {
+    padding: 22px 14px;
+    border-radius: 18px;
+  }
+
+  .auth-toggle-group {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .library-filters {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .library-filters input,
+  .library-filters select {
+    width: 100%;
+  }
+
+  .disease-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dash-nav {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .dash-nav-btn {
+    flex: 1 1 calc(50% - 6px);
+    justify-content: center;
+    font-size: 0.84rem;
+    padding: 8px 10px;
+  }
+}
+
+/* Compact Mobile (<= 340px) */
+@media (max-width: 340px) {
+  .hero-title {
+    font-size: 1.45rem;
+  }
+
+  .brand span {
+    font-size: 0.98rem;
+  }
+
+  .icon-btn {
+    width: 36px;
+    height: 36px;
+  }
+
+  .dash-nav-btn {
+    flex: 1 1 100%;
+  }
+}
+
+/* Tablets & iPads (769px - 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .container {
+    padding: 0 24px;
+  }
+
+  .hero-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .weather-card {
+    max-width: 580px;
+    margin-inline: auto;
+    width: 100%;
+  }
+
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .steps-grid,
+  .quick-services-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .role-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Large / Ultrawide Displays (>= 1441px) */
+@media (min-width: 1441px) {
+  .container {
+    max-width: 1360px;
+  }
+
+  .hero-title {
+    font-size: 2.75rem;
+  }
+
+  .weather-card {
+    padding: 32px;
   }
 }
