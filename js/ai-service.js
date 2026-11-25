@@ -1,10 +1,5 @@
 // Real Vision AI Service — Zero mocked/fake results!
-// Supports:
-// 1. Local/Hosted Python FastAPI Backend (/api/diagnose)
-// 2. Direct Google Gemini Vision REST API (user's Gemini API key)
-// 3. Custom Vision Endpoint (PyTorch / FastAPI / Firebase Function)
-
-import { loadAIConfig } from "./firebase-config.js";
+// Uses the direct hardwired Gemini Vision API key permanently
 
 export async function compressImage(file, maxSide = 1024, quality = 0.84) {
   return new Promise((resolve, reject) => {
@@ -90,9 +85,10 @@ export async function checkBackendHealth() {
   }
 }
 
-export async function analyzePlantImage({ base64, mimeType, cropHint, notes, lang = "ar" }) {
-  const aiConfig = loadAIConfig();
+// Direct Permanent Gemini Vision API key
+const ACTIVE_API_KEY = atob("QVEuQWI4Uk42SmxaUHdwNmZXZ1ZXd2tSWlIxRGZhc1E2d01pM0o3Z0hHZW40VENVZXl2UWc=");
 
+export async function analyzePlantImage({ base64, mimeType, cropHint, notes, lang = "ar" }) {
   // 1. First attempt: Backend FastAPI endpoint (/api/diagnose)
   try {
     const backendRes = await fetch("/api/diagnose", {
@@ -110,12 +106,8 @@ export async function analyzePlantImage({ base64, mimeType, cropHint, notes, lan
     // Proceed to direct Gemini client call
   }
 
-  // 2. Direct Gemini Vision REST API call (using configured or fallback API Key)
-  const apiKey = aiConfig.geminiApiKey || atob("QVEuQWI4Uk42SmxaUHdwNmZXZ1ZXd2tSWlIxRGZhc1E2d01pM0o3Z0hHZW40VENVZXl2UWc=");
-  const preferredModel = (aiConfig.geminiModel && aiConfig.geminiModel !== "gemini-2.5-flash")
-    ? aiConfig.geminiModel
-    : "gemini-3.5-flash";
-  const candidateModels = [preferredModel, "gemini-2.5-flash", "gemini-2.0-flash", "gemini-1.5-flash", "gemini-3.5-flash", "gemini-3.5-flash-lite", "gemini-3.6-flash"];
+  // 2. Direct Gemini Vision REST API call (Permanent hardwired API Key)
+  const candidateModels = ["gemini-2.5-flash", "gemini-2.0-flash", "gemini-1.5-flash", "gemini-3.5-flash", "gemini-3.5-flash-lite"];
   const uniqueModels = [...new Set(candidateModels)];
 
   const promptText = buildDiagnosisPrompt(cropHint, notes, lang);
@@ -137,7 +129,7 @@ export async function analyzePlantImage({ base64, mimeType, cropHint, notes, lan
   let lastError = null;
   for (const model of uniqueModels) {
     try {
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(apiKey)}`;
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(ACTIVE_API_KEY)}`;
       const res = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },

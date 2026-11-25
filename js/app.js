@@ -380,17 +380,7 @@ async function runPlantAnalysis() {
     };
     renderDiagnosisReport(state.currentReport);
   } catch (err) {
-    if (err.message === "AI_NOT_CONFIGURED") {
-      showToast(
-        state.lang === "ar"
-          ? "محرك الذكاء الاصطناعي غير مضبوط بعد — أدخل مفتاح Gemini API أو رابط نموذجك في الإعدادات ليتم التحليل الحقيقي."
-          : "Vision AI is not configured yet — enter your Gemini API key or custom ML endpoint in Settings.",
-        "warning"
-      );
-      openConfigModal();
-    } else {
-      showToast(err.message, "error");
-    }
+    showToast(err.message, "error");
   } finally {
     btn.disabled = false;
     btn.innerHTML = `🔍 <span>${escapeHtml(t("analyzeBtn"))}</span>`;
@@ -511,11 +501,6 @@ function renderDiagnosisReport(report) {
 
   // Save to Firestore
   document.getElementById("btn-save-report").addEventListener("click", async () => {
-    if (!firebaseService.isReady) {
-      showToast("اربط قاعدة بيانات Firebase أولاً لحفظ التقرير", "warning");
-      openConfigModal();
-      return;
-    }
     if (!state.user) {
       showToast("سجّل الدخول أولاً لحفظ التقرير في حسابك", "warning");
       navigateTo("auth");
@@ -899,10 +884,9 @@ function openConsultationThread(consultId) {
 }
 
 function openNewConsultModal(prefill = {}) {
-  if (!firebaseService.isReady || !state.user) {
-    showToast("سجّل الدخول بعد ربط Firebase لفتح استشارة حقيقية", "warning");
-    navigateTo(firebaseService.isReady ? "auth" : state.route);
-    if (!firebaseService.isReady) openConfigModal();
+  if (!state.user) {
+    showToast("سجّل الدخول أولاً لفتح استشارة زراعية", "warning");
+    navigateTo("auth");
     return;
   }
   document.getElementById("consult-crop").value = prefill.crop || "";
@@ -1019,17 +1003,18 @@ function renderDashboard() {
       </div>
       <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;">
         <button id="btn-dash-save-gov" class="btn btn-primary">حفظ المحافظة</button>
-        <button id="btn-dash-open-cfg" class="btn btn-secondary">⚙️ إعدادات Firebase والذكاء الاصطناعي</button>
       </div>
     </div>`;
     document.getElementById("btn-dash-save-gov").addEventListener("click", async () => {
       const gov = document.getElementById("dash-gov-select").value;
-      await firebaseService.updateUserProfile(state.user.uid, { governorate: gov });
-      state.profile.governorate = gov;
+      if (state.user?.uid) {
+        await firebaseService.updateUserProfile(state.user.uid, { governorate: gov });
+      }
+      if (state.profile) state.profile.governorate = gov;
+      localStorage.setItem("tabib_gov", gov);
       loadWeatherForGov(gov);
       showToast("تم تحديث المحافظة بنجاح");
     });
-    document.getElementById("btn-dash-open-cfg").addEventListener("click", openConfigModal);
   }
 
   content.querySelectorAll("[data-view-diag]").forEach(btn => {
@@ -1052,29 +1037,6 @@ function renderDashboard() {
       renderDashboard();
     });
   });
-}
-
-// ==================== CONFIGURATION MODAL ====================
-
-function openConfigModal() {
-  const modal = document.getElementById("modal-config");
-  const fbCfg = loadFirebaseConfig();
-  const aiCfg = loadAIConfig();
-
-  if (fbCfg) {
-    document.getElementById("cfg-firebase-raw").value = JSON.stringify(fbCfg, null, 2);
-  }
-  document.getElementById("cfg-ai-provider").value = aiCfg.provider || "gemini";
-  document.getElementById("cfg-gemini-key").value = aiCfg.geminiApiKey || "";
-  document.getElementById("cfg-custom-url").value = aiCfg.customEndpoint || "";
-  toggleAIConfigFields();
-  modal.classList.remove("hidden");
-}
-
-function toggleAIConfigFields() {
-  const provider = document.getElementById("cfg-ai-provider").value;
-  document.getElementById("cfg-gemini-group").classList.toggle("hidden", provider !== "gemini");
-  document.getElementById("cfg-custom-group").classList.toggle("hidden", provider !== "custom");
 }
 
 // ==================== INITIALIZATION ====================
@@ -1185,8 +1147,6 @@ async function bootstrap() {
     showToast(state.lang === "ar" ? "تم تسجيل الخروج بنجاح" : "Logged out successfully");
     navigateTo("home");
   });
-
-  document.getElementById("btn-diag-config")?.addEventListener("click", openConfigModal);
 
   // Weather controls
   document.getElementById("select-governorate")?.addEventListener("change", (e) => {
@@ -1411,57 +1371,10 @@ async function bootstrap() {
     });
   });
 
-  // Modals close & Config form
+  // Modals close
   document.getElementById("btn-close-disease-modal").addEventListener("click", () => {
     speechService.stop();
     document.getElementById("modal-disease").classList.add("hidden");
-  });
-  document.getElementById("btn-close-config-modal").addEventListener("click", () => {
-    document.getElementById("modal-config").classList.add("hidden");
-  });
-  document.getElementById("cfg-ai-provider").addEventListener("change", toggleAIConfigFields);
-
-  document.getElementById("form-config").addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const rawFb = document.getElementById("cfg-firebase-raw").value;
-    if (rawFb.trim()) {
-      const parsed = parseFirebaseConfigInput(rawFb);
-      if (!parsed) {
-        showToast("صيغة إعدادات Firebase غير مكتملة — تأكد من وجود apiKey و projectId", "error");
-        return;
-      }
-      saveFirebaseConfig(parsed);
-      const initRes = await firebaseService.init(parsed);
-      if (!initRes.ready) {
-        showToast(`تعذر الاتصال بـ Firebase: ${initRes.error || ""}`, "error");
-        return;
-      }
-      firebaseService.listenAuth(syncUserData);
-    }
-
-    saveAIConfig({
-      provider: document.getElementById("cfg-ai-provider").value,
-      geminiApiKey: document.getElementById("cfg-gemini-key").value.trim(),
-      geminiModel: "gemini-2.5-flash",
-      customEndpoint: document.getElementById("cfg-custom-url").value.trim()
-    });
-
-    updateConnectionUI();
-    document.getElementById("modal-config").classList.add("hidden");
-    showToast("تم حفظ وتفعيل الإعدادات بنجاح");
-  });
-
-  document.getElementById("btn-seed-firestore").addEventListener("click", async () => {
-    if (!firebaseService.isReady) {
-      showToast("احفظ إعدادات Firebase أولاً قبل التهيئة", "warning");
-      return;
-    }
-    try {
-      const res = await firebaseService.seedKnowledgeBase();
-      showToast(`تم رفع ${res.diseasesCount} مرض زراعي و ${res.quizCount} سؤال تدريبي إلى Firestore!`);
-    } catch (err) {
-      showToast(formatFirebaseError(err), "error");
-    }
   });
 
   // Respect URL hash

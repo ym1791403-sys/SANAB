@@ -274,7 +274,6 @@
           <h1 class="section-title" data-i18n="diagTitle">التشخيص بالذكاء الاصطناعي</h1>
           <p class="section-subtitle" data-i18n="diagSub">ارفع صورة واضحة لورقة النبات المصابة (JPG, PNG, WEBP)</p>
         </div>
-        <button id="btn-diag-config" class="btn btn-sm btn-secondary">⚙️ إعداد محرك الذكاء الاصطناعي</button>
       </div>
 
       <div class="diagnosis-layout">
@@ -461,7 +460,7 @@
           <button class="dash-nav-btn active" data-dash-tab="overview">📊 <span data-i18n="dashOverview">لوحة التحكم</span></button>
           <button class="dash-nav-btn" data-dash-tab="diagnoses">🔬 <span data-i18n="dashDiagnoses">فحوصاتي</span></button>
           <button class="dash-nav-btn" data-dash-tab="favorites">⭐ <span data-i18n="dashFavorites">المفضلة</span></button>
-          <button class="dash-nav-btn" data-dash-tab="settings">⚙️ <span data-i18n="dashSettings">الإعدادات والربط</span></button>
+          <button class="dash-nav-btn" data-dash-tab="settings">⚙️ <span>إعدادات الحساب</span></button>
           <button id="btn-logout" class="dash-nav-btn" style="margin-top:16px;background:rgba(255,255,255,0.08);">🚪 <span data-i18n="logoutBtn">تسجيل الخروج</span></button>
         </aside>
 
@@ -566,53 +565,6 @@
     <div class="modal-box">
       <button id="btn-close-disease-modal" class="icon-btn" style="position:absolute;top:16px;inset-inline-end:16px;">✕</button>
       <div id="modal-disease-body"></div>
-    </div>
-  </div>
-
-  <!-- Firebase & AI Real Integration Configuration Modal -->
-  <div id="modal-config" class="modal-backdrop hidden" role="dialog" aria-modal="true">
-    <div class="modal-box">
-      <button id="btn-close-config-modal" class="icon-btn" style="position:absolute;top:16px;inset-inline-end:16px;">✕</button>
-      <h2 style="font-weight:900;margin-bottom:8px;">⚙️ ربط قاعدة بيانات Firebase ومحرك الذكاء الاصطناعي</h2>
-      <p class="section-subtitle" style="margin-bottom:18px;">لضمان عدم وجود أي بيانات وهمية: الصق إعدادات مشروع Firebase الخاصة بك ومفتاح الرؤية الحاسوبية ليتم الحفظ والتحليل فعلياً.</p>
-
-      <form id="form-config">
-        <div class="form-group">
-          <label class="form-label" for="cfg-firebase-raw">1. إعدادات مشروع Firebase (الصق كود firebaseConfig أو JSON كما هو من لوحة Firebase)</label>
-          <textarea id="cfg-firebase-raw" rows="6" class="form-control" style="direction:ltr;text-align:left;font-family:monospace;font-size:0.85rem;" placeholder='const firebaseConfig = {
-  apiKey: "...",
-  authDomain: "...",
-  projectId: "...",
-  storageBucket: "...",
-  messagingSenderId: "...",
-  appId: "..."
-};'></textarea>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label" for="cfg-ai-provider">2. محرك تشخيص صور النبات بالذكاء الاصطناعي</label>
-          <select id="cfg-ai-provider" class="form-control">
-            <option value="gemini">محرك الذكاء الاصطناعي السحابي (Gemini Vision)</option>
-            <option value="backend">الخادم المحلي الداخلي (/api/diagnose)</option>
-            <option value="custom">رابط نموذج مخصص خارجي</option>
-          </select>
-        </div>
-
-        <div id="cfg-gemini-group" class="form-group">
-          <label class="form-label" for="cfg-gemini-key">مفتاح الذكاء الاصطناعي (Gemini API Key)</label>
-          <input id="cfg-gemini-key" type="password" class="form-control" style="direction:ltr;text-align:left;" placeholder="الصق مفتاح API الخاص بك هنا" />
-        </div>
-
-        <div id="cfg-custom-group" class="form-group hidden">
-          <label class="form-label" for="cfg-custom-url">رابط نقطة الاتصال المخصصة</label>
-          <input id="cfg-custom-url" type="url" class="form-control" style="direction:ltr;text-align:left;" placeholder="https://api.example.com/diagnose" />
-        </div>
-
-        <div style="display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-top:20px;">
-          <button type="button" id="btn-seed-firestore" class="btn btn-secondary">🌱 تهيئة موسوعة الأمراض والاختبارات في Firestore</button>
-          <button type="submit" class="btn btn-primary">💾 حفظ وتفعيل الاتصال</button>
-        </div>
-      </form>
     </div>
   </div>
 

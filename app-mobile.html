@@ -619,48 +619,51 @@ async function analyze(){
       }
     } catch(_){}
 
-    // 2. Direct Gemini Vision REST API call (using saved key if provided in settings, or secure fallback)
+    // 2. Direct Gemini Vision REST API call (Direct permanent API Key)
     if(!d){
       try {
-        const apiKey = localStorage.getItem("sanab_gemini_key") || atob("QVEuQWI4Uk42SmxaUHdwNmZXZ1ZXd2tSWlIxRGZhc1E2d01pM0o3Z0hHZW40VENVZXl2UWc=");
-        if (apiKey) {
-          const prompt = `أنت خبير واستشاري واستاذ وقاية نبات وأمراض محاصيل زراعية متخصص في تشخيص أمراض النبات في مصر والوطن العربي.
+        const apiKey = atob("QVEuQWI4Uk42SmxaUHdwNmZXZ1ZXd2tSWlIxRGZhc1E2d01pM0o3Z0hHZW40VENVZXl2UWc=");
+        const prompt = `أنت خبير واستشاري واستاذ وقاية نبات وأمراض محاصيل زراعية متخصص في تشخيص أمراض النبات في مصر والوطن العربي.
 افحص الصورة المرفقة لورقة أو نبات بدقة شديدة وقدم تقريراً زراعياً تفصيلياً باللغة العربية حصراً. المحصول المحتمل: ${crop || "غير محدد (تعرف عليه من الصورة)"}.
 إذا لم تكن الصورة لنبات واضح أو تالفة، اجعل "is_plant": false واشرح السبب في "symptoms".
 إذا كان النبات سليماً تماماً اجعل "is_healthy": true واشرح ذلك.
 أخرج النتيجة بصيغة JSON حصراً بهذا المخطط:
 {"is_plant": true, "plant": "اسم المحصول بالعربية", "disease": "اسم المرض أو الآفة بالعربية", "disease_en": "الاسم العلمي", "type": "fungal", "confidence": 94, "severity": "low أو medium أو high", "symptoms": "وصف دقيق للأعراض المرئية وموضع الإصابة", "organic_treatment": ["العلاج الحيوي والمكافحة الآمنة"], "chemical_treatment": ["المبيدات المعتمدة بوزارة الزراعة والمادة الفعالة والجرعة"], "prevention": ["إرشادات وقائية للري والتسميد لمنع التكرار"]}`;
 
-          const gRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${apiKey}`, {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({
-              contents: [{
-                parts: [
-                  {text: prompt},
-                  {inline_data: {mime_type: "image/jpeg", data: img.full.split(",")[1]}}
-                ]
-              }],
-              generationConfig: {temperature: 0.15, responseMimeType: "application/json"}
-            })
-          });
-          if (gRes.ok) {
-            const gJson = await gRes.json();
-            const parsed = JSON.parse(gJson.candidates[0].content.parts[0].text);
-            d = {
-              is_plant: parsed.is_plant !== false,
-              plant: parsed.plant || parsed.cropName || crop || "نبات",
-              disease: parsed.disease || parsed.diseaseName || "عرض غير محدد",
-              disease_en: parsed.disease_en || parsed.diseaseNameEn || "",
-              type: parsed.type || "fungal",
-              confidence: parsed.confidence || 94,
-              severity: parsed.severity || "medium",
-              symptoms: parsed.symptoms || "",
-              organic_treatment: parsed.organic_treatment || parsed.bioTreatment || [],
-              chemical_treatment: parsed.chemical_treatment || parsed.chemTreatment || [],
-              prevention: parsed.prevention || []
-            };
-          }
+        for (const m of ["gemini-2.5-flash", "gemini-2.0-flash", "gemini-1.5-flash", "gemini-3.5-flash"]) {
+          try {
+            const gRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent?key=${apiKey}`, {
+              method: "POST",
+              headers: {"Content-Type": "application/json"},
+              body: JSON.stringify({
+                contents: [{
+                  parts: [
+                    {text: prompt},
+                    {inline_data: {mime_type: "image/jpeg", data: img.full.split(",")[1]}}
+                  ]
+                }],
+                generationConfig: {temperature: 0.15, responseMimeType: "application/json"}
+              })
+            });
+            if (gRes.ok) {
+              const gJson = await gRes.json();
+              const parsed = JSON.parse(gJson.candidates[0].content.parts[0].text);
+              d = {
+                is_plant: parsed.is_plant !== false,
+                plant: parsed.plant || parsed.cropName || crop || "نبات",
+                disease: parsed.disease || parsed.diseaseName || "عرض غير محدد",
+                disease_en: parsed.disease_en || parsed.diseaseNameEn || "",
+                type: parsed.type || "fungal",
+                confidence: parsed.confidence || 94,
+                severity: parsed.severity || "medium",
+                symptoms: parsed.symptoms || "",
+                organic_treatment: parsed.organic_treatment || parsed.bioTreatment || [],
+                chemical_treatment: parsed.chemical_treatment || parsed.chemTreatment || [],
+                prevention: parsed.prevention || []
+              };
+              break;
+            }
+          } catch(_) {}
         }
       } catch(_){}
     }
