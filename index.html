@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SANAB | مساعدك الزراعي الذكي</title>
+  <meta name="description" content="منصة SANAB لتشخيص أمراض النبات بالذكاء الاصطناعي، موسوعة الآفات، الوضع التعليمي، واستشارات المهندسين الزراعيين." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./css/styles.css" />
+</head>
+<body>
+  <!-- Real Configuration Notice Banner (only visible while Firebase or AI key is unconfigured) -->
+  <div id="setup-banner" class="setup-banner">
+    <div class="container setup-banner-inner">
+      <div id="setup-banner-text">
+        <strong>تنبيه التجهيز:</strong>
+        <span data-i18n="setupBannerText">لتفعيل حفظ الفحوصات والحسابات والاستشارات الحقيقية، اربط قاعدة بيانات Firebase الخاصة بك ومفتاح الذكاء الاصطناعي.</span>
+      </div>
+      <button id="btn-open-config-banner" class="btn btn-sm btn-primary" data-i18n="setupBannerBtn">ربط قاعدة البيانات والمحرك الآن</button>
+    </div>
+  </div>
+
+  <!-- Top Navigation -->
+  <header class="navbar">
+    <div class="container navbar-inner">
+      <a href="#home" class="brand" data-route="home">
+        <span class="brand-icon" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z" />
+            <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12" />
+          </svg>
+        </span>
+        <span>
+          <span data-i18n="brandName">SANAB</span>
+          <span class="brand-sub" data-i18n="brandSub">مساعدك الزراعي الذكي</span>
+        </span>
+      </a>
+
+      <nav id="main-nav" class="nav-links" aria-label="Main Navigation">
+        <a href="#home" class="nav-link active" data-route="home" data-i18n="navHome">الرئيسية</a>
+        <a href="#diagnosis" class="nav-link" data-route="diagnosis" data-i18n="navDiagnosis">التشخيص الذكي</a>
+        <a href="#library" class="nav-link" data-route="library" data-i18n="navLibrary">موسوعة الآفات</a>
+        <a href="#learning" class="nav-link" data-route="learning" data-i18n="navLearning">الوضع التعليمي</a>
+        <a href="#consultations" class="nav-link" data-route="consultations" data-i18n="navConsult">استشارة مهندس</a>
+        <a href="#dashboard" class="nav-link" data-route="dashboard" data-i18n="navDashboard">لوحة التحكم</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button id="btn-firebase-status" class="status-pill pending" title="إعدادات Firebase والذكاء الاصطناعي">
+          <span class="status-dot"></span>
+          <span id="firebase-status-label" data-i18n="fbPending">في انتظار ربط Firebase</span>
+        </button>
+
+        <button id="btn-lang-toggle" class="icon-btn" title="AR / EN" aria-label="Toggle language">
+          <span id="lang-label" style="font-size:0.8rem;font-weight:800;">EN</span>
+        </button>
+
+        <button id="btn-notifications" class="icon-btn" title="التنبيهات" aria-label="Notifications">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
+            <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
+          </svg>
+          <span id="notif-badge" class="notif-badge hidden">0</span>
+        </button>
+
+        <button id="btn-nav-auth" class="btn btn-sm btn-primary" data-route="auth" data-i18n="loginBtn">تسجيل الدخول</button>
+
+        <button id="btn-mobile-menu" class="icon-btn mobile-menu-btn" aria-label="Menu">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <line x1="3" y1="12" x2="21" y2="12" />
+            <line x1="3" y1="18" x2="21" y2="18" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- ==================== HOME VIEW ==================== -->
+    <section id="view-home" class="app-view">
+      <div class="hero-grid">
+        <div class="hero-card">
+          <div>
+            <span class="hero-badge">🌿 <span data-i18n="heroBadge">تشخيص مبدئي حقيقي بالذكاء الاصطناعي + متابعة مهندسين زراعيين</span></span>
+            <h1 data-i18n="heroTitle">SANAB — شريكك الذكي لصحة محاصيلك</h1>
+            <p data-i18n="heroDesc">ارفع أو التقط صورة لورقة النبات، واحصل على تحليل مبدئي فوري بالذكاء الاصطناعي مع العلاج الحيوي والكيميائي، وإمكانية سماع التشخيص صوتياً أو استشارة مهندس زراعي متخصص.</p>
+          </div>
+          <div class="hero-cta-row">
+            <button class="btn btn-lg btn-hero-white" data-route="diagnosis">
+              📷 <span data-i18n="heroCtaDiagnose">افحص محصولك الآن</span>
+            </button>
+            <button class="btn btn-lg btn-hero-outline" data-route="library">
+              📖 <span data-i18n="heroCtaLibrary">استكشف موسوعة الآفات</span>
+            </button>
+            <button class="btn btn-lg btn-hero-outline" data-route="learning">
+              🎓 <span data-i18n="heroCtaLearn">الوضع التعليمي</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Real Live Weather Card (Open-Meteo API) -->
+        <aside class="weather-card" aria-live="polite">
+          <div class="weather-top">
+            <div>
+              <div class="section-subtitle" style="font-weight:700;" data-i18n="weatherTitle">طقس اليوم في مزرعتك</div>
+              <div id="weather-temp" class="weather-temp">--°</div>
+              <div id="weather-desc" class="weather-desc" data-i18n="weatherLoading">جارٍ جلب الطقس الحقيقي...</div>
+            </div>
+            <div id="weather-icon" class="weather-icon-box">☀️</div>
+          </div>
+
+          <div class="weather-metrics">
+            <div class="weather-metric">
+              <span data-i18n="weatherWind">الرياح</span>
+              <strong id="weather-wind">-- كم/س</strong>
+            </div>
+            <div class="weather-metric">
+              <span data-i18n="weatherHumidity">الرطوبة</span>
+              <strong id="weather-humidity">--%</strong>
+            </div>
+            <div class="weather-metric">
+              <span data-i18n="weatherRain">الأمطار</span>
+              <strong id="weather-rain">-- مم</strong>
+            </div>
+          </div>
+
+          <div class="weather-advice">
+            <strong data-i18n="weatherAdviceLabel">نصيحة الرش والزراعة:</strong>
+            <div id="weather-advice-text" style="margin-top:4px;">...</div>
+          </div>
+
+          <div class="weather-controls">
+            <select id="select-governorate" aria-label="اختر المحافظة"></select>
+            <button id="btn-gps-weather" class="btn btn-sm btn-secondary" title="تحديد موقعي">
+              📍 <span data-i18n="weatherDetectLoc">تحديد موقعي GPS</span>
+            </button>
+          </div>
+        </aside>
+      </div>
+
+      <!-- Features Grid -->
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🔬</div>
+          <h3 data-i18n="feat1Title">تشخيص ذكي بالصور</h3>
+          <p data-i18n="feat1Desc">تحليل فعلي لصورة ورقة النبات عبر نماذج الرؤية الحاسوبية مع تنبيه استرشادي دقيق.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔊</div>
+          <h3 data-i18n="feat2Title">سماع التشخيص صوتياً</h3>
+          <p data-i18n="feat2Desc">زر «اسمع التشخيص» لقراءة التقرير والعلاج بصوت عربي واضح لمساعدة كل المزارعين.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📚</div>
+          <h3 data-i18n="feat3Title">موسوعة أمراض النبات</h3>
+          <p data-i18n="feat3Desc">مرجع علمي موثوق للأمراض الفطرية والبكتيرية ونقص العناصر مع العلاج الحيوي والكيميائي.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">👨‍🌾</div>
+          <h3 data-i18n="feat4Title">استشارة مهندس وواتساب</h3>
+          <p data-i18n="feat4Desc">تواصل مباشر مع المهندسين الزراعيين عبر المنصة أو شارك التقرير فوراً عبر واتساب وتيليجرام.</p>
+        </div>
+      </div>
+
+      <!-- How It Works -->
+      <div class="section-header">
+        <h2 class="section-title" data-i18n="howTitle">كيف يعمل SANAB؟</h2>
+      </div>
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-num">1</div>
+          <div>
+            <h3 style="font-weight:800;margin-bottom:4px;" data-i18n="step1Title">التقط أو ارفع الصورة</h3>
+            <p class="section-subtitle" data-i18n="step1Desc">صوّر الورقة المصابة بوضوح وفي إضاءة جيدة من هاتفك أو جهازك.</p>
+          </div>
+        </div>
+        <div class="step-card">
+          <div class="step-num">2</div>
+          <div>
+            <h3 style="font-weight:800;margin-bottom:4px;" data-i18n="step2Title">تحليل مبدئي بالذكاء الاصطناعي</h3>
+            <p class="section-subtitle" data-i18n="step2Desc">يقوم محرك الرؤية بتحليل الأعراض وإظهار التشخيص المبدئي والبدائل المحتملة.</p>
+          </div>
+        </div>
+        <div class="step-card">
+          <div class="step-num">3</div>
+          <div>
+            <h3 style="font-weight:800;margin-bottom:4px;" data-i18n="step3Title">العلاج والاستشارة</h3>
+            <p class="section-subtitle" data-i18n="step3Desc">اقرأ أو اسمع خطة العلاج الحيوي والكيميائي، وتواصل مع مهندس زراعي قبل الرش.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Services (from Mobile Screenshots) -->
+      <div class="section-header">
+        <h2 class="section-title" data-i18n="quickServicesTitle">الخدمات السريعة</h2>
+      </div>
+      <div class="quick-services-grid">
+        <button class="quick-service-card" data-route="consultations">
+          <div class="qs-icon qs-green">🎧</div>
+          <div>
+            <h3 style="font-weight:800;" data-i18n="qsConsultTitle">استشارة مهندس</h3>
+            <p class="section-subtitle" data-i18n="qsConsultDesc">أرسل حالة محصولك وتواصل مع خبير زراعي</p>
+          </div>
+        </button>
+        <button class="quick-service-card" data-route="library">
+          <div class="qs-icon qs-blue">📖</div>
+          <div>
+            <h3 style="font-weight:800;" data-i18n="qsLibraryTitle">موسوعة الآفات</h3>
+            <p class="section-subtitle" data-i18n="qsLibraryDesc">دليل أمراض النبات وطرق المكافحة</p>
+          </div>
+        </button>
+        <button class="quick-service-card" data-route="learning">
+          <div class="qs-icon qs-amber">🎓</div>
+          <div>
+            <h3 style="font-weight:800;" data-i18n="qsLearnTitle">الوضع التعليمي</h3>
+            <p class="section-subtitle" data-i18n="qsLearnDesc">اختبر مهاراتك وتعلم التفريق بين الأمراض</p>
+          </div>
+        </button>
+      </div>
+
+      <!-- Recent Real Diagnoses from Firestore -->
+      <div class="section-header">
+        <h2 class="section-title" data-i18n="recentTitle">آخر الفحوصات والتشخيصات</h2>
+        <button class="btn btn-sm btn-ghost" data-route="dashboard" data-i18n="viewAll">عرض الكل</button>
+      </div>
+      <div id="home-recent-list" class="card">
+        <p class="section-subtitle" data-i18n="noRecentYet">لا توجد فحوصات مسجلة في حسابك بعد — ابدأ أول فحص لمحصولك الآن.</p>
+      </div>
+    </section>
+
+    <!-- ==================== DIAGNOSIS VIEW ==================== -->
+    <section id="view-diagnosis" class="app-view hidden">
+      <div class="section-header">
+        <div>
+          <h1 class="section-title" data-i18n="diagTitle">التشخيص بالذكاء الاصطناعي</h1>
+          <p class="section-subtitle" data-i18n="diagSub">ارفع صورة واضحة لورقة النبات المصابة (JPG, PNG, WEBP)</p>
+        </div>
+        <button id="btn-diag-config" class="btn btn-sm btn-secondary">⚙️ إعداد محرك الذكاء الاصطناعي</button>
+      </div>
+
+      <div class="diagnosis-layout">
+        <!-- Upload Card -->
+        <div class="card">
+          <div id="upload-dropzone" class="upload-zone" tabindex="0" role="button">
+            <div style="font-size:2.6rem;margin-bottom:10px;">🌿📷</div>
+            <p style="font-weight:800;font-size:1.05rem;margin-bottom:6px;" data-i18n="uploadDrop">اسحب وأفلت صورة الورقة هنا أو اضغط للاختيار</p>
+            <p class="section-subtitle" style="font-size:0.86rem;margin-bottom:14px;" data-i18n="uploadFormats">يتم التحليل بواسطة نموذج ذكاء اصطناعي حقيقي — بدون أي نتائج وهمية</p>
+            <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+              <label class="btn btn-primary">
+                📁 اختر صورة
+                <input id="input-leaf-file" type="file" accept="image/*" hidden />
+              </label>
+              <label class="btn btn-secondary">
+                📷 <span data-i18n="uploadCamera">التقاط بالكاميرا</span>
+                <input id="input-leaf-camera" type="file" accept="image/*" capture="environment" hidden />
+              </label>
+            </div>
+          </div>
+
+          <div id="preview-container" class="hidden" style="margin-top:16px;">
+            <div class="upload-preview-wrap">
+              <img id="leaf-preview-img" alt="صورة الورقة المرفوعة" />
+            </div>
+            <button id="btn-clear-image" class="btn btn-sm btn-ghost" style="color:var(--danger-text);">🗑️ إزالة الصورة</button>
+          </div>
+
+          <div class="form-group" style="margin-top:18px;">
+            <label class="form-label" for="diag-crop-select" data-i18n="cropLabel">نوع المحصول (اختياري — يحسّن دقة التحليل)</label>
+            <select id="diag-crop-select" class="form-control">
+              <option value="">-- غير محدد / دَع المحرك يتعرف عليه --</option>
+              <option value="طماطم (Tomato)">طماطم (Tomato)</option>
+              <option value="بطاطس (Potato)">بطاطس (Potato)</option>
+              <option value="قمح (Wheat)">قمح (Wheat)</option>
+              <option value="فلفل (Pepper)">فلفل (Pepper)</option>
+              <option value="خيار / قرعيات (Cucumber)">خيار / قرعيات (Cucumber)</option>
+              <option value="عنب (Grape)">عنب (Grape)</option>
+              <option value="ذرة (Corn)">ذرة (Corn)</option>
+              <option value="أخرى (Other)">أخرى (Other)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="diag-notes" data-i18n="notesLabel">وصف إضافي للأعراض (اختياري)</label>
+            <textarea id="diag-notes" rows="3" class="form-control" data-i18n-placeholder="notesPlaceholder" placeholder="مثال: اصفرار في الأوراق السفلية مع بقع بنية منذ 3 أيام..."></textarea>
+          </div>
+
+          <button id="btn-analyze-leaf" class="btn btn-lg btn-primary" style="width:100%;" disabled>
+            🔍 <span data-i18n="analyzeBtn">تحليل الصورة بالذكاء الاصطناعي</span>
+          </button>
+        </div>
+
+        <!-- Diagnosis Result Stack (Matches Images 3–8 + Image 13 Accessibility) -->
+        <div id="diagnosis-result-panel">
+          <div id="diag-empty-state" class="card" style="text-align:center;padding:48px 24px;">
+            <div style="font-size:3rem;margin-bottom:12px;">🔬</div>
+            <h3 style="font-weight:800;margin-bottom:8px;">تقرير تشخيص المحصول</h3>
+            <p class="section-subtitle">ارفع صورة ورقة النبات على اليمين واضغط «تحليل الصورة» للحصول على تقرير كامل متضمن الأعراض، العلاج الحيوي، العلاج الكيميائي، والإرشادات الوقائية مع زر القراءة الصوتية.</p>
+          </div>
+
+          <div id="diag-report-output" class="report-stack hidden"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== DISEASE LIBRARY VIEW ==================== -->
+    <section id="view-library" class="app-view hidden">
+      <div class="section-header">
+        <div>
+          <h1 class="section-title" data-i18n="libTitle">موسوعة أمراض النبات والآفات</h1>
+          <p class="section-subtitle" data-i18n="libSub">ابحث وتصفّح الدليل الزراعي الموثوق للأعراض وطرق العلاج الحيوي والكيميائي</p>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+          <input id="lib-search" type="search" class="form-control" style="min-width:260px;" data-i18n-placeholder="searchDiseasePlaceholder" placeholder="ابحث عن مرض أو محصول أو عرض..." />
+        </div>
+      </div>
+
+      <div class="library-layout">
+        <aside class="filter-sidebar">
+          <h3 style="font-weight:800;margin-bottom:12px;font-size:1rem;" data-i18n="filterCropTitle">تصفية حسب المحصول</h3>
+          <div id="crop-filter-list"></div>
+          <hr style="border:none;border-top:1px solid var(--border-light);margin:14px 0;" />
+          <h3 style="font-weight:800;margin-bottom:10px;font-size:0.95rem;">نوع المسبب</h3>
+          <select id="pathogen-filter" class="form-control">
+            <option value="all">جميع الأنواع</option>
+            <option value="fungal">فطري</option>
+            <option value="bacterial">بكتيري</option>
+            <option value="viral">فيروسي</option>
+            <option value="pest">آفة حشرية / أكاروس</option>
+            <option value="nutrient">نقص عناصر</option>
+          </select>
+        </aside>
+
+        <div id="disease-grid" class="disease-grid"></div>
+      </div>
+    </section>
+
+    <!-- ==================== LEARNING MODE VIEW ==================== -->
+    <section id="view-learning" class="app-view hidden">
+      <div class="section-header">
+        <div>
+          <h1 class="section-title" data-i18n="learnTitle">الوضع التعليمي والتدريبي</h1>
+          <p class="section-subtitle" data-i18n="learnSub">طوّر مهارتك في التعرف على أمراض النباتات والتفريق بين الإصابات المتشابهة</p>
+        </div>
+        <div class="tag-row">
+          <span class="tag" style="padding:8px 14px;font-size:0.9rem;">🏆 النقاط: <strong id="learn-points">0</strong></span>
+          <span class="tag" style="padding:8px 14px;font-size:0.9rem;">🔥 السلسلة: <strong id="learn-streak">0</strong></span>
+        </div>
+      </div>
+
+      <div class="tabs-bar">
+        <button class="tab-btn active" data-learn-tab="identify" data-i18n="tabIdentify">حدد المرض</button>
+        <button class="tab-btn" data-learn-tab="quiz" data-i18n="tabQuiz">اختبار سريع</button>
+        <button class="tab-btn" data-learn-tab="compare" data-i18n="tabCompare">قارن الأمراض المتشابهة</button>
+      </div>
+
+      <div id="learning-stage"></div>
+    </section>
+
+    <!-- ==================== CONSULTATIONS VIEW ==================== -->
+    <section id="view-consultations" class="app-view hidden">
+      <div class="section-header">
+        <div>
+          <h1 class="section-title" data-i18n="consultTitle">استشارة مهندس زراعي متخصص</h1>
+          <p class="section-subtitle" data-i18n="consultSub">تواصل مباشرة مع المهندسين الزراعيين عبر المنصة أو قنوات واتساب وتيليجرام</p>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <a id="link-wa-channel" href="#" target="_blank" rel="noopener" class="btn btn-sm btn-whatsapp hidden">💬 قناة واتساب</a>
+          <a id="link-tg-channel" href="#" target="_blank" rel="noopener" class="btn btn-sm btn-telegram hidden">✈️ بوت تيليجرام</a>
+          <button id="btn-new-consult" class="btn btn-sm btn-primary">+ فتح استشارة جديدة</button>
+        </div>
+      </div>
+
+      <div id="consult-auth-guard" class="card hidden" style="text-align:center;padding:36px;">
+        <h3 style="font-weight:800;margin-bottom:8px;">سجّل الدخول للتواصل مع المهندسين الزراعيين</h3>
+        <p class="section-subtitle" style="margin-bottom:16px;">يتم حفظ الاستشارات والردود بشكل فوري وآمن في قاعدة بيانات Firebase الخاصة بك.</p>
+        <button class="btn btn-primary" data-route="auth">تسجيل الدخول / إنشاء حساب</button>
+      </div>
+
+      <div id="consult-workspace" class="chat-layout">
+        <div class="card" style="padding:16px;">
+          <h3 id="consult-list-title" style="font-weight:800;margin-bottom:12px;">استشاراتي</h3>
+          <div id="consult-list" style="display:flex;flex-direction:column;gap:10px;"></div>
+        </div>
+
+        <div class="card">
+          <div id="consult-thread-empty" style="text-align:center;padding:48px 16px;">
+            <div style="font-size:2.4rem;margin-bottom:8px;">💬</div>
+            <p class="section-subtitle">اختر محادثة من القائمة أو افتح استشارة جديدة لإرسال صورة وتفاصيل محصولك لمهندس زراعي.</p>
+          </div>
+          <div id="consult-thread-active" class="hidden">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:10px;flex-wrap:wrap;">
+              <div>
+                <h3 id="thread-subject" style="font-weight:800;"></h3>
+                <span id="thread-meta" class="section-subtitle" style="font-size:0.84rem;"></span>
+              </div>
+              <span id="thread-status-badge" class="tag"></span>
+            </div>
+            <div id="thread-messages" class="chat-messages"></div>
+            <form id="form-send-msg" style="display:flex;gap:10px;">
+              <input id="input-chat-msg" type="text" class="form-control" placeholder="اكتب رسالتك أو نصيحتك هنا..." required />
+              <button type="submit" class="btn btn-primary">إرسال</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== DASHBOARD VIEW ==================== -->
+    <section id="view-dashboard" class="app-view hidden">
+      <div id="dash-auth-guard" class="card hidden" style="text-align:center;padding:40px;">
+        <h3 style="font-weight:800;margin-bottom:10px;">لوحة التحكم الشخصية</h3>
+        <p class="section-subtitle" style="margin-bottom:18px;">سجّل الدخول بحسابك لمتابعة فحوصات مزرعتك، تقدمك التعليمي، والمفضلة من Firestore.</p>
+        <button class="btn btn-primary" data-route="auth">تسجيل الدخول الآن</button>
+      </div>
+
+      <div id="dash-main" class="dashboard-layout hidden">
+        <aside class="dash-sidebar">
+          <div style="margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid rgba(255,255,255,0.18);">
+            <div id="dash-user-name" style="font-weight:800;font-size:1.15rem;"></div>
+            <div id="dash-user-role" style="font-size:0.84rem;opacity:0.85;"></div>
+          </div>
+          <button class="dash-nav-btn active" data-dash-tab="overview">📊 <span data-i18n="dashOverview">لوحة التحكم</span></button>
+          <button class="dash-nav-btn" data-dash-tab="diagnoses">🔬 <span data-i18n="dashDiagnoses">فحوصاتي</span></button>
+          <button class="dash-nav-btn" data-dash-tab="favorites">⭐ <span data-i18n="dashFavorites">المفضلة</span></button>
+          <button class="dash-nav-btn" data-dash-tab="settings">⚙️ <span data-i18n="dashSettings">الإعدادات والربط</span></button>
+          <button id="btn-logout" class="dash-nav-btn" style="margin-top:16px;background:rgba(255,255,255,0.08);">🚪 <span data-i18n="logoutBtn">تسجيل الخروج</span></button>
+        </aside>
+
+        <div id="dash-content"></div>
+      </div>
+    </section>
+
+    <!-- ==================== AUTH VIEW ==================== -->
+    <section id="view-auth" class="app-view hidden">
+      <div class="card" style="max-width:480px;margin-inline:auto;padding:24px;border-radius:18px;">
+        <div style="text-align:center;color:var(--green-700);margin-bottom:8px;">
+          <svg style="width:40px;height:40px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/>
+            <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>
+          </svg>
+        </div>
+        <h2 style="text-align:center;margin:4px 0;color:var(--green-900);font-weight:900;" id="auth-title">أهلاً بك في SANAB</h2>
+        <p style="text-align:center;color:var(--text-muted);margin:0 0 14px;font-size:0.92rem;" id="auth-subtitle">سجّل الدخول لمتابعة مزرعتك</p>
+
+        <form id="form-auth">
+          <div id="register-only-fields" class="hidden">
+            <div class="form-group" style="margin-bottom:12px;">
+              <label class="form-label" for="auth-name" style="font-weight:700;font-size:14px;">الاسم الكامل</label>
+              <input id="auth-name" type="text" class="form-control" placeholder="أحمد محمد" />
+            </div>
+
+            <div class="form-group" style="margin-bottom:12px;">
+              <label class="form-label" style="font-weight:700;font-size:14px;">نوع الحساب</label>
+              <div class="roles" id="auth-role-grid">
+                <div class="role" data-role="student">
+                  <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                  <span>طالب زراعة</span>
+                </div>
+                <div class="role" data-role="engineer">
+                  <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 18a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1z"/><path d="M10 10V5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v5"/><path d="M4 15v-3a6 6 0 0 1 6-6"/><path d="M14 6a6 6 0 0 1 6 6v3"/></svg>
+                  <span>مهندس زراعي</span>
+                </div>
+                <div class="role on" data-role="farmer">
+                  <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="7" cy="16" r="4"/><circle cx="19" cy="17" r="2.5"/><path d="M3 16V8h8l2 5h7v2M11 8V5h3"/></svg>
+                  <span>مزارع</span>
+                </div>
+                <div class="role" data-role="nursery">
+                  <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/></svg>
+                  <span>صاحب مشتل</span>
+                </div>
+                <div class="role" data-role="other">
+                  <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                  <span>أخرى</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom:12px;">
+              <label class="form-label" for="auth-governorate" style="font-weight:700;font-size:14px;">المحافظة / المنطقة</label>
+              <select id="auth-governorate" class="form-control"></select>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-bottom:12px;">
+            <label class="form-label" for="auth-email" style="font-weight:700;font-size:14px;">البريد الإلكتروني</label>
+            <input id="auth-email" type="email" class="form-control" dir="ltr" autocomplete="email" placeholder="example@email.com" required />
+          </div>
+
+          <div class="form-group" style="margin-bottom:12px;">
+            <label class="form-label" for="auth-password" style="font-weight:700;font-size:14px;">كلمة المرور</label>
+            <div class="pw">
+              <input id="auth-password" type="password" class="form-control" dir="ltr" placeholder="••••••••" minlength="6" required />
+              <button type="button" id="btn-toggle-eye" aria-label="عرض كلمة المرور">
+                <svg id="eye-icon" style="width:20px;height:20px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <div id="login-only-row" style="display:flex;justify-content:space-between;align-items:center;margin:12px 0;font-size:14px;">
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;">
+              <input id="auth-remember" type="checkbox" checked />
+              <span>تذكرني</span>
+            </label>
+            <a href="#" id="btn-forgot-pass" style="color:var(--green-700);font-weight:700;">نسيت كلمة المرور؟</a>
+          </div>
+
+          <button id="btn-auth-submit" type="submit" class="btn btn-primary" style="width:100%;margin-top:14px;">تسجيل الدخول</button>
+          <button id="btn-switch-auth-mode" type="button" class="btn btn-secondary" style="width:100%;margin-top:10px;">إنشاء حساب جديد</button>
+        </form>
+
+        <div style="text-align:center;margin:14px 0;color:var(--text-muted);font-size:0.86rem;">أو</div>
+
+        <button id="btn-google-auth" type="button" class="btn btn-secondary" style="width:100%;">
+          🔵 <span>الدخول بحساب Google</span>
+        </button>
+
+        <div style="text-align:center;margin-top:16px;padding-top:12px;border-top:1px solid var(--border-light);">
+          <a href="./app-mobile.html" class="status-pill connected" style="text-decoration:none;display:inline-flex;">
+            📱 فتح وضع تطبيق الموبايل المستقل (Mobile App Shell)
+          </a>
+        </div>
+      </div>
+    </section>
+    </section>
+  </main>
+
+  <!-- ==================== MODALS ==================== -->
+  <!-- Disease Detail Modal -->
+  <div id="modal-disease" class="modal-backdrop hidden" role="dialog" aria-modal="true">
+    <div class="modal-box">
+      <button id="btn-close-disease-modal" class="icon-btn" style="position:absolute;top:16px;inset-inline-end:16px;">✕</button>
+      <div id="modal-disease-body"></div>
+    </div>
+  </div>
+
+  <!-- Firebase & AI Real Integration Configuration Modal -->
+  <div id="modal-config" class="modal-backdrop hidden" role="dialog" aria-modal="true">
+    <div class="modal-box">
+      <button id="btn-close-config-modal" class="icon-btn" style="position:absolute;top:16px;inset-inline-end:16px;">✕</button>
+      <h2 style="font-weight:900;margin-bottom:8px;">⚙️ ربط قاعدة بيانات Firebase ومحرك الذكاء الاصطناعي</h2>
+      <p class="section-subtitle" style="margin-bottom:18px;">لضمان عدم وجود أي بيانات وهمية: الصق إعدادات مشروع Firebase الخاصة بك ومفتاح الرؤية الحاسوبية ليتم الحفظ والتحليل فعلياً.</p>
+
+      <form id="form-config">
+        <div class="form-group">
+          <label class="form-label" for="cfg-firebase-raw">1. إعدادات مشروع Firebase (الصق كود firebaseConfig أو JSON كما هو من لوحة Firebase)</label>
+          <textarea id="cfg-firebase-raw" rows="6" class="form-control" style="direction:ltr;text-align:left;font-family:monospace;font-size:0.85rem;" placeholder='const firebaseConfig = {
+  apiKey: "...",
+  authDomain: "...",
+  projectId: "...",
+  storageBucket: "...",
+  messagingSenderId: "...",
+  appId: "..."
+};'></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="cfg-ai-provider">2. محرك تشخيص صور النبات (Vision AI)</label>
+          <select id="cfg-ai-provider" class="form-control">
+            <option value="gemini">Google Gemini Vision API (مباشر من المتصفح بمفتاحك)</option>
+            <option value="backend">خادم Python المحلي (/api/diagnose عبر ملف .env)</option>
+            <option value="custom">رابط نموذج مخصص (Custom ML / FastAPI / Firebase Function)</option>
+          </select>
+        </div>
+
+        <div id="cfg-gemini-group" class="form-group">
+          <label class="form-label" for="cfg-gemini-key">مفتاح Gemini API Key (من Google AI Studio)</label>
+          <input id="cfg-gemini-key" type="password" class="form-control" style="direction:ltr;text-align:left;" placeholder="AIza..." />
+        </div>
+
+        <div id="cfg-custom-group" class="form-group hidden">
+          <label class="form-label" for="cfg-custom-url">رابط Endpoint المخصص</label>
+          <input id="cfg-custom-url" type="url" class="form-control" style="direction:ltr;text-align:left;" placeholder="https://your-ml-api.example.com/diagnose" />
+        </div>
+
+        <div style="display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-top:20px;">
+          <button type="button" id="btn-seed-firestore" class="btn btn-secondary">🌱 تهيئة موسوعة الأمراض والاختبارات في Firestore</button>
+          <button type="submit" class="btn btn-primary">💾 حفظ وتفعيل الاتصال</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- New Consultation Modal -->
+  <div id="modal-new-consult" class="modal-backdrop hidden" role="dialog" aria-modal="true">
+    <div class="modal-box">
+      <button id="btn-close-consult-modal" class="icon-btn" style="position:absolute;top:16px;inset-inline-end:16px;">✕</button>
+      <h2 style="font-weight:900;margin-bottom:14px;">🎧 إرسال استشارة لمهندس زراعي</h2>
+      <form id="form-new-consult">
+        <div class="form-group">
+          <label class="form-label" for="consult-crop">المحصول</label>
+          <input id="consult-crop" type="text" class="form-control" placeholder="مثال: طماطم، قمح، بطاطس" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="consult-subject">عنوان المشكلة</label>
+          <input id="consult-subject" type="text" class="form-control" placeholder="مثال: بقع بنية على الأوراق السفلية" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="consult-details">تفاصيل الحالة في الغيط</label>
+          <textarea id="consult-details" rows="4" class="form-control" placeholder="اكتب عمر المحصول، نظام الري، والمبيدات المستخدمة مؤخراً..." required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:100%;">إرسال الاستشارة الآن</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+  <footer class="footer">
+    <div class="container" style="display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;">
+      <div>
+        <strong>🌿 SANAB</strong>
+        <p style="font-size:0.86rem;opacity:0.8;">منصة زراعية ذكية — تشخيص استرشادي، موسوعة علمية، ودعم صوتي للمزارعين.</p>
+      </div>
+      <div style="font-size:0.84rem;opacity:0.8;">
+        الطقس الحي عبر Open-Meteo • القاعدة السحابية Firebase
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="./js/app.js"></script>
+</body>
+</html>

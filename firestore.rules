@@ -1,0 +1,49 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isEngineer() {
+      return isSignedIn() &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.accountType == 'engineer';
+    }
+
+    match /users/{uid} {
+      allow read, write: if isSignedIn() && request.auth.uid == uid;
+    }
+
+    match /diagnoses/{diagId} {
+      allow read, update, delete: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+    }
+
+    match /diseases/{diseaseId} {
+      allow read: if true;
+      allow write: if isSignedIn();
+    }
+
+    match /quiz_questions/{questionId} {
+      allow read: if true;
+      allow write: if isSignedIn();
+    }
+
+    match /consultations/{consultId} {
+      allow create: if isSignedIn() && request.resource.data.farmerId == request.auth.uid;
+      allow read, update: if isSignedIn() && (resource.data.farmerId == request.auth.uid || isEngineer());
+
+      match /messages/{msgId} {
+        allow read, create: if isSignedIn() && (
+          get(/databases/$(database)/documents/consultations/$(consultId)).data.farmerId == request.auth.uid ||
+          isEngineer()
+        );
+      }
+    }
+
+    match /settings/{docId} {
+      allow read: if true;
+      allow write: if isEngineer();
+    }
+  }
+}

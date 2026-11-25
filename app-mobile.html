@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#2e7d32">
+<title>SANAB</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--g:#2e7d32;--gd:#1b5e20;--g3:#e8f5e9;--bg:#f4f8f4;--card:#fff;--tx:#1d2b22;--mu:#6e7c73;--bd:#e3ebe4;--red:#e53935;--org:#f59e0b;--blue:#1e88e5}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0}body{font-family:Cairo,system-ui,sans-serif;background:#dfe8e0;color:var(--tx);line-height:1.6}
+button,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer}a{color:inherit;text-decoration:none}
+.i{width:1.3em;height:1.3em;vertical-align:-.28em;flex:none}
+.app{max-width:480px;margin:0 auto;min-height:100vh;background:var(--bg);position:relative;box-shadow:0 0 30px #0002}
+.bar{position:sticky;top:0;z-index:30;background:var(--g);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:12px 14px;min-height:58px}
+.bar h1{margin:0;font-size:20px;font-weight:800}.bar button{position:relative;background:none;border:0;color:#fff;width:40px;height:40px;display:grid;place-items:center;font-size:20px;border-radius:50%}.bar button:active{background:#fff3}
+.dot{position:absolute;top:7px;inset-inline-end:7px;width:10px;height:10px;border-radius:50%;background:#ff5252;border:2px solid var(--g)}
+main{padding:16px 14px 110px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:18px;padding:16px;margin-bottom:14px;box-shadow:0 2px 10px #1b5e2010}
+.wx{background:#e3f2e4;border-color:#d3e8d4;display:flex;gap:12px;align-items:center;justify-content:space-between}.wx .t{flex:1}.wx b{color:var(--gd);font-size:17px;display:block}.wx p{margin:4px 0 0;color:var(--mu);font-size:14px}
+.wx .ic{width:62px;height:62px;border-radius:14px;background:#fff;display:grid;place-items:center;color:#f9a825}.wx .ic .i{width:36px;height:36px}
+.hero{background:linear-gradient(135deg,#2e7d32,#1b5e20);color:#fff;border:0;display:flex;gap:10px;align-items:center;position:relative;overflow:hidden}
+.hero .t{flex:1;z-index:1}.hero h2{margin:0 0 6px;font-size:20px}.hero p{margin:0 0 14px;opacity:.85;font-size:14px}.hero .bg{position:absolute;inset-inline-start:12px;top:14px;opacity:.3}.hero .bg .i{width:96px;height:96px}
+.wbtn{background:#fff;color:var(--gd);border:0;border-radius:14px;padding:12px 16px;font-weight:800;display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%}
+h3.sec{margin:20px 0 10px;font-size:19px;display:flex;justify-content:space-between;align-items:center}h3.sec a{font-size:14px;color:var(--g);font-weight:600}
+.svc{display:grid;grid-template-columns:1fr 1fr;gap:12px}.svc .card{margin:0;display:flex;flex-direction:column;gap:6px;cursor:pointer}.svc .si{width:46px;height:46px;border-radius:12px;display:grid;place-items:center}.svc b{font-size:15px}.svc small{color:var(--mu)}
+.item{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:12px;margin-bottom:10px;cursor:pointer}
+.item .av{width:46px;height:46px;border-radius:12px;background:var(--g3);color:var(--g);display:grid;place-items:center;flex:none}.item .tx{flex:1;min-width:0}.item b{display:block;font-size:15px}.item small{color:var(--mu)}.item>.i{color:var(--mu)}
+.ibtn{background:none;border:0;color:var(--red);padding:6px}
+.empty{text-align:center;color:var(--mu);padding:26px 10px}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;background:var(--g);color:#fff;border:0;border-radius:14px;padding:13px 18px;font-weight:700;width:100%}.btn:disabled{opacity:.5}.btn.o{background:#fff;color:var(--g);border:1.5px solid var(--g)}.btn.r{background:var(--red)}.btn.sm{width:auto;padding:8px 14px;font-size:14px}
+.btn+.btn{margin-top:10px}
+label.l{display:block;font-weight:700;margin:12px 0 4px;font-size:14px}
+input,select,textarea{width:100%;padding:11px 12px;border:1px solid var(--bd);border-radius:12px;background:#fbfdfb;outline:none}input:focus,select:focus,textarea:focus{border-color:var(--g)}input[type=checkbox]{width:auto}
+.pw{position:relative}.pw button{position:absolute;inset-inline-end:8px;top:50%;transform:translateY(-50%);background:none;border:0;color:var(--mu)}
+.roles{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}.role{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 2px;border:1.5px solid var(--bd);border-radius:12px;font-size:11px;font-weight:700;background:#fff;cursor:pointer}.role.on{border-color:var(--g);background:var(--g3);color:var(--gd)}
+.drop{border:2px dashed #9ccc9f;border-radius:18px;background:var(--g3);min-height:210px;display:grid;place-items:center;text-align:center;color:var(--gd);overflow:hidden}.drop img{width:100%;max-height:300px;object-fit:cover}.drop .i{width:44px;height:44px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+.sum{display:flex;gap:14px;align-items:center}.sum .av{width:64px;height:64px;border-radius:50%;background:var(--g3);color:var(--g);display:grid;place-items:center;flex:none;overflow:hidden}.sum .av img{width:100%;height:100%;object-fit:cover}.sum .av .i{width:32px;height:32px}.sum small{color:var(--mu)}.sum b{font-size:20px;display:block;line-height:1.3}
+.met{display:flex;border-top:1px solid var(--bd);margin-top:14px;padding-top:14px}.met>div{flex:1;text-align:center}.met>div+div{border-inline-start:1px solid var(--bd)}.met b{display:block;font-size:19px}.met small{color:var(--mu)}
+.sv-low{color:#2e9e4f}.sv-medium{color:var(--org)}.sv-high{color:var(--red)}
+.sh{display:flex;align-items:center;gap:8px;font-weight:800;font-size:17px;margin-bottom:8px}.sh .i{width:24px;height:24px}
+.li{display:flex;gap:10px;align-items:flex-start;color:#4a5a50;margin:8px 0;font-size:15px}.li .i{margin-top:3px}
+.note{background:#fff8e1;color:#6d4c00;border-radius:12px;padding:10px 12px;font-size:13px;margin-bottom:14px;display:flex;gap:8px}
+.bnav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:#fff;border-top:1px solid var(--bd);display:flex;align-items:flex-end;justify-content:space-around;padding:6px 4px calc(6px + env(safe-area-inset-bottom));z-index:40}
+.bnav a{flex:1;display:flex;flex-direction:column;align-items:center;gap:0;color:var(--mu);font-size:12px;font-weight:600;padding:4px 0}.bnav a.on{color:var(--g)}.bnav a .i{width:26px;height:26px}
+.bnav .fab{flex:none;width:62px;height:62px;border-radius:20px;background:var(--g);color:#fff;display:grid;place-items:center;margin:0 6px;transform:translateY(-18px);box-shadow:0 6px 16px #2e7d3260;border:4px solid var(--bg)}.bnav .fab .i{width:28px;height:28px}
+dialog{border:0;border-radius:18px;width:92%;max-width:440px;padding:18px;max-height:88vh;background:#fff}dialog::backdrop{background:#0008}
+#toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:#222;color:#fff;padding:10px 18px;border-radius:12px;display:none;z-index:99;max-width:90%;font-size:14px}
+.spin{display:inline-block;width:18px;height:18px;border:3px solid #fff6;border-top-color:#fff;border-radius:50%;animation:s 1s linear infinite}@keyframes s{to{transform:rotate(360deg)}}
+.tag{display:inline-block;padding:1px 9px;border-radius:20px;font-size:12px;font-weight:700;background:var(--g3);color:var(--gd)}
+.msg{background:#f1f6f1;border-radius:12px;padding:10px 12px;margin:8px 0;font-size:14px}.msg.rep{background:var(--g3);border-inline-start:4px solid var(--g)}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="i-leaf" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></symbol>
+<symbol id="i-bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></symbol>
+<symbol id="i-share" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></symbol>
+<symbol id="i-back" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></symbol>
+<symbol id="i-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></symbol>
+<symbol id="i-home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></symbol>
+<symbol id="i-scan" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M8 8h8M8 12h8M8 16h5"/></symbol>
+<symbol id="i-camera" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></symbol>
+<symbol id="i-book" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></symbol>
+<symbol id="i-user" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+<symbol id="i-head" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 14v-2a9 9 0 0 1 18 0v2"/><path d="M21 15a2 2 0 0 1-2 2h-1v-5h1a2 2 0 0 1 2 2zM3 15a2 2 0 0 0 2 2h1v-5H5a2 2 0 0 0-2 2z"/><path d="M18 17v1a3 3 0 0 1-3 3h-2"/></symbol>
+<symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+<symbol id="i-cloud" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.7-9h1.8a4 4 0 0 1 0 8z"/></symbol>
+<symbol id="i-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></symbol>
+<symbol id="i-eyeoff" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.9 4.2A10 10 0 0 1 12 5c7 0 10 7 10 7a13 13 0 0 1-1.7 2.7"/><path d="M6.6 6.6A13 13 0 0 0 2 12s3 7 10 7a10 10 0 0 0 5.4-1.6"/><path d="m2 2 20 20"/></symbol>
+<symbol id="i-sprout" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/></symbol>
+<symbol id="i-cap" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></symbol>
+<symbol id="i-hat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 18a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1z"/><path d="M10 10V5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v5"/><path d="M4 15v-3a6 6 0 0 1 6-6"/><path d="M14 6a6 6 0 0 1 6 6v3"/></symbol>
+<symbol id="i-tractor" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="16" r="4"/><circle cx="19" cy="17" r="2.5"/><path d="M3 16V8h8l2 5h7v2M11 8V5h3"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" stroke-width="2"/><path d="m8 12 3 3 5-6"/></symbol>
+<symbol id="i-flask" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v7.5L4.5 19a2 2 0 0 0 1.8 3h11.4a2 2 0 0 0 1.8-3L14 9.5V2"/><path d="M8.5 2h7"/></symbol>
+<symbol id="i-med" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M12 9v7M8.5 12.5h7"/></symbol>
+<symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></symbol>
+<symbol id="i-arrc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m12 8-4 4 4 4M16 12H8"/></symbol>
+<symbol id="i-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.7 18-8-14a2 2 0 0 0-3.4 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.7-3z"/><path d="M12 9v4M12 17h.01"/></symbol>
+<symbol id="i-vol" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></symbol>
+<symbol id="i-image" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></symbol>
+<symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></symbol>
+<symbol id="i-trash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></symbol>
+<symbol id="i-send" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4z"/><path d="M22 2 11 13"/></symbol>
+<symbol id="i-logout" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/></symbol>
+<symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></symbol>
+<symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+</defs></svg>
+
+<div class="app">
+  <header class="bar"><button id="bR" type="button"></button><h1 id="bT"></h1><button id="bL" type="button"></button></header>
+  <main id="main"><div class="empty"><span class="spin" style="border-color:#2e7d3240;border-top-color:#2e7d32"></span></div></main>
+  <nav class="bnav" id="bnav" style="display:none">
+    <a href="#home" data-n="home"><svg class="i"><use href="#i-home"/></svg><span>الرئيسية</span></a>
+    <a href="#scan" data-n="scan"><svg class="i"><use href="#i-scan"/></svg><span>فحص ورقة</span></a>
+    <a href="#scan" class="fab" aria-label="فحص"><svg class="i"><use href="#i-camera"/></svg></a>
+    <a href="#library" data-n="library"><svg class="i"><use href="#i-book"/></svg><span>الموسوعة</span></a>
+    <a href="#account" data-n="account"><svg class="i"><use href="#i-user"/></svg><span>حسابي</span></a>
+  </nav>
+</div>
+<dialog id="dlg"></dialog>
+<div id="toast"></div>
+<script>addEventListener("error",e=>{const t=document.getElementById("toast");if(t){t.textContent="خطأ: "+e.message;t.style.display="block"}})</script>
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+import {getAuth,onAuthStateChanged,createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut,updateProfile,sendPasswordResetEmail,setPersistence,browserLocalPersistence,browserSessionPersistence} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+import {getFirestore,doc,getDoc,setDoc,updateDoc,deleteDoc,addDoc,collection,getDocs,query,orderBy,where,serverTimestamp} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+const app=initializeApp({apiKey:"AIzaSyBXviTNH4nVLSezWBh5FBxCNuJumu5JRCQ",authDomain:"senap-d4a15.firebaseapp.com",projectId:"senap-d4a15",storageBucket:"senap-d4a15.firebasestorage.app",messagingSenderId:"417838476170",appId:"1:417838476170:web:c55be5e12946e8beb5f673",measurementId:"G-S230MMYYC0"});
+const auth=getAuth(app),db=getFirestore(app);
+let _model=null;
+async function getModel(){if(_model)return _model;
+  const m=await import("https://www.gstatic.com/firebasejs/11.10.0/firebase-ai.js");
+  _model=m.getGenerativeModel(m.getAI(app,{backend:new m.GoogleAIBackend()}),{model:"gemini-2.5-flash",generationConfig:{responseMimeType:"application/json"}});
+  return _model}
+
+/* ---------- helpers ---------- */
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const ico=(n,c="")=>`<svg class="i ${c}"><use href="#i-${n}"/></svg>`;
+const toast=m=>{const e=$("toast");e.textContent=m;e.style.display="block";clearTimeout(e._t);e._t=setTimeout(()=>e.style.display="none",4200)};
+const SEV={low:"منخفضة",medium:"متوسطة",high:"شديدة"},TYPE={fungal:"فطري",bacterial:"بكتيري",viral:"فيروسي",deficiency:"نقص عناصر",pest:"آفة حشرية",healthy:"سليم",unknown:"غير محدد"};
+const ROLES={student:["طالب زراعة","cap"],engineer:["مهندس زراعي","hat"],farmer:["مزارع","tractor"],nursery:["صاحب مشتل","sprout"],other:["أخرى","user"]};
+const sk=s=>SEV[s]?s:"medium";
+const err=x=>({"auth/invalid-credential":"بيانات الدخول غير صحيحة","auth/wrong-password":"بيانات الدخول غير صحيحة","auth/user-not-found":"بيانات الدخول غير صحيحة","auth/email-already-in-use":"البريد مستخدم بالفعل","auth/weak-password":"كلمة المرور ضعيفة (6 أحرف على الأقل)","auth/invalid-email":"بريد غير صالح","permission-denied":"ليس لديك صلاحية (راجع قواعد Firestore)"}[x?.code]||x?.message||"حدث خطأ");
+const lines=s=>String(s||"").split("\n").map(x=>x.trim()).filter(Boolean);
+const ms=d=>d?.createdAt?.toMillis?d.createdAt.toMillis():Date.now();
+const dDate=d=>d?.createdAt?.toDate?d.createdAt.toDate().toLocaleDateString("ar-EG"):"";
+function resize(file,max,q=.85){return new Promise((ok,bad)=>{const i=new Image(),u=URL.createObjectURL(file);i.onload=()=>{const k=Math.min(1,max/Math.max(i.width,i.height)),c=document.createElement("canvas");c.width=Math.round(i.width*k);c.height=Math.round(i.height*k);c.getContext("2d").drawImage(i,0,0,c.width,c.height);URL.revokeObjectURL(u);ok(c.toDataURL("image/jpeg",q))};i.onerror=()=>bad(new Error("تعذر قراءة الصورة"));i.src=u})}
+const openDlg=h=>{$("dlg").innerHTML=h;$("dlg").showModal()};
+
+/* ---------- state ---------- */
+let user=null,profile=null,authReady=false,signingUp=false,mode="login",role="student",diags=[],diseases=[],cur=null,img=null,wx=null,badge=0,speaking=false;
+
+/* ---------- auth ---------- */
+onAuthStateChanged(auth,async u=>{
+  if(signingUp)return;
+  user=u;profile=null;
+  if(u){try{const r=doc(db,"users",u.uid),s=await getDoc(r);
+      if(s.exists())profile=s.data();else{profile={name:u.displayName||u.email.split("@")[0],email:u.email,role:"other"};await setDoc(r,{...profile,createdAt:serverTimestamp()})}
+    }catch(x){toast(err(x));profile={name:u.displayName||u.email,role:"other"}}
+    refreshBadge()}
+  authReady=true;route();
+});
+setTimeout(()=>{if(!authReady){authReady=true;route()}},4000);
+
+/* ---------- router ---------- */
+const TITLES={home:"SANAB",scan:"فحص ورقة النبات",library:"موسوعة الآفات",account:"حسابي",consult:"استشارة مهندس",history:"آخر الفحوصات",report:"تقرير تشخيص المحصول",disease:"تفاصيل الآفة"};
+function bar(title,right,left){
+  $("bT").textContent=title;
+  const set=(id,o)=>{const b=$(id);b.style.visibility=o?"visible":"hidden";b.innerHTML=o?ico(o.ic)+(o.dot&&badge>0?'<span class="dot"></span>':""):"";b.dataset.act=o?o.act:""};
+  set("bR",right);set("bL",left);
+}
+function route(){
+  if(!authReady)return;
+  let r=(location.hash||"#home").slice(1);if(!TITLES[r])r="home";
+  $("bnav").style.display=user?"flex":"none";
+  if(!user){renderAuth();scrollTo(0,0);return}
+  if((r==="report"||r==="disease")&&!cur){location.replace("#home");return}
+  document.querySelectorAll(".bnav a[data-n]").forEach(a=>a.classList.toggle("on",a.dataset.n===r));
+  const main=["home","scan","library","account"].includes(r);
+  bar(TITLES[r],main?{ic:"leaf",act:"home"}:{ic:"back",act:"back"},r==="report"?{ic:"share",act:"share"}:main||r==="consult"?{ic:"bell",act:"bell",dot:1}:null);
+  ({home:renderHome,scan:renderScan,library:renderLibrary,account:renderAccount,consult:renderConsult,history:renderHistory,report:renderReport,disease:renderReport})[r]();
+  scrollTo(0,0);
+}
+addEventListener("hashchange",()=>{stopSpeak();route()});
+
+/* ---------- auth screen ---------- */
+function renderAuth(){
+  bar("SANAB",{ic:"leaf",act:"x"},null);
+  $("main").innerHTML=`<div class="card" style="margin-top:10px"><div style="text-align:center;color:var(--g)">${ico("leaf")}</div>
+  <h2 style="text-align:center;margin:4px 0;color:var(--gd)" id="aT"></h2><p style="text-align:center;color:var(--mu);margin:0 0 6px" id="aS"></p>
+  <div id="nameBox"><label class="l">الاسم الكامل</label><input id="aName"></div>
+  <label class="l">البريد الإلكتروني</label><input id="aEmail" type="email" dir="ltr" autocomplete="email">
+  <label class="l">كلمة المرور</label><div class="pw"><input id="aPass" type="password" dir="ltr"><button type="button" data-act="eye" id="eye">${ico("eye")}</button></div>
+  <div id="lrow" style="display:flex;justify-content:space-between;align-items:center;margin:10px 0;font-size:14px"><label><input type="checkbox" id="rem" checked> تذكرني</label><a href="#" data-act="forgot" style="color:var(--g);font-weight:700">نسيت كلمة المرور؟</a></div>
+  <div id="roleBox"><label class="l">نوع الحساب</label><div class="roles" id="roles"></div></div>
+  <button class="btn" id="authBtn" data-act="auth" type="button" style="margin-top:14px"></button>
+  <button class="btn o" data-act="switch" id="swBtn" type="button"></button></div>`;
+  applyMode();
+}
+function applyMode(){const s=mode==="signup";
+  $("aT").textContent=s?"إنشاء حساب جديد":"أهلاً بك في SANAB";$("aS").textContent=s?"أنشئ حسابك للبدء":"سجّل الدخول لمتابعة مزرعتك";
+  $("nameBox").style.display=$("roleBox").style.display=s?"":"none";$("lrow").style.display=s?"none":"flex";
+  $("authBtn").textContent=s?"إنشاء الحساب":"تسجيل الدخول";$("swBtn").textContent=s?"لديك حساب؟ سجّل الدخول":"إنشاء حساب جديد";
+  $("roles").innerHTML=Object.entries(ROLES).map(([k,[n,ic]])=>`<div class="role ${k===role?"on":""}" data-act="role" data-v="${k}">${ico(ic)}<span>${n}</span></div>`).join("")}
+async function doAuth(){
+  const em=$("aEmail").value.trim(),pw=$("aPass").value;if(!em||!pw)return toast("اكمل البيانات");
+  const b=$("authBtn");b.disabled=true;
+  try{
+    await setPersistence(auth,$("rem").checked||mode==="signup"?browserLocalPersistence:browserSessionPersistence);
+    if(mode==="signup"){const name=$("aName").value.trim();if(!name){toast("اكتب اسمك");return}
+      signingUp=true;
+      try{const c=await createUserWithEmailAndPassword(auth,em,pw);
+        try{await updateProfile(c.user,{displayName:name})}catch(e){}
+        profile={name,email:em,role};user=c.user;
+        await setDoc(doc(db,"users",c.user.uid),{...profile,createdAt:serverTimestamp()});
+      }finally{signingUp=false}
+      refreshBadge();location.hash="#home";route();
+    }else await signInWithEmailAndPassword(auth,em,pw);
+  }catch(x){toast(err(x))}finally{if($("authBtn"))$("authBtn").disabled=false}
+}
+
+/* ---------- weather ---------- */
+const WMO=c=>c===0?["مشمس","sun"]:c<=2?["غائم جزئياً","sun"]:c===3?["غائم","cloud"]:c<=48?["ضباب","cloud"]:c<=67?["ممطر","cloud"]:c<=77?["ثلوج","cloud"]:c<=82?["زخات مطر","cloud"]:["عواصف رعدية","cloud"];
+function wxHTML(){
+  if(!wx)return `<div class="t"><b>طقس مزرعتك</b><p>فعّل الموقع لعرض طقس اليوم ونصيحة الرش.</p><button class="btn sm" data-act="wx" type="button" style="margin-top:8px">تفعيل الموقع</button></div><div class="ic">${ico("sun")}</div>`;
+  if(wx.fail)return `<div class="t"><b>طقس مزرعتك</b><p>${esc(wx.fail)}</p><button class="btn sm" data-act="wx" type="button" style="margin-top:8px">إعادة المحاولة</button></div><div class="ic">${ico("cloud")}</div>`;
+  const [txt,ic]=WMO(wx.code),w=wx.wind,wd=w<12?"هادئة":w<25?"معتدلة":"قوية",rain=wx.code>=51&&wx.code!==3&&wx.code<=99&&wx.code>=51;
+  const tip=rain?"تجنب الرش اليوم بسبب الأمطار.":w>=25?"الرياح قوية، أجّل الرش لوقت أهدأ.":wx.temp>=32?"الحرارة مرتفعة، الأفضل الرش في الصباح الباكر أو بعد العصر.":"الظروف مناسبة للرش الوقائي، والأفضل قبل اشتداد حرارة الظهيرة.";
+  return `<div class="t"><b>طقس اليوم في مزرعتك: ${Math.round(wx.temp)}° مئوية (${txt})</b><p>نصيحة اليوم: سرعة الرياح ${wd} (${Math.round(w)} كم/س)، ${tip}</p></div><div class="ic">${ico(ic)}</div>`}
+function loadWx(){
+  if(!navigator.geolocation){wx={fail:"المتصفح لا يدعم تحديد الموقع."};return paintWx()}
+  navigator.geolocation.getCurrentPosition(async p=>{
+    try{const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${p.coords.latitude}&longitude=${p.coords.longitude}&current=temperature_2m,weather_code,wind_speed_10m&wind_speed_unit=kmh&timezone=auto`);
+      const j=await r.json();wx={temp:j.current.temperature_2m,code:j.current.weather_code,wind:j.current.wind_speed_10m}}catch(e){wx={fail:"تعذر تحميل بيانات الطقس."}}
+    paintWx()},()=>{wx={fail:"لم يتم السماح بالوصول للموقع."};paintWx()},{timeout:12000});
+}
+const paintWx=()=>{if($("wx"))$("wx").innerHTML=wxHTML()};
+
+/* ---------- data ---------- */
+async function loadDiags(force){if(diags.length&&!force)return;try{const s=await getDocs(query(collection(db,"users",user.uid,"diagnoses"),orderBy("createdAt","desc")));diags=s.docs.map(d=>({id:d.id,...d.data()}))}catch(x){toast(err(x))}}
+async function loadDiseases(){try{const s=await getDocs(query(collection(db,"diseases"),orderBy("createdAt","desc")));diseases=s.docs.map(d=>({id:d.id,...d.data()}))}catch(x){toast(err(x))}}
+async function myConsults(){const eng=profile?.role==="engineer";
+  const s=await getDocs(eng?collection(db,"consultations"):query(collection(db,"consultations"),where("uid","==",user.uid)));
+  return s.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>ms(b)-ms(a))}
+async function refreshBadge(){try{const l=await myConsults(),eng=profile?.role==="engineer";badge=l.filter(c=>eng?!c.reply:c.reply&&!c.seen).length;const bl=$("bL");bl.querySelectorAll(".dot").forEach(d=>d.remove());if(badge&&bl.dataset.act==="bell")bl.insertAdjacentHTML("beforeend",'<span class="dot"></span>')}catch(e){}}
+
+/* ---------- home ---------- */
+const diagItem=(d,i)=>`<div class="item" data-act="openDiag" data-i="${i}"><div class="av">${d.thumb?`<img src="${d.thumb}" style="width:100%;height:100%;object-fit:cover;border-radius:12px">`:ico("leaf")}</div><div class="tx"><b>${esc(d.plant)} - ${esc(d.disease)}${d.disease_en?` (${esc(d.disease_en)})`:""}</b><small>ثقة مبدئية ${esc(d.confidence)}% • الخطورة: ${SEV[sk(d.severity)]}</small></div>${ico("chev")}</div>`;
+async function renderHome(){
+  $("main").innerHTML=`<div class="card wx" id="wx">${wxHTML()}</div>
+  <div class="card hero"><div class="t"><h2>هل لاحظت اصفراراً أو بقعاً؟</h2><p>التقط صورة لورقة النبات وسيتولى الذكاء الاصطناعي تشخيص المرض فوراً مع العلاج المناسب.</p><button class="wbtn" data-act="goScan" type="button"><span>افحص محصولك الآن</span>${ico("camera")}</button></div><div class="bg">${ico("scan")}</div></div>
+  <h3 class="sec">الخدمات السريعة</h3>
+  <div class="svc"><div class="card" data-act="goLib"><div class="si" style="background:#e3f0fd;color:var(--blue)">${ico("book")}</div><b>موسوعة الآفات</b><small>دليل أمراض النبات</small></div>
+  <div class="card" data-act="goConsult"><div class="si" style="background:#e3f1e5;color:var(--g)">${ico("head")}</div><b>استشارة مهندس</b><small>تواصل مع خبير</small></div></div>
+  <h3 class="sec"><span>آخر الفحوصات والتشخيصات</span><a href="#history">عرض الكل</a></h3><div id="recent"><div class="empty">جارٍ التحميل...</div></div>`;
+  if(!wx)loadWx();
+  await loadDiags(true);if(!$("recent"))return;
+  $("recent").innerHTML=diags.length?diags.slice(0,3).map(diagItem).join(""):`<div class="empty">لا توجد فحوصات بعد. ابدأ بفحص أول ورقة.</div>`;
+}
+
+/* ---------- scan ---------- */
+async function pickFile(f){if(!f)return;try{img={full:await resize(f,1024),thumb:await resize(f,200,.8)};$("drop").innerHTML=`<img src="${img.full}">`;$("anBtn").disabled=false}catch(x){toast(x.message)}}
+function renderScan(){
+  img=null;
+  $("main").innerHTML=`<div class="card"><div class="drop" id="drop"><div>${ico("camera")}<br><b>التقط صورة واضحة لورقة النبات المصابة</b><br><small style="color:var(--mu)">JPG / PNG</small></div></div>
+  <div class="two"><label class="btn" for="fCam">${ico("camera")} التقاط صورة</label><label class="btn o" for="fGal" style="margin:0">${ico("image")} من المعرض</label></div>
+  <input type="file" id="fCam" accept="image/*" capture="environment" hidden><input type="file" id="fGal" accept="image/*" hidden>
+  <label class="l">اسم المحصول (اختياري)</label><input id="crop" placeholder="مثال: طماطم">
+  <button class="btn" id="anBtn" data-act="analyze" type="button" style="margin-top:14px" disabled>${ico("scan")} تحليل الورقة</button></div>
+  <div class="note">${ico("alert")}<span>النتيجة تقدير مبدئي من الذكاء الاصطناعي وليست تشخيصاً نهائياً.</span></div>`;
+  $("fCam").onchange=e=>pickFile(e.target.files[0]);$("fGal").onchange=e=>pickFile(e.target.files[0]);
+}
+async function analyze(){
+  if(!img)return toast("اختر صورة أولاً");
+  const b=$("anBtn");b.disabled=true;b.innerHTML='<span class="spin"></span> جاري التحليل...';
+  const crop=$("crop").value.trim();
+  const prompt=`أنت خبير أمراض نباتات. حلل صورة ورقة النبات وأجب بصيغة JSON فقط بهذه الحقول:
+{"is_plant":boolean,"plant":"اسم المحصول بالعربية","disease":"اسم المرض أو المشكلة بالعربية","disease_en":"الاسم بالإنجليزية","type":"fungal|bacterial|viral|deficiency|pest|healthy|unknown","confidence":رقم من 0 إلى 100,"severity":"low|medium|high","symptoms":"وصف الأعراض الظاهرة في الصورة بالعربية البسيطة","organic_treatment":[نصائح علاج حيوي آمن للتربة],"chemical_treatment":[مبيدات أو مواد معتمدة مع التنبيه لاتباع الجرعة الموصى بها],"prevention":[إرشادات وقائية لتفادي تكرار الإصابة]}
+إن لم تكن الصورة نبات فاجعل is_plant=false. إن كان النبات سليماً فاجعل type="healthy". كن صادقاً في الثقة ولا تبالغ فيها. ${crop?"المحصول حسب المستخدم: "+crop:""}`;
+  try{
+    let d=null;
+    try {
+      const res = await fetch("/api/diagnose", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ imageBase64: img.full.split(",")[1], mimeType: "image/jpeg", cropHint: crop, lang: "ar" })
+      });
+      if (res.ok) {
+        const j = await res.json();
+        d = {
+          is_plant: j.isPlantLeaf !== false,
+          plant: j.cropName || crop || "نبات",
+          disease: j.diseaseName || "عرض غير محدد",
+          disease_en: j.diseaseNameEn || "",
+          type: "fungal",
+          confidence: 88,
+          severity: j.severity || "medium",
+          symptoms: j.symptoms || "",
+          organic_treatment: j.bioTreatment || [],
+          chemical_treatment: j.chemTreatment || [],
+          prevention: j.prevention || []
+        };
+      }
+    } catch(e){}
+    if(!d){
+      const r=await (await getModel()).generateContent([prompt,{inlineData:{mimeType:"image/jpeg",data:img.full.split(",")[1]}}]);
+      d=JSON.parse(r.response.text());
+    }
+    if(d.is_plant===false){toast("الصورة لا تبدو لنبات. ارفع صورة واضحة لورقة النبات.");return}
+    const rec={...d,thumb:img.thumb,createdAt:serverTimestamp()};
+    const ref=await addDoc(collection(db,"users",user.uid,"diagnoses"),rec);
+    diags=[];cur={kind:"diag",d:{...d,thumb:img.thumb,id:ref.id}};location.hash="#report";
+  }catch(x){console.error(x);toast("فشل التحليل: "+err(x))}
+  finally{const b2=$("anBtn");if(b2){b2.disabled=false;b2.innerHTML=ico("scan")+" تحليل الورقة"}}
+}
+
+/* ---------- report / disease ---------- */
+function norm(c){
+  if(c.kind==="diag"){const d=c.d;return {crop:d.plant,name:d.disease,en:d.disease_en,sev:sk(d.severity),conf:d.confidence,type:TYPE[d.type]?d.type:"unknown",img:d.thumb,symptoms:d.symptoms,bio:d.organic_treatment,chem:d.chemical_treatment,prev:d.prevention,diag:true}}
+  const d=c.d;return {crop:d.plant,name:d.name,en:d.nameEn,sev:sk(d.severity),conf:null,type:TYPE[d.type]?d.type:"unknown",img:null,symptoms:d.symptoms,bio:d.bio,chem:d.chem,prev:d.prev,diag:false}}
+const lst=(a,ic,col)=>Array.isArray(a)&&a.length?a.map(x=>`<div class="li"><span style="color:${col}">${ico(ic)}</span><span>${esc(x)}</span></div>`).join(""):`<p style="color:var(--mu);margin:4px 0">—</p>`;
+function renderReport(){
+  const r=norm(cur),col={low:"#2e9e4f",medium:"var(--org)",high:"var(--red)"}[r.sev];
+  $("main").innerHTML=`<div class="card"><div class="sum"><div class="av">${r.img?`<img src="${r.img}">`:ico("leaf")}</div><div><small>محصول ${esc(r.crop)}</small><b>${esc(r.name)}${r.en?` (${esc(r.en)})`:""}</b></div></div>
+  <div class="met"><div><b style="color:var(--g)">${r.conf!=null?esc(r.conf)+"%":TYPE[r.type]}</b><small>${r.conf!=null?"ثقة مبدئية (تقدير)":"نوع الإصابة"}</small></div><div><b style="color:${col}">${SEV[r.sev]}</b><small>درجة الخطورة</small></div></div></div>
+  ${r.diag?`<div class="note">${ico("alert")}<span>تشخيص مبدئي بالذكاء الاصطناعي، وليس نتيجة نهائية. راجع مهندساً زراعياً قبل استخدام أي مبيد.</span></div>`:""}
+  <div class="card"><div class="sh" style="color:var(--blue)">${ico("eye")}<span style="color:var(--tx)">الأعراض الملاحظة</span></div><p style="color:#4a5a50;margin:0">${esc(r.symptoms)}</p></div>
+  <div class="card"><div class="sh" style="color:#10a37f">${ico("sprout")}<span style="color:var(--tx)">العلاج الحيوي والوقائي (آمن للتربة)</span></div>${lst(r.bio,"check","#2e9e4f")}</div>
+  <div class="card"><div class="sh" style="color:var(--org)">${ico("flask")}<span style="color:var(--tx)">العلاج الكيميائي والمبيدات المعتمدة</span></div>${lst(r.chem,"med","var(--org)")}</div>
+  <div class="card"><div class="sh" style="color:var(--g)">${ico("shield")}<span style="color:var(--tx)">إرشادات وقائية لتفادي تكرار الإصابة</span></div>${lst(r.prev,"arrc","var(--g)")}</div>
+  <button class="btn o" data-act="listen" id="lsBtn" type="button">${ico("vol")} اسمع التشخيص</button>
+  <button class="btn" data-act="goConsult" type="button" style="margin-top:10px">${ico("head")} استشارة مهندس زراعي متخصص</button>`;
+}
+function reportText(){const r=norm(cur);return `المحصول ${r.crop}. ${r.name}. درجة الخطورة ${SEV[r.sev]}. الأعراض: ${r.symptoms}. العلاج الحيوي: ${(r.bio||[]).join(". ")}. العلاج الكيميائي: ${(r.chem||[]).join(". ")}. الوقاية: ${(r.prev||[]).join(". ")}. هذه نتيجة مبدئية، راجع مهندساً زراعياً.`}
+function stopSpeak(){try{speechSynthesis.cancel()}catch(e){}speaking=false;const b=$("lsBtn");if(b)b.innerHTML=ico("vol")+" اسمع التشخيص"}
+function listen(){
+  if(!("speechSynthesis" in window))return toast("المتصفح لا يدعم القراءة الصوتية");
+  if(speaking){stopSpeak();return}
+  const u=new SpeechSynthesisUtterance(reportText());u.lang="ar-EG";
+  const v=speechSynthesis.getVoices().find(x=>x.lang.toLowerCase().startsWith("ar"));if(v)u.voice=v;
+  u.onend=u.onerror=()=>stopSpeak();speaking=true;$("lsBtn").innerHTML=ico("x")+" إيقاف القراءة";speechSynthesis.speak(u);
+}
+async function share(){const r=norm(cur),txt=`SANAB\nالمحصول: ${r.crop}\nالتشخيص: ${r.name}\nالخطورة: ${SEV[r.sev]}\n${r.symptoms}`;
+  try{if(navigator.share)await navigator.share({title:"SANAB",text:txt});else{await navigator.clipboard.writeText(txt);toast("تم نسخ التقرير")}}catch(e){}}
+
+/* ---------- history ---------- */
+async function renderHistory(){
+  $("main").innerHTML=`<div class="empty">جارٍ التحميل...</div>`;await loadDiags(true);if(!$("main"))return;
+  $("main").innerHTML=diags.length?diags.map((d,i)=>`<div style="display:flex;align-items:flex-start;gap:6px"><div style="flex:1;min-width:0">${diagItem(d,i)}</div><button class="ibtn" data-act="delDiag" data-i="${i}" type="button" style="margin-top:14px">${ico("trash")}</button></div>`).join(""):`<div class="empty">لا توجد فحوصات بعد.</div>`;
+}
+
+/* ---------- library ---------- */
+async function renderLibrary(){
+  $("main").innerHTML=`<div style="display:flex;gap:8px;margin-bottom:12px"><input id="q" placeholder="ابحث عن مرض أو محصول..." style="flex:1">${profile?.role==="engineer"?`<button class="btn sm" data-act="addDis" type="button">${ico("plus")} إضافة</button>`:""}</div><div id="dl"><div class="empty">جارٍ التحميل...</div></div>`;
+  await loadDiseases();if(!$("dl"))return;paintLib();$("q").oninput=paintLib;
+}
+function paintLib(){
+  const q=($("q")?.value||"").trim().toLowerCase();
+  const l=diseases.filter(d=>!q||((d.name||"")+" "+(d.nameEn||"")+" "+(d.plant||"")).toLowerCase().includes(q));
+  $("dl").innerHTML=l.length?l.map(d=>`<div class="item" data-act="openDis" data-id="${d.id}"><div class="av">${ico("leaf")}</div><div class="tx"><b>${esc(d.name)}${d.nameEn?` (${esc(d.nameEn)})`:""}</b><small>${esc(d.plant)} • الخطورة: ${SEV[sk(d.severity)]}</small></div>${ico("chev")}</div>`).join("")
+   :`<div class="empty">${diseases.length?"لا نتائج مطابقة.":"لا توجد آفات في الموسوعة بعد. "+(profile?.role==="engineer"?"أضف أول آفة بزر «إضافة».":"يضيفها المهندسون الزراعيون هنا.")}</div>`;
+}
+function addDisDlg(){
+  openDlg(`<h3 style="margin:0 0 6px">إضافة آفة للموسوعة</h3>
+  <label class="l">المحصول</label><input id="n_plant"><label class="l">اسم المرض</label><input id="n_name"><label class="l">الاسم بالإنجليزية</label><input id="n_en" dir="ltr">
+  <label class="l">النوع</label><select id="n_type">${["fungal","bacterial","viral","deficiency","pest"].map(k=>`<option value="${k}">${TYPE[k]}</option>`).join("")}</select>
+  <label class="l">الخطورة</label><select id="n_sev">${["low","medium","high"].map(k=>`<option value="${k}">${SEV[k]}</option>`).join("")}</select>
+  <label class="l">الأعراض</label><textarea id="n_sym" rows="3"></textarea>
+  <label class="l">العلاج الحيوي (كل نقطة في سطر)</label><textarea id="n_bio" rows="3"></textarea>
+  <label class="l">العلاج الكيميائي (كل نقطة في سطر)</label><textarea id="n_chem" rows="3"></textarea>
+  <label class="l">الوقاية (كل نقطة في سطر)</label><textarea id="n_prev" rows="3"></textarea>
+  <button class="btn" data-act="saveDis" type="button" style="margin-top:14px">حفظ</button><button class="btn o" data-act="closeDlg" type="button">إلغاء</button>`);
+}
+async function saveDis(){const v=i=>$(i).value.trim();
+  const d={plant:v("n_plant"),name:v("n_name"),nameEn:v("n_en"),type:v("n_type"),severity:v("n_sev"),symptoms:v("n_sym"),bio:lines($("n_bio").value),chem:lines($("n_chem").value),prev:lines($("n_prev").value)};
+  if(!d.plant||!d.name||!d.symptoms)return toast("المحصول والاسم والأعراض مطلوبة");
+  try{await addDoc(collection(db,"diseases"),{...d,createdBy:user.uid,createdAt:serverTimestamp()});$("dlg").close();await loadDiseases();paintLib()}catch(x){toast(err(x))}}
+
+/* ---------- consult ---------- */
+async function renderConsult(){
+  const eng=profile?.role==="engineer";
+  $("main").innerHTML=`<div class="empty">جارٍ التحميل...</div>`;
+  let list=[];try{list=await myConsults()}catch(x){toast(err(x))}
+  if(!eng)await loadDiags();
+  if(!$("main")||location.hash!=="#consult")return;
+  const form=eng?"":`<div class="card"><b>اسأل مهندساً زراعياً</b><textarea id="cMsg" rows="4" placeholder="اكتب مشكلتك أو سؤالك..." style="margin-top:8px"></textarea>
+    ${diags.length?`<label style="display:flex;gap:8px;align-items:center;margin:10px 0;font-size:14px"><input type="checkbox" id="cAtt"> إرفاق آخر تشخيص (${esc(diags[0].plant)} - ${esc(diags[0].disease)})</label>`:""}
+    <button class="btn" data-act="sendC" type="button">${ico("send")} إرسال</button></div>`;
+  $("main").innerHTML=form+`<h3 class="sec">${eng?"استفسارات المزارعين":"استشاراتي"}</h3>`+(list.length?list.map(c=>`<div class="card"><small style="color:var(--mu)">${eng?esc(c.name)+" • ":""}${dDate(c)}</small>
+    <div class="msg">${esc(c.message)}${c.attach?`<br><span class="tag">${esc(c.attach)}</span>`:""}</div>
+    ${c.reply?`<div class="msg rep"><b>${esc(c.replyBy||"مهندس")}:</b> ${esc(c.reply)}</div>`:eng?`<textarea id="r_${c.id}" rows="2" placeholder="اكتب ردك..."></textarea><button class="btn sm" data-act="replyC" data-id="${c.id}" type="button" style="margin-top:8px">إرسال الرد</button>`:`<small style="color:var(--mu)">في انتظار رد المهندس...</small>`}</div>`).join(""):`<div class="empty">لا توجد استشارات.</div>`);
+  if(!eng){const un=list.filter(c=>c.reply&&!c.seen);for(const c of un){try{await updateDoc(doc(db,"consultations",c.id),{seen:true})}catch(e){}}if(un.length){badge=0;document.querySelectorAll(".dot").forEach(d=>d.remove())}}
+}
+async function sendC(){const m=$("cMsg").value.trim();if(!m)return toast("اكتب رسالتك");
+  const att=$("cAtt")?.checked&&diags[0]?`${diags[0].plant} - ${diags[0].disease}`:"";
+  try{await addDoc(collection(db,"consultations"),{uid:user.uid,name:profile.name,role:profile.role,message:m,attach:att,reply:"",seen:true,createdAt:serverTimestamp()});toast("تم إرسال استشارتك");renderConsult()}catch(x){toast(err(x))}}
+async function replyC(id){const t=$("r_"+id).value.trim();if(!t)return toast("اكتب الرد");
+  try{await updateDoc(doc(db,"consultations",id),{reply:t,replyBy:profile.name,repliedAt:serverTimestamp(),seen:false});toast("تم إرسال الرد");refreshBadge();renderConsult()}catch(x){toast(err(x))}}
+
+/* ---------- account ---------- */
+async function renderAccount(){
+  await loadDiags();if(location.hash!=="#account")return;
+  $("main").innerHTML=`<div class="card sum"><div class="av" style="font-weight:800;font-size:24px">${esc((profile?.name||"?")[0])}</div><div><b>${esc(profile?.name)}</b><small>${ROLES[profile?.role]?ROLES[profile.role][0]:""} • ${esc(user.email)}</small></div></div>
+  <div class="card"><div class="met" style="border:0;margin:0;padding:0"><div><b style="color:var(--g)">${diags.length}</b><small>إجمالي الفحوصات</small></div></div></div>
+  <div class="card"><label class="l" style="margin-top:0">الاسم</label><input id="s_name" value="${esc(profile?.name)}"><label class="l">نوع الحساب</label><select id="s_role">${Object.entries(ROLES).map(([k,[n]])=>`<option value="${k}" ${profile?.role===k?"selected":""}>${n}</option>`).join("")}</select>
+  <button class="btn" data-act="saveAcc" type="button" style="margin-top:14px">حفظ التعديلات</button><button class="btn o" data-act="resetPw" type="button">إرسال رابط تغيير كلمة المرور</button></div>
+  <button class="btn r" data-act="logout" type="button">${ico("logout")} تسجيل الخروج</button>`;
+}
+
+/* ---------- events ---------- */
+document.addEventListener("click",async e=>{
+  const el=e.target.closest("[data-act]");if(!el)return;const a=el.dataset.act;
+  if(a==="back"){history.length>1?history.back():location.hash="#home";return}
+  if(a==="home"){location.hash="#home";return}
+  if(a==="bell"||a==="goConsult"){location.hash="#consult";return}
+  if(a==="goScan"){location.hash="#scan";return}
+  if(a==="goLib"){location.hash="#library";return}
+  if(a==="share"){share();return}
+  if(a==="wx"){loadWx();return}
+  if(a==="eye"){const p=$("aPass"),s=p.type==="password";p.type=s?"text":"password";el.innerHTML=ico(s?"eyeoff":"eye");return}
+  if(a==="role"){role=el.dataset.v;applyMode();return}
+  if(a==="switch"){mode=mode==="login"?"signup":"login";applyMode();return}
+  if(a==="forgot"){e.preventDefault();const em=$("aEmail").value.trim();if(!em)return toast("اكتب بريدك أولاً");try{await sendPasswordResetEmail(auth,em);toast("تم إرسال رابط إعادة التعيين")}catch(x){toast(err(x))}return}
+  if(a==="auth"){doAuth();return}
+  if(a==="analyze"){analyze();return}
+  if(a==="listen"){listen();return}
+  if(a==="openDiag"){cur={kind:"diag",d:diags[el.dataset.i]};location.hash="#report";return}
+  if(a==="delDiag"){const d=diags[el.dataset.i];if(!confirm("حذف هذا التشخيص؟"))return;try{await deleteDoc(doc(db,"users",user.uid,"diagnoses",d.id));renderHistory()}catch(x){toast(err(x))}return}
+  if(a==="openDis"){const d=diseases.find(x=>x.id===el.dataset.id);if(d){cur={kind:"dis",d};location.hash="#disease"}return}
+  if(a==="addDis"){addDisDlg();return}
+  if(a==="saveDis"){saveDis();return}
+  if(a==="closeDlg"){$("dlg").close();return}
+  if(a==="sendC"){sendC();return}
+  if(a==="replyC"){replyC(el.dataset.id);return}
+  if(a==="saveAcc"){const n=$("s_name").value.trim(),r=$("s_role").value;if(!n)return toast("اكتب اسمك");
+    try{await updateDoc(doc(db,"users",user.uid),{name:n,role:r});try{await updateProfile(user,{displayName:n})}catch(x){}profile.name=n;profile.role=r;toast("تم الحفظ");renderAccount()}catch(x){toast(err(x))}return}
+  if(a==="resetPw"){try{await sendPasswordResetEmail(auth,user.email);toast("تم إرسال الرابط إلى بريدك")}catch(x){toast(err(x))}return}
+  if(a==="logout"){await signOut(auth);cur=null;diags=[];wx=wx;location.hash="#home";return}
+});
+route();
+</script>
+</body>
+</html>
