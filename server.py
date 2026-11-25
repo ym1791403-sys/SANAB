@@ -156,12 +156,6 @@ def diagnose(req: DiagnoseRequest):
             },
         )
 
-    try:
-        from google import genai
-        from google.genai import types
-    except ImportError as exc:
-        raise HTTPException(status_code=500, detail=f"google-genai package missing: {exc}")
-
     output_lang = "Arabic" if req.lang == "ar" else "English"
     prompt = f"""أنت خبير واستشاري واستاذ وقاية نبات وأمراض محاصيل زراعية متخصص في تشخيص أمراض النبات في مصر والوطن العربي.
 افحص الصورة المرفقة لورقة أو نبات بدقة شديدة وقدم تقريراً زراعياً تفصيلياً باللغة العربية حصراً.
