@@ -151,6 +151,12 @@ function applyLanguage() {
 }
 
 function navigateTo(route) {
+  const protectedRoutes = ["diagnosis", "consultations", "learning", "dashboard"];
+  if (protectedRoutes.includes(route) && !state.user) {
+    state.intendedRoute = route;
+    route = "auth";
+  }
+
   if (route === "dashboard") {
     const isAdmin = Boolean(
       state.profile?.accountType === "admin" ||
@@ -159,7 +165,6 @@ function navigateTo(route) {
       state.user?.email?.toLowerCase().includes("admin")
     );
     if (!isAdmin) {
-      showToast("لوحة التحكم مخصصة لحسابات الإدارة (Admin) فقط", "warning");
       route = "home";
     }
   }
@@ -1294,11 +1299,9 @@ async function bootstrap() {
         email.toLowerCase().includes("admin")
       );
 
-      if (isAdmin) {
-        navigateTo("dashboard");
-      } else {
-        navigateTo("home");
-      }
+      const target = state.intendedRoute || (isAdmin ? "dashboard" : "home");
+      state.intendedRoute = null;
+      navigateTo(target);
     } catch (err) {
       showToast(formatFirebaseError(err), "error");
     } finally {
@@ -1316,11 +1319,9 @@ async function bootstrap() {
         res.profile?.role === "admin" ||
         res.profile?.accountType === "engineer"
       );
-      if (isAdmin) {
-        navigateTo("dashboard");
-      } else {
-        navigateTo("home");
-      }
+      const target = state.intendedRoute || (isAdmin ? "dashboard" : "home");
+      state.intendedRoute = null;
+      navigateTo(target);
     } catch (err) {
       showToast(formatFirebaseError(err), "error");
     }
