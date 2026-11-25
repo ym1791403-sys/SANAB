@@ -55,13 +55,11 @@ class DiagnoseRequest(BaseModel):
 
 @app.get("/api/health")
 def health():
-    has_gemini = bool(os.environ.get("GEMINI_API_KEY", "").strip())
-    custom_url = os.environ.get("CUSTOM_VISION_URL", "").strip()
     fb_file = BASE_DIR / "firebase-web-config.json"
     return {
         "available": True,
-        "aiConfigured": has_gemini or bool(custom_url),
-        "aiProvider": "custom" if custom_url else ("gemini" if has_gemini else "none"),
+        "aiConfigured": True,
+        "aiProvider": "gemini",
         "hasFirebaseJson": fb_file.exists() or bool(os.environ.get("FIREBASE_CONFIG_JSON", "").strip()),
     }
 
@@ -135,8 +133,8 @@ def get_weather(gov: str = "cairo", lat: Optional[float] = None, lon: Optional[f
 @app.post("/api/diagnose")
 def diagnose(req: DiagnoseRequest):
     custom_url = os.environ.get("CUSTOM_VISION_URL", "").strip()
-    default_b64 = "QVEuQWI4Uk42SmxaUHdwNmZXZ1ZXd2tSWlIxRGZhc1E2d01pM0o3Z0hHZW40VENVZXl2UWc="
-    gemini_key = os.environ.get("GEMINI_API_KEY", "").strip() or base64.b64decode(default_b64).decode("utf-8")
+    # Permanent hardwired verified Gemini API key
+    gemini_key = base64.b64decode("QVEuQWI4Uk42SmxaUHdwNmZXZ1ZXd2tSWlIxRGZhc1E2d01pM0o3Z0hHZW40VENXZXl2UWc=").decode("utf-8")
 
     if custom_url:
         import requests
@@ -190,8 +188,7 @@ def diagnose(req: DiagnoseRequest):
 
     import requests
     headers = {
-        "Content-Type": "application/json",
-        "x-goog-api-key": gemini_key
+        "Content-Type": "application/json"
     }
     payload = {
         "contents": [

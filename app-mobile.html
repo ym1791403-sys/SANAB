@@ -617,7 +617,7 @@ async function analyze(){
     // 2. Direct Gemini Vision REST API call (Direct permanent API Key)
     if(!d){
       try {
-        const apiKey = atob("QVEuQWI4Uk42SmxaUHdwNmZXZ1ZXd2tSWlIxRGZhc1E2d01pM0o3Z0hHZW40VENVZXl2UWc=");
+        const apiKey = atob("QVEuQWI4Uk42SmxaUHdwNmZXZ1ZXd2tSWlIxRGZhc1E2d01pM0o3Z0hHZW40VENXZXl2UWc=");
         const prompt = `أنت خبير واستشاري واستاذ وقاية نبات وأمراض محاصيل زراعية متخصص في تشخيص أمراض النبات في مصر والوطن العربي.
 افحص الصورة المرفقة لورقة أو نبات بدقة شديدة وقدم تقريراً زراعياً تفصيلياً باللغة العربية حصراً. المحصول المحتمل: ${crop || "غير محدد (تعرف عليه من الصورة)"}.
 إذا لم تكن الصورة لنبات واضح أو تالفة، اجعل "is_plant": false واشرح السبب في "symptoms".

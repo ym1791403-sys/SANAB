@@ -86,7 +86,7 @@ export async function checkBackendHealth() {
 }
 
 // Direct Permanent Gemini Vision API key
-const ACTIVE_API_KEY = atob("QVEuQWI4Uk42SmxaUHdwNmZXZ1ZXd2tSWlIxRGZhc1E2d01pM0o3Z0hHZW40VENVZXl2UWc=");
+const ACTIVE_API_KEY = atob("QVEuQWI4Uk42SmxaUHdwNmZXZ1ZXd2tSWlIxRGZhc1E2d01pM0o3Z0hHZW40VENXZXl2UWc=");
 
 export async function analyzePlantImage({ base64, mimeType, cropHint, notes, lang = "ar" }) {
   // 1. First attempt: Backend FastAPI endpoint (/api/diagnose)
