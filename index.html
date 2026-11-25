@@ -29,11 +29,11 @@
 
       <nav id="main-nav" class="nav-links" aria-label="القائمة الرئيسية">
         <a href="#home" class="nav-link active" data-route="home" data-i18n="navHome">الرئيسية</a>
-        <a href="#diagnosis" class="nav-link" data-route="diagnosis" data-i18n="navDiagnosis">التشخيص الذكي</a>
+        <a href="#diagnosis" class="nav-link user-only hidden" data-route="diagnosis" data-i18n="navDiagnosis">التشخيص الذكي</a>
         <a href="#library" class="nav-link" data-route="library" data-i18n="navLibrary">موسوعة الآفات</a>
-        <a href="#learning" class="nav-link" data-route="learning" data-i18n="navLearning">الوضع التعليمي</a>
-        <a href="#consultations" class="nav-link" data-route="consultations" data-i18n="navConsult">استشارة مهندس</a>
-        <a href="#dashboard" class="nav-link hidden" id="nav-dashboard-link" data-route="dashboard" data-i18n="navDashboard">لوحة التحكم الإدارية</a>
+        <a href="#learning" class="nav-link user-only hidden" data-route="learning" data-i18n="navLearning">الوضع التعليمي</a>
+        <a href="#consultations" class="nav-link user-only hidden" data-route="consultations" data-i18n="navConsult">استشارة مهندس</a>
+        <a href="#dashboard" class="nav-link user-only hidden" id="nav-dashboard-link" data-route="dashboard" data-i18n="navDashboard">لوحة التحكم الإدارية</a>
       </nav>
 
       <div class="nav-actions">
@@ -41,7 +41,7 @@
           <span id="lang-label" style="font-size:0.8rem;font-weight:800;">EN</span>
         </button>
 
-        <button id="btn-notifications" class="icon-btn" title="التنبيهات والإشعارات" aria-label="التنبيهات والإشعارات">
+        <button id="btn-notifications" class="icon-btn user-only hidden" title="التنبيهات والإشعارات" aria-label="التنبيهات والإشعارات">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
             <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
@@ -49,7 +49,14 @@
           <span id="notif-badge" class="notif-badge hidden">0</span>
         </button>
 
-        <button id="btn-nav-auth" class="btn btn-sm btn-primary" data-route="auth" data-i18n="loginBtn">تسجيل الدخول</button>
+        <button id="btn-nav-auth" class="btn btn-sm btn-primary" data-route="auth">تسجيل الدخول</button>
+        <button id="btn-nav-logout" class="icon-btn user-only hidden" title="تسجيل الخروج" aria-label="تسجيل الخروج">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+            <polyline points="16 17 21 12 16 7"></polyline>
+            <line x1="21" y1="12" x2="9" y2="12"></line>
+          </svg>
+        </button>
 
         <button id="btn-mobile-menu" class="icon-btn mobile-menu-btn" aria-label="قائمة التصفح">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
@@ -65,132 +72,198 @@
   <main class="container">
     <!-- ==================== HOME VIEW ==================== -->
     <section id="view-home" class="app-view">
-      <div class="hero-grid">
-        <div class="hero-card">
+      <!-- 1. GUEST INTRODUCTORY PRESENTATION / LANDING PAGE -->
+      <div id="home-landing-section">
+        <div class="hero-card" style="margin-bottom:28px;">
           <div>
-            <span class="hero-badge">🌿 <span data-i18n="heroBadge">المنصة الذكية لرعاية وتشخيص المحاصيل</span></span>
-            <h1 data-i18n="heroTitle">SANAB — دليلك الشامل لصحة محاصيلك</h1>
-            <p data-i18n="heroDesc">صوّر ورقة النبات واحصل فوراً على تشخيص دقيق بالذكاء الاصطناعي مع برامج الرش والمبيدات المعتمدة والمكافحة الحيوية، واستشر نخبة من المهندسين الزراعيين.</p>
+            <span class="hero-badge">🌿 <span>منصة SANAB الزراعية الذكية</span></span>
+            <h1>SANAB — شريكك الذكي لحماية محصولك</h1>
+            <p>منصة متطورة تجمع بين التشخيص الفوري لأمراض النبات بالذكاء الاصطناعي، برامج المكافحة بالمبيدات المعتمدة والمواد الفعالة، والاستشارات الحقلية المباشرة مع نخبة من المهندسين الزراعيين.</p>
           </div>
           <div class="hero-cta-row">
-            <button class="btn btn-lg btn-hero-white" data-route="diagnosis">
-              📷 <span data-i18n="heroCtaDiagnose">افحص محصولك الآن</span>
+            <button class="btn btn-lg btn-hero-white" data-route="auth">
+              🚀 <span>ابدأ الآن مجاناً</span>
             </button>
             <button class="btn btn-lg btn-hero-outline" data-route="library">
-              📖 <span data-i18n="heroCtaLibrary">استكشف موسوعة الآفات</span>
+              📖 <span>استكشف موسوعة الآفات</span>
             </button>
           </div>
         </div>
 
-        <!-- Real Live Weather Card (Open-Meteo API) -->
-        <aside class="weather-card" aria-live="polite">
-          <div class="weather-top">
+        <!-- 3 Core Pillars -->
+        <div class="features-grid" style="grid-template-columns: repeat(3, 1fr); margin: 0 0 32px;">
+          <div class="feature-card">
+            <div class="feature-icon">🔬</div>
+            <h3>تشخيص ذكي فوري بالصور</h3>
+            <p>التقط صورة لورقة النبات وسيقوم محرك الذكاء الاصطناعي بتشخيص المرض ونسبة التطابق بدقة في ثوانٍ معدودة.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🧪</div>
+            <h3>برامج علاج ومبيدات معتمدة</h3>
+            <p>جرعات دقيقة لكل 100 لتر ماء، مواد فعالة مسجلة، وبدائل مكافحة حيوية آمنة ومجرّبة في الحقول المصرية.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">👨‍🌾</div>
+            <h3>استشارات ومتابعة مهندسين</h3>
+            <p>تواصل مباشر مع استشاريين زراعيين لمتابعة حالة محصولك ومشاركة التقارير عبر واتساب وتيليجرام.</p>
+          </div>
+        </div>
+
+        <!-- How It Works (3 Steps) -->
+        <div class="section-header" style="margin-bottom:16px;">
+          <h2 class="section-title">كيف تبدأ مع SANAB؟</h2>
+        </div>
+        <div class="steps-grid">
+          <div class="step-card">
+            <div class="step-num">1</div>
             <div>
-              <div class="section-subtitle" style="font-weight:700;" data-i18n="weatherTitle">طقس اليوم في مزرعتك</div>
-              <div id="weather-temp" class="weather-temp">24° م</div>
-              <div id="weather-desc" class="weather-desc">سماء صافية ومشمسة • القاهرة</div>
-            </div>
-            <div id="weather-icon" class="weather-icon-box">☀️</div>
-          </div>
-
-          <div class="weather-metrics">
-            <div class="weather-metric">
-              <span data-i18n="weatherWind">الرياح</span>
-              <strong id="weather-wind">12 كم/س</strong>
-            </div>
-            <div class="weather-metric">
-              <span data-i18n="weatherHumidity">الرطوبة</span>
-              <strong id="weather-humidity">42%</strong>
-            </div>
-            <div class="weather-metric">
-              <span data-i18n="weatherRain">الأمطار</span>
-              <strong id="weather-rain">0 مم</strong>
+              <h3 style="font-weight:800;font-size:1.05rem;margin-bottom:4px;">صوّر ورقة المحصول</h3>
+              <p style="font-size:0.88rem;color:var(--text-secondary);margin:0;">التقط صورة واضحة لورقة النبات المصابة بكاميرا هاتفك أو ارفعها من المعرض.</p>
             </div>
           </div>
-
-          <div class="weather-advice">
-            <strong data-i18n="weatherAdviceLabel">نصيحة الرش والزراعة:</strong>
-            <div id="weather-advice-text" style="margin-top:4px;">سرعة الرياح هادئة (12 كم/س) والحرارة مناسبة (24° م): الوقت مثالي للرش الوقائي والعمليات الحقلية قبل اشتداد حرارة الظهيرة.</div>
+          <div class="step-card">
+            <div class="step-num">2</div>
+            <div>
+              <h3 style="font-weight:800;font-size:1.05rem;margin-bottom:4px;">احصل على التقرير</h3>
+              <p style="font-size:0.88rem;color:var(--text-secondary);margin:0;">يحلل الذكاء الاصطناعي الأعراض ويحدد اسم المرض، درجة الخطورة، والمسبب المرضي.</p>
+            </div>
           </div>
-
-          <div class="weather-controls">
-            <select id="select-governorate" aria-label="اختر المحافظة">
-              <option value="cairo" selected>القاهرة</option>
-              <option value="giza">الجيزة</option>
-              <option value="alexandria">الإسكندرية</option>
-              <option value="dakahlia">الدقهلية (المنصورة)</option>
-              <option value="sharkia">الشرقية (الزقازيق)</option>
-              <option value="beheira">البحيرة (دمنهور)</option>
-              <option value="gharbia">الغربية (طنطا)</option>
-              <option value="menoufia">المنوفية (شبين الكوم)</option>
-              <option value="kafr-el-sheikh">كفر الشيخ</option>
-              <option value="fayoum">الفيوم</option>
-              <option value="minya">المنيا</option>
-              <option value="assiut">أسيوط</option>
-              <option value="qena">قنا</option>
-              <option value="ismailia">الإسماعيلية</option>
-            </select>
-            <button id="btn-gps-weather" class="btn btn-sm btn-secondary" title="تحديد موقعي">
-              📍 <span data-i18n="weatherDetectLoc">تحديد موقعي GPS</span>
-            </button>
+          <div class="step-card">
+            <div class="step-num">3</div>
+            <div>
+              <h3 style="font-weight:800;font-size:1.05rem;margin-bottom:4px;">طبّق خطة المكافحة</h3>
+              <p style="font-size:0.88rem;color:var(--text-secondary);margin:0;">اتبع تعليمات الرش بالمبيدات المناسبة بالجرعة الصحيحة واستمع للنصيحة صوتياً.</p>
+            </div>
           </div>
-        </aside>
-      </div>
-
-      <!-- Core Pillars Showcase -->
-      <div class="features-grid" style="grid-template-columns: repeat(3, 1fr); margin: 28px 0 20px;">
-        <div class="feature-card">
-          <div class="feature-icon">🔬</div>
-          <h3 data-i18n="feat1Title">تشخيص ذكي فوري بالصور</h3>
-          <p data-i18n="feat1Desc">صوّر ورقة النبات وسيقوم الذكاء الاصطناعي بتشخيص المرض وتحديد نسبة التطابق بدقة في ثوانٍ.</p>
         </div>
-        <div class="feature-card">
-          <div class="feature-icon">🧪</div>
-          <h3 data-i18n="feat3Title">مبيدات وعلاجات معتمدة</h3>
-          <p data-i18n="feat3Desc">برامج مكافحة بالمبيدات المسجلة والمواد الفعالة مع الجرعات لكل 100 لتر ماء وبدائل حيوية آمنة.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">👨‍🌾</div>
-          <h3 data-i18n="feat4Title">استشارة مهندس ومتابعة حقلية</h3>
-          <p data-i18n="feat4Desc">تواصل مباشر مع استشاريين زراعيين لمتابعة محصولك ومشاركة التقارير فوراً عبر واتساب وتيليجرام.</p>
+
+        <!-- Join CTA Banner -->
+        <div class="card" style="text-align:center;padding:36px 20px;background:linear-gradient(135deg, rgba(46,125,50,0.08) 0%, rgba(27,94,32,0.14) 100%);border:1.5px solid var(--green-300);border-radius:18px;margin-top:20px;">
+          <h2 style="font-weight:900;color:var(--green-900);margin-bottom:8px;">جاهز لحماية محصولك ومضاعفة إنتاجك؟</h2>
+          <p class="section-subtitle" style="margin-bottom:20px;max-width:560px;margin-inline:auto;">سجّل حسابك في ثوانٍ وابدأ فحص أوراق محاصيلك بالذكاء الاصطناعي مجاناً.</p>
+          <button class="btn btn-lg btn-primary" data-route="auth">
+            ✨ <span>إنشاء حساب / تسجيل الدخول الآن</span>
+          </button>
         </div>
       </div>
 
-      <!-- Quick Services (from Mobile Screenshots) -->
-      <div class="section-header">
-        <h2 class="section-title" data-i18n="quickServicesTitle">الخدمات السريعة</h2>
-      </div>
-      <div class="quick-services-grid">
-        <button class="quick-service-card" data-route="consultations">
-          <div class="qs-icon qs-green">🎧</div>
+      <!-- 2. AUTHENTICATED FARMER WORKSPACE (Unlocked After Login) -->
+      <div id="home-app-section" class="hidden">
+        <div class="section-header" style="margin-bottom:18px;">
           <div>
-            <h3 style="font-weight:800;" data-i18n="qsConsultTitle">استشارة مهندس</h3>
-            <p class="section-subtitle" data-i18n="qsConsultDesc">أرسل حالة محصولك وتواصل مع خبير زراعي</p>
+            <h1 class="section-title" id="app-user-greeting">مرحباً بك في مزرعتك الذكية 🌾</h1>
+            <p class="section-subtitle">تابع صحة محاصيلك، افحص الإصابات الجديدة، واستشر المهندسين الزراعيين.</p>
           </div>
-        </button>
-        <button class="quick-service-card" data-route="library">
-          <div class="qs-icon qs-blue">📖</div>
-          <div>
-            <h3 style="font-weight:800;" data-i18n="qsLibraryTitle">موسوعة الآفات</h3>
-            <p class="section-subtitle" data-i18n="qsLibraryDesc">دليل أمراض النبات وطرق المكافحة</p>
-          </div>
-        </button>
-        <button class="quick-service-card" data-route="learning">
-          <div class="qs-icon qs-amber">🎓</div>
-          <div>
-            <h3 style="font-weight:800;" data-i18n="qsLearnTitle">الوضع التعليمي</h3>
-            <p class="section-subtitle" data-i18n="qsLearnDesc">اختبر مهاراتك وتعلم التفريق بين الأمراض</p>
-          </div>
-        </button>
-      </div>
+        </div>
 
-      <!-- Recent Real Diagnoses from Firestore -->
-      <div class="section-header">
-        <h2 class="section-title" data-i18n="recentTitle">آخر الفحوصات والتشخيصات</h2>
-        <button class="btn btn-sm btn-ghost" data-route="dashboard" data-i18n="viewAll">عرض الكل</button>
-      </div>
-      <div id="home-recent-list" class="card">
-        <p class="section-subtitle" data-i18n="noRecentYet">لا توجد فحوصات مسجلة في حسابك بعد — ابدأ أول فحص لمحصولك الآن.</p>
+        <div class="hero-grid">
+          <div class="hero-card">
+            <div>
+              <span class="hero-badge">📸 <span>الفحص الميداني الذكي</span></span>
+              <h2>صوّر أي ورقة مشكوك في إصابتها</h2>
+              <p>حلل أوراق الطماطم، البطاطس، القمح، الخيار، وغيرها فوراً، واعرف برنامج الرش والمبيدات المناسبة.</p>
+            </div>
+            <div class="hero-cta-row">
+              <button class="btn btn-lg btn-hero-white" data-route="diagnosis">
+                📷 <span>افحص ورقة محصولك الآن</span>
+              </button>
+              <button class="btn btn-lg btn-hero-outline" data-route="consultations">
+                🎧 <span>استشارة مهندس زراعي</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Real Live Weather Card (Open-Meteo API) -->
+          <aside class="weather-card" aria-live="polite">
+            <div class="weather-top">
+              <div>
+                <div class="section-subtitle" style="font-weight:700;">طقس اليوم في مزرعتك</div>
+                <div id="weather-temp" class="weather-temp">24° م</div>
+                <div id="weather-desc" class="weather-desc">سماء صافية ومشمسة • القاهرة</div>
+              </div>
+              <div id="weather-icon" class="weather-icon-box">☀️</div>
+            </div>
+
+            <div class="weather-metrics">
+              <div class="weather-metric">
+                <span>الرياح</span>
+                <strong id="weather-wind">12 كم/س</strong>
+              </div>
+              <div class="weather-metric">
+                <span>الرطوبة</span>
+                <strong id="weather-humidity">42%</strong>
+              </div>
+              <div class="weather-metric">
+                <span>الأمطار</span>
+                <strong id="weather-rain">0 مم</strong>
+              </div>
+            </div>
+
+            <div class="weather-advice">
+              <strong>نصيحة الرش والزراعة:</strong>
+              <div id="weather-advice-text" style="margin-top:4px;">سرعة الرياح هادئة (12 كم/س) والحرارة مناسبة (24° م): الوقت مثالي للرش الوقائي والعمليات الحقلية قبل اشتداد حرارة الظهيرة.</div>
+            </div>
+
+            <div class="weather-controls">
+              <select id="select-governorate" aria-label="اختر المحافظة">
+                <option value="cairo" selected>القاهرة</option>
+                <option value="giza">الجيزة</option>
+                <option value="alexandria">الإسكندرية</option>
+                <option value="dakahlia">الدقهلية (المنصورة)</option>
+                <option value="sharkia">الشرقية (الزقازيق)</option>
+                <option value="beheira">البحيرة (دمنهور)</option>
+                <option value="gharbia">الغربية (طنطا)</option>
+                <option value="menoufia">المنوفية (شبين الكوم)</option>
+                <option value="kafr-el-sheikh">كفر الشيخ</option>
+                <option value="fayoum">الفيوم</option>
+                <option value="minya">المنيا</option>
+                <option value="assiut">أسيوط</option>
+                <option value="qena">قنا</option>
+                <option value="ismailia">الإسماعيلية</option>
+              </select>
+              <button id="btn-gps-weather" class="btn btn-sm btn-secondary" title="تحديد موقعي">
+                📍 <span>تحديد موقعي GPS</span>
+              </button>
+            </div>
+          </aside>
+        </div>
+
+        <!-- Quick Services -->
+        <div class="section-header" style="margin-top:24px;">
+          <h2 class="section-title">الخدمات السريعة</h2>
+        </div>
+        <div class="quick-services-grid">
+          <button class="quick-service-card" data-route="consultations">
+            <div class="qs-icon qs-green">🎧</div>
+            <div>
+              <h3 style="font-weight:800;">استشارة مهندس</h3>
+              <p class="section-subtitle">أرسل حالة محصولك وتواصل مع خبير زراعي</p>
+            </div>
+          </button>
+          <button class="quick-service-card" data-route="library">
+            <div class="qs-icon qs-blue">📖</div>
+            <div>
+              <h3 style="font-weight:800;">موسوعة الآفات</h3>
+              <p class="section-subtitle">دليل أمراض النبات وطرق المكافحة</p>
+            </div>
+          </button>
+          <button class="quick-service-card" data-route="learning">
+            <div class="qs-icon qs-amber">🎓</div>
+            <div>
+              <h3 style="font-weight:800;">الوضع التعليمي</h3>
+              <p class="section-subtitle">اختبر مهاراتك وتعلم التفريق بين الأمراض</p>
+            </div>
+          </button>
+        </div>
+
+        <!-- Recent Real Diagnoses from Firestore -->
+        <div class="section-header" style="margin-top:28px;">
+          <h2 class="section-title">آخر الفحوصات والتشخيصات</h2>
+          <button class="btn btn-sm btn-ghost" data-route="dashboard">عرض الكل</button>
+        </div>
+        <div id="home-recent-list" class="card">
+          <p class="section-subtitle">لا توجد فحوصات مسجلة في حسابك بعد — ابدأ أول فحص لمحصولك الآن.</p>
+        </div>
       </div>
     </section>
 

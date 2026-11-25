@@ -554,7 +554,14 @@ async function refreshBadge(){try{const l=await myConsults(),eng=profile?.role==
 const diagItem=(d,i)=>`<div class="item" data-act="openDiag" data-i="${i}"><div class="av">${d.thumb?`<img src="${d.thumb}" style="width:100%;height:100%;object-fit:cover;border-radius:12px">`:ico("leaf")}</div><div class="tx"><b>محصول ${esc(d.plant||d.cropName)} - ${esc(d.disease||d.diseaseName)}${d.disease_en?` (${esc(d.disease_en)})`:""}</b><small>دقة التشخيص ${esc(d.confidence||90)}% • الخطورة: ${SEV[sk(d.severity)]}</small></div>${ico("chev")}</div>`;
 
 async function renderHome(){
-  $("main").innerHTML=`<div class="card wx" id="wx">${wxHTML()}</div>
+  const guestCard = !user ? `
+    <div class="card" style="background:linear-gradient(135deg, rgba(46,125,50,0.12), rgba(27,94,32,0.2));border:1.5px solid var(--g);margin-bottom:12px;text-align:center;padding:16px;">
+      <h3 style="margin:0 0 6px;color:var(--gd);font-weight:900;">مرحباً بك في منصة SANAB 🌿</h3>
+      <p style="margin:0 0 10px;font-size:13px;color:var(--mu);">شريكك الذكي لتشخيص أمراض النبات بالمبيدات المعتمدة واستشارة المهندسين الزراعيين.</p>
+      <button class="btn" data-act="goAuth" style="margin:0 auto;display:inline-flex;padding:8px 18px;font-size:13px;"><span>سجّل مجاناً وابدأ الفحص</span></button>
+    </div>` : ``;
+
+  $("main").innerHTML=`${guestCard}<div class="card wx" id="wx">${wxHTML()}</div>
   <div class="card hero"><div class="t"><h2>هل لاحظت اصفراراً أو بقعاً؟</h2><p>التقط صورة لورقة النبات وسيتولى الذكاء الاصطناعي تشخيص المرض فوراً مع العلاج المناسب.</p><button class="wbtn" data-act="goScan" type="button"><span>افحص محصولك الآن</span>${ico("camera")}</button></div><div class="bg">${ico("scan")}</div></div>
   <h3 class="sec">الخدمات السريعة</h3>
   <div class="svc"><div class="card" data-act="goLib"><div class="si" style="background:#e3f0fd;color:var(--blue)">${ico("book")}</div><b>موسوعة الآفات</b><small>دليل أمراض النبات</small></div>
@@ -827,6 +834,7 @@ document.addEventListener("click",async e=>{
   const el=e.target.closest("[data-act]");if(!el)return;const a=el.dataset.act;
   if(a==="back"){history.length>1?history.back():location.hash="#home";return}
   if(a==="home"){location.hash="#home";return}
+  if(a==="goAuth"){renderAuth();return}
   if(a==="bell"||a==="goConsult"){location.hash="#consult";return}
   if(a==="goScan"){location.hash="#scan";return}
   if(a==="goLib"){location.hash="#library";return}

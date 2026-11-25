@@ -219,8 +219,8 @@ def diagnose(req: DiagnoseRequest):
         }
     }
 
-    preferred_model = os.environ.get("GEMINI_MODEL", "gemini-3.5-flash")
-    candidate_models = [preferred_model, "gemini-3.5-flash", "gemini-3.5-flash-lite", "gemini-3.6-flash"]
+    preferred_model = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")
+    candidate_models = [preferred_model, "gemini-2.5-flash", "gemini-2.0-flash", "gemini-1.5-flash", "gemini-3.5-flash", "gemini-3.5-flash-lite"]
     unique_models = []
     for m in candidate_models:
         if m not in unique_models:

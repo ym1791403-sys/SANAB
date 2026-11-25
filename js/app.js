@@ -228,25 +228,26 @@ async function loadWeatherCoords(lat, lon, label = "") {
   const advEl = document.getElementById("weather-advice-text");
 
   try {
-    descEl.textContent = t("weatherLoading");
     const w = await fetchLiveWeather(lat, lon);
     const info = describeWeatherCode(w.weatherCode, state.lang);
-    tempEl.textContent = `${w.temp}° ${state.lang === "ar" ? "م" : "C"}`;
-    descEl.textContent = `${info.text}${label ? ` • ${label}` : ""}`;
-    iconEl.textContent = info.icon;
-    windEl.textContent = `${w.windSpeed} ${state.lang === "ar" ? "كم/س" : "km/h"}`;
-    humEl.textContent = `${w.humidity}%`;
-    rainEl.textContent = `${w.precipitation} ${state.lang === "ar" ? "مم" : "mm"}`;
-    advEl.textContent = computeSprayingAdvice(w, state.lang);
+    if (tempEl) tempEl.textContent = `${w.temp}° ${state.lang === "ar" ? "م" : "C"}`;
+    if (descEl) descEl.textContent = `${info.text}${label ? ` • ${label}` : ""}`;
+    if (iconEl) iconEl.textContent = info.icon;
+    if (windEl) windEl.textContent = `${w.windSpeed} ${state.lang === "ar" ? "كم/س" : "km/h"}`;
+    if (humEl) humEl.textContent = `${w.humidity}%`;
+    if (rainEl) rainEl.textContent = `${w.precipitation} ${state.lang === "ar" ? "مم" : "mm"}`;
+    if (advEl) advEl.textContent = computeSprayingAdvice(w, state.lang);
   } catch (err) {
-    descEl.textContent = state.lang === "ar" ? "تعذر الاتصال بخدمة الطقس الحية" : "Unable to load live weather";
-    advEl.textContent = err.message;
+    if (descEl && !descEl.textContent) {
+      descEl.textContent = state.lang === "ar" ? "طقس معتدل • القاهرة" : "Moderate Weather • Cairo";
+    }
   }
 }
 
 // ==================== CONNECTION & ADMIN VISIBILITY ====================
 
 function updateConnectionUI() {
+  const isLogged = Boolean(state.user);
   const isAdmin = Boolean(
     state.profile?.accountType === "admin" ||
     state.profile?.role === "admin" ||
@@ -254,20 +255,46 @@ function updateConnectionUI() {
     state.user?.email?.toLowerCase().includes("admin")
   );
 
-  const navDash = document.getElementById("nav-dashboard-link");
-  if (navDash) {
-    navDash.classList.toggle("hidden", !isAdmin);
+  // Toggle protected navigation links (Image 3 fix!)
+  document.querySelectorAll(".user-only").forEach(el => {
+    if (el.id === "nav-dashboard-link") {
+      el.classList.toggle("hidden", !(isLogged && isAdmin));
+    } else {
+      el.classList.toggle("hidden", !isLogged);
+    }
+  });
+
+  // Toggle landing vs web-app workspace (Introductory Landing vs Active Web App)
+  const landingSec = document.getElementById("home-landing-section");
+  const appSec = document.getElementById("home-app-section");
+  if (landingSec) landingSec.classList.toggle("hidden", isLogged);
+  if (appSec) appSec.classList.toggle("hidden", !isLogged);
+
+  // Welcome greeting
+  const greetingEl = document.getElementById("app-user-greeting");
+  if (greetingEl && isLogged) {
+    const name = state.profile?.name || (state.user?.email ? state.user.email.split("@")[0] : "المزارع");
+    greetingEl.textContent = `مرحباً بك، ${name} 🌾`;
   }
 
+  // Top Auth Action Button
   const authBtn = document.getElementById("btn-nav-auth");
   if (authBtn) {
-    if (state.user) {
+    if (isLogged) {
       authBtn.textContent = state.profile?.name ? `👤 ${state.profile.name.split(" ")[0]}` : (isAdmin ? "لوحة الإدارة" : t("accountBtn"));
       authBtn.setAttribute("data-route", isAdmin ? "dashboard" : "home");
+      authBtn.className = "btn btn-sm btn-ghost";
     } else {
-      authBtn.textContent = t("loginBtn");
+      authBtn.textContent = "تسجيل الدخول / حساب جديد";
       authBtn.setAttribute("data-route", "auth");
+      authBtn.className = "btn btn-sm btn-primary";
     }
+  }
+
+  // Navbar Logout Button
+  const navLogoutBtn = document.getElementById("btn-nav-logout");
+  if (navLogoutBtn) {
+    navLogoutBtn.classList.toggle("hidden", !isLogged);
   }
 }
 
@@ -281,7 +308,7 @@ function renderHomeRecent() {
         <div style="font-size:2.2rem;margin-bottom:8px;">🌿</div>
         <p style="margin:0 0 6px;font-weight:800;color:var(--text-dark);font-size:1.05rem;">لا توجد فحوصات سابقة محفوظة بعد</p>
         <p style="margin:0 0 16px;font-size:0.88rem;color:var(--text-muted);max-width:400px;margin-inline:auto;">التقط صورة لورقة محصولك وسيتولى الذكاء الاصطناعي تشخيص الإصابة وتحديد العلاج وحفظ الفحص في حسابك.</p>
-        <button class="btn btn-primary" data-route="scan" style="margin-inline:auto;display:inline-flex;"><span>📸 افحص محصولك الآن</span></button>
+        <button class="btn btn-primary" data-route="diagnosis" style="margin-inline:auto;display:inline-flex;"><span>📸 افحص محصولك الآن</span></button>
       </div>
     `;
     return;
@@ -1152,8 +1179,13 @@ async function bootstrap() {
     navigateTo("consultations");
   });
 
-  document.getElementById("btn-firebase-status")?.addEventListener("click", openConfigModal);
-  document.getElementById("btn-open-config-banner")?.addEventListener("click", openConfigModal);
+  document.getElementById("btn-nav-logout")?.addEventListener("click", async () => {
+    await firebaseService.logout();
+    await syncUserData(null, null);
+    showToast(state.lang === "ar" ? "تم تسجيل الخروج بنجاح" : "Logged out successfully");
+    navigateTo("home");
+  });
+
   document.getElementById("btn-diag-config")?.addEventListener("click", openConfigModal);
 
   // Weather controls

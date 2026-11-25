@@ -115,7 +115,7 @@ export async function analyzePlantImage({ base64, mimeType, cropHint, notes, lan
   const preferredModel = (aiConfig.geminiModel && aiConfig.geminiModel !== "gemini-2.5-flash")
     ? aiConfig.geminiModel
     : "gemini-3.5-flash";
-  const candidateModels = [preferredModel, "gemini-3.5-flash", "gemini-3.5-flash-lite", "gemini-3.6-flash"];
+  const candidateModels = [preferredModel, "gemini-2.5-flash", "gemini-2.0-flash", "gemini-1.5-flash", "gemini-3.5-flash", "gemini-3.5-flash-lite", "gemini-3.6-flash"];
   const uniqueModels = [...new Set(candidateModels)];
 
   const promptText = buildDiagnosisPrompt(cropHint, notes, lang);
